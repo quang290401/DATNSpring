@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/latest/jquery.validate.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <th:block th:replace="~{cssImport.html :: layout_import_css}"/>
+
+
+</head>
+<body class="no-skin">
+<!-- header -->
+<!-- Thay thế các đoạn mã này bằng thymeleaf block -->
+<div th:replace="admin/common/Header.html"></div>
+<!-- header -->
+
+
+<div class="main-container" id="main-container">
+    <script type="text/javascript">
+        try {
+            ace.settings.check('main-container', 'fixed')
+        } catch (e) {
+        }
+    </script>
+    <!-- header -->
+    <!-- Thay thế các đoạn mã này bằng thymeleaf block -->
+    <div th:replace="admin/common/menu.html"></div>
+    <!-- header -->
+    <div class="main-content">
+        <div class="main-content-inner">
+            <div class="page-content">
+                <form id="insert-product">
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label >Tên sản phẩm</label>
+                            <input type="text" class="form-control" id="name-product" name="name-product">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label >Giá sản phẩm</label>
+                            <input type="text" class="form-control" id="price-product" name="price-product">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label >Số lượng</label>
+                            <input type="number" class="form-control" id="quantity" name="quantity">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label >Màu sắc</label>
+                            <input type="text" class="form-control" id="Color" name="Color">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label >Trạng thái</label>
+                            <input type="text" class="form-control" id="Status" name="Status">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label>Loại</label>
+                            <select class="form-control" id="categorySelect" name="categorySelect">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary" id="btn-save">Submit</button>
+                    </div>
+                </form>
+
+                <div class="form-row">
+                    <div class="form-group col-md-8">
+                        <input class="form-control" type="search" placeholder="Tìm kiếm" aria-label="Search" id="keySearch">
+                    </div>
+                    <div class="form-group col-md-4">
+                        <button type="button" class="btn btn-primary btn-block" id="btn-search" onclick="searchProduct()">Tìm kiếm</button>
+                    </div>
+                </div>
+
+
+                <br>
+
+                <table class="table" id="productTable">
+                    <thead>
+                    <tr>
+                        <th scope="col">nameProduct</th>
+                        <th scope="col">priceProduct</th>
+                        <th scope="col">Color</th>
+                        <th scope="col">quantity</th>
+                        <th scope="col">status</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody id="productTableId">
+
+                    </tbody>
+                </table>
+
+
+            </div>
+        </div>
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+
+            </ul>
+        </nav>
+
+    </div>
+
+    <!-- footer -->
+    <!-- Thay thế các đoạn mã này bằng thymeleaf block -->
+    <div th:replace="admin/common/foodter.html"></div>
+    <!-- footer -->
+
+    <a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse display">
+        <i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
+    </a>
+</div>
+</body>
+
+
+</html>
