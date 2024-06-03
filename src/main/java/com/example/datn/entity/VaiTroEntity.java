@@ -18,7 +18,7 @@ import java.util.UUID;
 public class VaiTroEntity extends SuperEntity {
 
 
-    @Column(name = "tenVaiTro", length = 150, nullable = false, unique = true)
+    @Column(name = "tenVaiTro", length = 150, nullable = false)
     private String tenVaiTro;
     @JsonIgnore
     @OneToMany(mappedBy = "vaiTro")

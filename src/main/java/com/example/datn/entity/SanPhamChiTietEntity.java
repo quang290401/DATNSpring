@@ -18,15 +18,15 @@ import java.util.UUID;
 @NoArgsConstructor
 public class SanPhamChiTietEntity extends SuperEntity{
 
-    @Column(name = "giaSanPham", length = 150, nullable = false, unique = true)
+    @Column(name = "giaSanPham", length = 150, nullable = false)
     private BigDecimal giaSanPham;
-    @Column(name = "soLuong", length = 50, nullable = false, unique = true)
+    @Column(name = "soLuong", length = 50, nullable = false)
     private int soLuong;
-    @Column(name = "trongLuong", length = 150, nullable = false, unique = true)
+    @Column(name = "trongLuong", length = 150, nullable = false)
     private String trongLuong;
-    @Column(name = "gioiTinh", length = 10, nullable = false, unique = true)
+    @Column(name = "gioiTinh", length = 10, nullable = false)
     private int gioiTinh;
-    @Column(name = "moTa", length = 150, nullable = false, unique = true)
+    @Column(name = "moTa", length = 150, nullable = false)
     private String moTa;
 
     @ManyToOne
