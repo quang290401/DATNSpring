@@ -24,11 +24,11 @@ public class DiaChiEntity extends SuperEntity {
     private String diaChi;
     @Column(name = "thanhPho", length = 150, nullable = false, unique = true)
     private String thanhPho;
-    @Column(name = "quocGia", length = 150, nullable = false, unique = true)
+    @Column(name = "quocGia", length = 150, nullable = false, unique = false)
     private String quocGia;
     @JsonIgnore
     @OneToMany(mappedBy = "diaChi")
     private List<UserEntity> userEntities = new ArrayList<UserEntity>();
-    @Column(name = "trangThai", length = 10, nullable = false, unique = true)
+    @Column(name = "trangThai", length = 10, nullable = false, unique = false)
     private int trangThai;
 }

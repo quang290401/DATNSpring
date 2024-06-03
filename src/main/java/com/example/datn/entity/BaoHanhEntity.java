@@ -27,7 +27,7 @@ public class BaoHanhEntity extends SuperEntity {
     private String duongDan;
 
 
-    @Column(name = "trangThai", length = 10, nullable = false, unique = true)
+    @Column(name = "trangThai", length = 10, nullable = false, unique = false)
     private int trangThai;
     @JsonIgnore
     @OneToMany(mappedBy = "baoHanh")

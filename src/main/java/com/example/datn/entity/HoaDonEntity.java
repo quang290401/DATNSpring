@@ -23,11 +23,11 @@ public class HoaDonEntity extends SuperEntity {
     @ManyToOne
     @JoinColumn(name  = "trangThaiHD_id")
     private TrangThaiHDEntity trangThaiHD;
-    @Column(name = "thanhTien", length = 20, nullable = false, unique = true)
+    @Column(name = "thanhTien", length = 20, nullable = false, unique = false)
     private BigDecimal tongTien;
-    @Column(name = "ngayThanhToan", length = 120, nullable = false, unique = true)
+    @Column(name = "ngayThanhToan", length = 120, nullable = false, unique = false)
     private LocalDate ngayThanhToan;
-    @Column(name = "trangThai", length = 20, nullable = false, unique = true)
+    @Column(name = "trangThai", length = 20, nullable = false, unique = false)
     private int trangThai;
     @ManyToOne
     @JoinColumn(name  = "vouCher_id")

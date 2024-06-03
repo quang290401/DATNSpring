@@ -19,7 +19,7 @@ public class KichCoEntity extends SuperEntity {
 
     @Column(name = "tenKichCo", length = 120, nullable = false, unique = true)
     private String tenKichCo;
-    @Column(name = "doDai", length = 150, nullable = false, unique = true)
+    @Column(name = "doDai", length = 150, nullable = false, unique = false)
     private String doDai;
     @JsonIgnore
     @OneToMany(mappedBy = "kichCo")

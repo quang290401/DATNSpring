@@ -22,7 +22,7 @@ public class NSXEntity extends SuperEntity {
     @Column(name = "ten", length = 150, nullable = false, unique = true)
     private String ten;
 
-    @Column(name = "trangThai", length = 10, nullable = false, unique = true)
+    @Column(name = "trangThai", length = 10, nullable = false, unique = false)
     private int trangThai;
     @JsonIgnore
     @OneToMany(mappedBy = "nsx")

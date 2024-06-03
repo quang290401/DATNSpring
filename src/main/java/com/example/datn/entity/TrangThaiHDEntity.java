@@ -20,7 +20,7 @@ import java.util.List;
 public class TrangThaiHDEntity extends SuperEntity {
     @Column(name = "ten", length = 120, nullable = false, unique = true)
     private String ten;
-    @Column(name = "trangThai", length = 120, nullable = false, unique = true)
+    @Column(name = "trangThai", length = 120, nullable = false, unique = false)
     private String trangThai;
 
     @JsonIgnore
