@@ -18,11 +18,11 @@ import java.util.List;
 @Entity
 @Table(name = "DiaChi")
 public class DiaChiEntity extends SuperEntity {
-    @Column(name = "diaChi", length = 120, nullable = false)
+    @Column(name = "diaChi", length = 120, nullable = false,columnDefinition = "NVARCHAR(255)")
     private String diaChi;
-    @Column(name = "thanhPho", length = 150, nullable = false)
+    @Column(name = "thanhPho", length = 150, nullable = false,columnDefinition = "NVARCHAR(255)")
     private String thanhPho;
-    @Column(name = "quocGia", length = 150, nullable = false)
+    @Column(name = "quocGia", length = 150, nullable = false,columnDefinition = "NVARCHAR(255)")
     private String quocGia;
     @JsonIgnore
     @OneToMany(mappedBy = "diaChi")

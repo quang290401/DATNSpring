@@ -18,7 +18,7 @@ import java.util.List;
 @Entity
 @Table(name = "TrangThaiHD")
 public class TrangThaiHDEntity extends SuperEntity {
-    @Column(name = "ten", length = 120, nullable = false)
+    @Column(name = "ten", length = 120, nullable = false,columnDefinition = "NVARCHAR(255)")
     private String ten;
     @Column(name = "trangThai", length = 120, nullable = false)
     private String trangThai;

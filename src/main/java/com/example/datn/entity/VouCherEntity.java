@@ -20,7 +20,7 @@ import java.util.List;
 @Table(name = "VouCher")
 public class  VouCherEntity extends SuperEntity {
 
-    @Column(name = "ten", length = 150, nullable = false)
+    @Column(name = "ten", length = 150, nullable = false,columnDefinition = "NVARCHAR(255)")
     private String ten;
     @Column(name = "phanTramGiam", length = 10, nullable = false)
     private int phanTramGiam;

@@ -2,31 +2,29 @@ package com.example.datn.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-
+@Data
 @Entity
 @Table(name = "SanPhamChiTiet")
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
+
 public class SanPhamChiTietEntity extends SuperEntity{
 
     @Column(name = "giaSanPham", length = 150, nullable = false)
     private BigDecimal giaSanPham;
     @Column(name = "soLuong", length = 50, nullable = false)
     private int soLuong;
-    @Column(name = "trongLuong", length = 150, nullable = false)
+    @Column(name = "trongLuong", length = 150, nullable = false,columnDefinition = "NVARCHAR(255)")
     private String trongLuong;
-    @Column(name = "gioiTinh", length = 10, nullable = false)
+    @Column(name = "gioiTinh", length = 10, nullable = false,columnDefinition = "NVARCHAR(255)")
     private int gioiTinh;
-    @Column(name = "moTa", length = 150, nullable = false)
+    @Column(name = "moTa", length = 150, nullable = false,columnDefinition = "NVARCHAR(255)")
     private String moTa;
 
     @ManyToOne
@@ -61,6 +59,24 @@ public class SanPhamChiTietEntity extends SuperEntity{
     private List<HoaDonChiTietEntity> hoaDonChiTiets = new ArrayList<HoaDonChiTietEntity>();
 
 
-
-
+    @Override
+    public String toString() {
+        return "SanPhamChiTietEntity{" +
+                "giaSanPham=" + giaSanPham +
+                ", soLuong=" + soLuong +
+                ", trongLuong='" + trongLuong + '\'' +
+                ", gioiTinh=" + gioiTinh +
+                ", moTa='" + moTa + '\'' +
+                ", sanPham=" + sanPham +
+                ", mauSac=" + mauSac +
+                ", kichCo=" + kichCo +
+                ", nsx=" + nsx +
+                ", chatLieu=" + chatLieu +
+                ", hinhAnh=" + hinhAnh +
+                ", danhMuc=" + danhMuc +
+                ", baoHanh=" + baoHanh +
+                ", gioHangChiTietEntities=" + gioHangChiTietEntities +
+                ", hoaDonChiTiets=" + hoaDonChiTiets +
+                '}';
+    }
 }

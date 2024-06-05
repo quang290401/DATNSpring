@@ -8,6 +8,7 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,9 +21,9 @@ import java.util.List;
 public class BaoHanhEntity extends SuperEntity {
 
 
-    @Column(name = "ten", length = 150, nullable = false)
+    @Column(name = "ten", length = 150, nullable = false,columnDefinition = "NVARCHAR(255)")
     private String ten;
-    @Column(name = "thoiHan", length = 150, nullable = false)
+    @Column(name = "thoiHan", length = 150, nullable = false,columnDefinition = "NVARCHAR(255)")
     private String thoiHan;
 
 
@@ -30,5 +31,6 @@ public class BaoHanhEntity extends SuperEntity {
     private int trangThai;
     @JsonIgnore
     @OneToMany(mappedBy = "baoHanh")
+    @ToString.Exclude
     private List<SanPhamChiTietEntity> sanPhamChiTiets = new ArrayList<SanPhamChiTietEntity>();
 }

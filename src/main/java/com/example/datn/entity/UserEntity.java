@@ -19,11 +19,11 @@ import java.util.List;
 public class UserEntity extends SuperEntity{
     @Column(name = "taiKhoan", length = 50, nullable = false)
     private String taiKhoan;
-    @Column(name = "ten", length =150, nullable = false)
+    @Column(name = "ten", length =150, nullable = false,columnDefinition = "NVARCHAR(255)")
     private String ten;
-    @Column(name = "tenDem", length = 150, nullable = false)
+    @Column(name = "tenDem", length = 150, nullable = false,columnDefinition = "NVARCHAR(255)")
     private String tenDem;
-    @Column(name = "ho", length = 150, nullable = false)
+    @Column(name = "ho", length = 150, nullable = false,columnDefinition = "NVARCHAR(255)")
     private String ho;
     @Column(name = "sdt", length = 50, nullable = false)
     private String sdt;
