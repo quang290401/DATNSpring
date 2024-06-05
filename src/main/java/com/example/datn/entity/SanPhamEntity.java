@@ -18,10 +18,10 @@ import java.util.UUID;
 @NoArgsConstructor
 public class SanPhamEntity extends SuperEntity{
 
-    @Column(name = "tenSanPham", length = 150, nullable = false, unique = true)
+    @Column(name = "tenSanPham", length = 150, nullable = false)
     private String tenSanPham;
 
-    @Column(name = "trangThai", length = 10, nullable = false, unique = true)
+    @Column(name = "trangThai", length = 10, nullable = false)
     private int trangThai;
     @JsonIgnore
     @OneToMany(mappedBy = "sanPham")

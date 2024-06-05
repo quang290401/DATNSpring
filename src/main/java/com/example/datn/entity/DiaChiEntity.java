@@ -18,17 +18,15 @@ import java.util.List;
 @Entity
 @Table(name = "DiaChi")
 public class DiaChiEntity extends SuperEntity {
-    @Column(name = "ma", length = 120, nullable = false, unique = true)
-    private String ma;
-    @Column(name = "diaChi", length = 120, nullable = false, unique = true)
+    @Column(name = "diaChi", length = 120, nullable = false)
     private String diaChi;
-    @Column(name = "thanhPho", length = 150, nullable = false, unique = true)
+    @Column(name = "thanhPho", length = 150, nullable = false)
     private String thanhPho;
-    @Column(name = "quocGia", length = 150, nullable = false, unique = true)
+    @Column(name = "quocGia", length = 150, nullable = false)
     private String quocGia;
     @JsonIgnore
     @OneToMany(mappedBy = "diaChi")
     private List<UserEntity> userEntities = new ArrayList<UserEntity>();
-    @Column(name = "trangThai", length = 10, nullable = false, unique = true)
+    @Column(name = "trangThai", length = 10, nullable = false)
     private int trangThai;
 }

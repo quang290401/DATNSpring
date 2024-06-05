@@ -17,23 +17,23 @@ import java.util.List;
 @NoArgsConstructor
 @Table(name ="Users")
 public class UserEntity extends SuperEntity{
-    @Column(name = "taiKhoan", length = 50, nullable = false, unique = true)
+    @Column(name = "taiKhoan", length = 50, nullable = false)
     private String taiKhoan;
-    @Column(name = "ten", length =150, nullable = false, unique = true)
+    @Column(name = "ten", length =150, nullable = false)
     private String ten;
-    @Column(name = "tenDem", length = 150, nullable = false, unique = true)
+    @Column(name = "tenDem", length = 150, nullable = false)
     private String tenDem;
-    @Column(name = "ho", length = 150, nullable = false, unique = true)
+    @Column(name = "ho", length = 150, nullable = false)
     private String ho;
-    @Column(name = "sdt", length = 50, nullable = false, unique = true)
+    @Column(name = "sdt", length = 50, nullable = false)
     private String sdt;
-    @Column(name = "matKhau", length = 30, nullable = false, unique = true)
+    @Column(name = "matKhau", length = 30, nullable = false)
     private String matKhau;
-    @Column(name = "ngaySinh", length = 30, nullable = false, unique = true)
+    @Column(name = "ngaySinh", length = 30, nullable = false)
     private LocalDate ngaySinh;
-    @Column(name = "gioiTinh", length = 10, nullable = false, unique = true)
+    @Column(name = "gioiTinh", length = 10, nullable = false)
     private int gioiTinh;
-    @Column(name = "trangThai", length = 10, nullable = false, unique = true)
+    @Column(name = "trangThai", length = 10, nullable = false)
     private int trangThai;
     @ManyToOne
     @JoinColumn(name  = "vaiTro_id")

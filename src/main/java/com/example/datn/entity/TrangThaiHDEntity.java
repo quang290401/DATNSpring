@@ -18,9 +18,9 @@ import java.util.List;
 @Entity
 @Table(name = "TrangThaiHD")
 public class TrangThaiHDEntity extends SuperEntity {
-    @Column(name = "ten", length = 120, nullable = false, unique = true)
+    @Column(name = "ten", length = 120, nullable = false)
     private String ten;
-    @Column(name = "trangThai", length = 120, nullable = false, unique = true)
+    @Column(name = "trangThai", length = 120, nullable = false)
     private String trangThai;
 
     @JsonIgnore
