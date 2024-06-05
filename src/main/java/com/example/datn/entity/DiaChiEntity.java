@@ -22,7 +22,7 @@ public class DiaChiEntity extends SuperEntity {
     private String ma;
     @Column(name = "diaChi", length = 120, nullable = false, unique = true)
     private String diaChi;
-    @Column(name = "thanhPho", length = 150, nullable = false, unique = true)
+    @Column(name = "thanhPho", length = 150, nullable = false, unique = false)
     private String thanhPho;
     @Column(name = "quocGia", length = 150, nullable = false, unique = false)
     private String quocGia;

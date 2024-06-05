@@ -23,8 +23,8 @@ public class BaoHanhEntity extends SuperEntity {
 
     @Column(name = "ten", length = 150, nullable = false, unique = true)
     private String ten;
-    @Column(name = "duongDan", length = 150, nullable = false, unique = true)
-    private String duongDan;
+    @Column(name = "thangBaoHanh", length = 150, nullable = false, unique = true)
+    private int thangBaoHanh;
 
 
     @Column(name = "trangThai", length = 10, nullable = false, unique = false)
