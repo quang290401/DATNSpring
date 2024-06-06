@@ -4,13 +4,13 @@ import com.example.datn.Repository.KichCoRepository;
 import com.example.datn.entity.KichCoEntity;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,8 +22,11 @@ public class KichCoController {
     KichCoRepository kichCoRepository;
 
     @GetMapping("/kichco/getAll")
-    public String getAllChatLieu(Model model) {
-        List<KichCoEntity> kichCoList = kichCoRepository.findAll();
+    public String getAllKichCo(@RequestParam(defaultValue = "0") int page,
+                                @RequestParam(defaultValue = "5") int size,
+                                Model model) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<KichCoEntity> kichCoList = kichCoRepository.findAll(pageable);
         model.addAttribute("kichCoList", kichCoList);
         model.addAttribute("kichCo", new KichCoEntity());
         return "admin/adminWeb/KichCo";
