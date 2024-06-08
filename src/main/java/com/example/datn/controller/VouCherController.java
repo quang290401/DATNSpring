@@ -100,7 +100,7 @@ public class VouCherController {
             }
 
             // Cập nhật thông tin chất liệu
-            existingVouCher.setMa(updateVouCher.getMa());
+            existingVouCher.setId(updateVouCher.getId());
             existingVouCher.setTen(updateVouCher.getTen());
             existingVouCher.setPhanTramGiam(updateVouCher.getPhanTramGiam());
             existingVouCher.setNgayBatDau(updateVouCher.getNgayBatDau());

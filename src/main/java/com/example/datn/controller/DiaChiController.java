@@ -101,7 +101,7 @@ public String getDiaChiDetail(@PathVariable("id") UUID id, Model model) {
             }
 
             // Cập nhật thông tin chất liệu
-            existingdiaChi.setMa(updateDiaChi.getMa());
+            existingdiaChi.setId(updateDiaChi.getId());
             existingdiaChi.setDiaChi(updateDiaChi.getDiaChi());
             existingdiaChi.setThanhPho(updateDiaChi.getThanhPho());
             existingdiaChi.setUpdateDate(updateDiaChi.getUpdateDate());

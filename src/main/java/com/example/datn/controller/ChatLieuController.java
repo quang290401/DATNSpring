@@ -97,9 +97,9 @@ public class ChatLieuController {
             }
 
             // Cập nhật thông tin chất liệu
-            existingChatLieu.setMa(updatedChatLieu.getMa());
+            existingChatLieu.setId(updatedChatLieu.getId());
             existingChatLieu.setTen(updatedChatLieu.getTen());
-            existingChatLieu.setMoTa(updatedChatLieu.getMoTa());
+//            existingChatLieu.setMoTa(updatedChatLieu.getMoTa());
             existingChatLieu.setUpdateDate(updatedChatLieu.getUpdateDate());
             existingChatLieu.setTrangThai(updatedChatLieu.getTrangThai());
             chatLieuRepository.save(existingChatLieu);
