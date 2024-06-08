@@ -3,13 +3,13 @@ import com.example.datn.Repository.NSXRepository;
 import com.example.datn.entity.NSXEntity;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,8 +21,11 @@ public class NSXController {
     NSXRepository nsxRepository;
 
     @GetMapping("/nsx/getAll")
-    public String getAllNSX(Model model) {
-        List<NSXEntity> listNSX = nsxRepository.findAll();
+    public String getAllNSX(@RequestParam(defaultValue = "0") int page,
+                               @RequestParam(defaultValue = "5") int size,
+                               Model model) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<NSXEntity> listNSX = nsxRepository.findAll(pageable);
         model.addAttribute("listNSX", listNSX);
         model.addAttribute("nsx", new NSXEntity());
         return "admin/adminWeb/NSX";
