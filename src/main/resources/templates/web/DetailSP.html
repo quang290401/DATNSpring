@@ -1,45 +1,175 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Insert title here</title>
-    <link rel="stylesheet" th:href="@{/dist/DetailPaging/csspaging/styles.css}"/>
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Detail</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <style>
+        .custom-input-group {
+            display: flex;
+            align-items: center;
+        }
+        .custom-input-group .form-control {
+            flex: 1;
+            margin-right: 15px; /* Adjust the margin as needed */
+        }
+        .custom-input-group .btn {
+            flex: none;
+        }
+    </style>
+    <style>
+        .card-custom {
+            width: 20rem; /* Điều chỉnh chiều rộng của thẻ */
+        }
+        .card-img-top-custom {
+            height: 300px; /* Điều chỉnh chiều cao của hình ảnh */
+            object-fit: cover; /* Đảm bảo hình ảnh không bị méo */
+        }
+        .card-body-custom h5 {
+            font-size: 1rem; /* Điều chỉnh kích thước font chữ của tên sản phẩm */
+        }
+        .card-body-custom div {
+            font-size: 0.9rem; /* Điều chỉnh kích thước font chữ của giá sản phẩm */
+        }
+        .card-footer-custom a {
+            font-size: 0.85rem; /* Điều chỉnh kích thước font chữ của nút */
+        }
+    </style>
 </head>
 <body>
 <div th:replace="web/common/header.html"></div>
 <form id="formSubmit">
     <div class="row gx-4 gx-lg-5 align-items-center">
         <div class="col-md-6">
-            <img class="card-img-top mb-5 mb-md-0"
-                 src="https://images.pexels.com/photos/2529148/pexels-photo-2529148.jpeg?auto=compress&cs=tinysrgb&w=600"
-                 alt="..." style="width: 100%; max-width: 500px; height: auto;"/>
+            <img class="card-img-top" id="productImage" src="" alt="..."
+                 style="width: 100%; max-width: 500px; height: auto;"/>
         </div>
         <div class="col-md-6">
             <div class="small mb-1"></div>
-            <h1 class="display-5 fw-bolder">Tên Sản Phẩm</h1>
+            <h1 class="display-5 fw-bolder" id="productName">Tên Sản Phẩm</h1>
             <div class="fs-5 mb-5">
-                <span class="text-decoration-line-through">$1245.00</span> <span>Giá SP</span>
+                <span class="text-decoration-line-through" id="productOldPrice">$1245.00</span>
+                <span id="productPrice">Giá SP</span>
             </div>
-            <p class="lead">Lorem ipsum dolor sit amet consectetur
-                adipisicing elit. Praesentium at dolorem quidem modi. Nam sequi
-                consequatur obcaecati excepturi alias magni, accusamus eius
-                blanditiis delectus ipsam minima ea iste laborum vero?</p>
-            <div class="d-flex">
+            <p class="lead" id="productDescription"></p>
+            <div class="custom-input-group">
                 <input type="hidden" class="form-control" id="gioHang" name="gioHang" value=""/>
                 <input type="hidden" class="form-control" id="sanPham" name="sanPham" value=""/>
-                <input class="form-control" value=1 type="number" id="soLuong" name="soLuong">
-                <a class="btn btn-outline-dark mt-auto" id="btnAddCart"> Add to cart </a>
+                <input class="form-control" value="1" type="number" id="soLuong" name="soLuong">
+                <a class="btn btn-outline-dark mt-auto" id="btnAddCart">Add to cart</a>
             </div>
         </div>
     </div>
 </form>
-
-<!-- Related items section-->
-
 <h2 class="fw-bolder mb-4">Có Thể Bạn Quan Tâm ?</h2>
 
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center" id="productContainer">
+    <!-- Product cards will be appended here by JavaScript -->
+
+</div>
+
+</div>
 <div th:replace="web/common/foodter.html"></div>
+
+<script>
+    var url = document.location.pathname;
+    var id = url.substring(url.lastIndexOf('/') + 1);
+    $(document).ready(function() {
+        // Hàm để lấy chi tiết sản phẩm
+        function fetchProductDetails(id) {
+            $.ajax({
+                url: `/api/SPCT/Detail/` + id, // Thay thế bằng endpoint API của bạn
+                method: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    // Ghi dữ liệu vào console để gỡ lỗi
+                    console.log('Dữ liệu sản phẩm:', data);
+
+                    // Kiểm tra xem URL hình ảnh có chính xác không
+                    if (data.hinhAnh && data.hinhAnh.duongDan) {
+                        let imageUrl = data.hinhAnh.duongDan;
+                        console.log('URL hình ảnh:', imageUrl);
+
+                        // Nếu đường dẫn không bắt đầu bằng http:// hoặc https://, thêm tiền tố
+                        if (!imageUrl.startsWith('http://') && !imageUrl.startsWith('https://')) {
+                            imageUrl = `http://localhost:8080/${imageUrl}`;
+                        }
+
+                        $('#productImage').attr('src', imageUrl);
+                    } else {
+                        console.error('URL hình ảnh không hợp lệ:', data.hinhAnh);
+                    }
+
+                    $('#productName').text(data.sanPham.tenSanPham);
+                    $('#productOldPrice').text(`$${(data.giaSanPham * 1.2).toFixed(2)}`); // Giả sử giá cũ cao hơn 20%
+                    $('#productPrice').text(`$${data.giaSanPham.toFixed(2)}`);
+                    $('#productDescription').html(`Mô Tả : ${data.moTa}<br>Kích Cỡ : ${data.kichCo.tenKichCo}<br>NSX : ${data.nsx.ten}`);
+
+
+                },
+                error: function(err) {
+                    console.error('Lỗi khi lấy chi tiết sản phẩm:', err);
+                }
+            });
+        }
+
+        // Gọi ví dụ để lấy chi tiết sản phẩm cho một ID sản phẩm cụ thể
+        fetchProductDetails(id); // Thay thế bằng ID sản phẩm thực tế
+    });
+
+</script>
+<script>
+    $(document).ready(function() {
+        // Function to fetch top 4 products
+        function fetchTop4Products() {
+            $.ajax({
+                url: '/api/SPCT/top4', // Endpoint API của bạn
+                method: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    // Ghi dữ liệu vào console để gỡ lỗi
+                    console.log('Dữ liệu sản phẩm:', data);
+
+                    // Lặp qua danh sách sản phẩm và tạo HTML cho mỗi sản phẩm
+                    var productContainer = $('#productContainer');
+                    productContainer.empty(); // Xóa nội dung cũ (nếu có)
+
+                    data.forEach(function(product) {
+                        var productCard = `
+                                <div class="col mb-5">
+                                    <div class="card h-100 card-custom">
+                                        <!-- Product image-->
+                                        <img class="card-img-top card-img-top-custom" src="http://localhost:8080/${product.hinhAnh.duongDan}" alt="..."/>
+                                        <!-- Product details-->
+                                        <div class="card-body p-4 card-body-custom">
+                                            <div class="text-center">
+                                                <!-- Product name-->
+                                                <h5 class="fw-bolder">${product.sanPham.tenSanPham}</h5>
+                                                <!-- Product price-->
+                                                <div>${product.giaSanPham}</div>
+                                            </div>
+                                        </div>
+                                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent card-footer-custom">
+                                            <div class="text-center">
+                                                <a class="btn btn-outline-dark mt-auto" href="">View options</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>`;
+                        productContainer.append(productCard);
+                    });
+                },
+                error: function(err) {
+                    console.error('Lỗi khi lấy danh sách sản phẩm:', err);
+                }
+            });
+        }
+
+        // Gọi hàm fetchTop4Products khi trang được tải
+        fetchTop4Products();
+    });
+</script>
 </body>
 </html>

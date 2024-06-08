@@ -16,16 +16,15 @@
     <form th:action="@{/chatlieu/add}" th:object="${chatLieu}" method="post">
       <div class="form-row">
         <div class="form-group col-md-2">
-          <label for="ma">Mã</label>
-          <input type="text" class="form-control" id="ma" th:field="*{ma}" placeholder="Ma" required>
+
+
         </div>
         <div class="form-group col-md-2">
           <label for="ten">Tên</label>
           <input type="text" class="form-control" id="ten" th:field="*{ten}" placeholder="Ten" required>
         </div>
         <div class="form-group col-md-4">
-          <label for="moTa">Mô Tả</label>
-          <input type="text" class="form-control" id="moTa" th:field="*{moTa}" placeholder="Mo Ta">
+
         </div>
         <div class="form-group col-md-2">
           <label for="trangThai">Trạng Thái</label>
@@ -50,11 +49,9 @@
     </thead>
     <tbody>
     <tr th:each="chatLieu : ${chatLieuList}">
-      <td th:text="${chatLieu.ma}"></td>
       <td th:text="${chatLieu.ten}"></td>
       <td th:text="${chatLieu.createDate}"></td>
       <td th:text="${chatLieu.updateDate}"></td>
-      <td th:text="${chatLieu.moTa}"></td>
       <td th:text="${chatLieu.trangThai}"></td>
       <td>
         <a th:href="@{/chatlieu/detail/{id}(id=${chatLieu.id})}" class="btn btn-primary">Detail</a>

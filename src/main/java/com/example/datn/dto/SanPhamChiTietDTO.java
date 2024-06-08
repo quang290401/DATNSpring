@@ -28,21 +28,21 @@ public class SanPhamChiTietDTO extends SuperDTO {
     private String moTa;
 
 
-    private String sanPham;
+    private SanPhamDTO sanPham;
 
-    private String mauSac;
+    private MauSacDTO mauSac;
 
-    private String kichCo;
+    private KichCoDTO kichCo;
 
-    private String nsx;
+    private NSXDTO nsx;
 
-    private String chatLieu;
+    private ChatLieuDTO chatLieu;
 
-    private String hinhAnh;
+    private HinhAnhDTO hinhAnh;
 
-    private String danhMuc;
+    private DanhMucDTO danhMuc;
 
-    private String baoHanh;
+    private BaoHanhDTO baoHanh;
 
 
 }

@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class DetailSPController {
-    @GetMapping("/DetailSP")
+    @GetMapping("/DetailSP/{id}")
     public String home(){
         return "web/DetailSP.html";
     }

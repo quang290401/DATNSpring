@@ -5,10 +5,12 @@ import com.example.datn.dto.SanPhamChiTietDTO;
 import com.example.datn.service.SanPhamChiTietService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,4 +25,15 @@ public class SanPhamChiTietRestController {
 
         return sanPhamChiTietService.getAllSanPhamChiTiet(pageNo, pageSize);
     }
+    @GetMapping("/Detail/{id}")
+    public  SanPhamChiTietDTO getById(@PathVariable UUID id){
+        return sanPhamChiTietService.findById(id);
+    }
+
+    @GetMapping("/top4")
+    public List<SanPhamChiTietDTO> getForSPCT() {
+        Pageable topFour = PageRequest.of(0, 4);
+        return sanPhamChiTietService.GetForSP(topFour);
+    }
+
 }
