@@ -1,4 +1,4 @@
-package com.example.datn.service.impl;
+package com.example.datn.service.config;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;

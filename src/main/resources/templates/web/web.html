@@ -14,26 +14,33 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 </head>
 <body>
-<div th:replace="web/common/header.html"></div>
+<div th:replace="~{web/common/header.html}"></div>
 <section class="py-5">
   <div class="container px-4 px-lg-5 mt-5">
     <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
       <!-- Sản phẩm sẽ được thêm vào đây bởi AJAX -->
     </div>
   </div>
+  <nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-center">
+      <!-- Các liên kết phân trang sẽ được thêm vào đây -->
+    </ul>
+  </nav>
 </section>
-<div th:replace="web/common/foodter.html"></div>
+<div th:replace="~{web/common/foodter.html}"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 <script th:src="@{/dist/addjs/scripts.js}"></script>
 <script th:src="@{/dist/css/styles.css}"></script>
 <script th:src="@{/dist/assets/favicon.ico}"></script>
 
-</body>
-<script >
-  $(document).ready(function() {
+<script>
+  let currentPage = 1;
+  let pageSize = 8;
+
+  function fetchProducts(pageNo) {
     $.ajax({
-      url: '/api/SPCT', // URL của API của bạn
+      url: `/api/SPCT?pageNo=${pageNo}&pageSize=${pageSize}`,
       method: 'GET',
       dataType: 'json',
       success: function(response) {
@@ -49,29 +56,31 @@
           products.forEach(function(product) { // Sửa tên biến thành product
             var productId = product.id; // Lấy id của sản phẩm
             var productHtml = `
-            <div class="col mb-5">
-              <div class="card h-100">
-                <!-- Product image-->
-                <img class="card-img-top" src="${product.hinhAnh.duongDan}" alt="...">
-                <!-- Product details-->
-                <div class="card-body p-4">
-                  <div class="text-center">
-                    <!-- Product name-->
-                    <h5 class="fw-bolder">${product.sanPham.tenSanPham}</h5>
-                    <!-- Product price-->
-                    ${product.giaSanPham.toLocaleString('vi-VN', {style: 'currency', currency: 'VND'})}
-                  </div>
-                </div>
-                <!-- Product actions-->
-                <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                  <div class="text-center"><a class="btn btn-outline-dark mt-auto view-options" href="#" data-product-id="${productId}">View options</a></div>
-                </div>
-              </div>
-            </div>
-          `;
-
+                        <div class="col mb-5">
+                            <div class="card h-100">
+                                <!-- Product image-->
+                                <img class="card-img-top" src="${product.hinhAnh.duongDan}" alt="...">
+                                <!-- Product details-->
+                                <div class="card-body p-4">
+                                    <div class="text-center">
+                                        <!-- Product name-->
+                                        <h5 class="fw-bolder">${product.sanPham.tenSanPham}</h5>
+                                        <!-- Product price-->
+                                        ${product.giaSanPham.toLocaleString('vi-VN', {style: 'currency', currency: 'VND'})}
+                                    </div>
+                                </div>
+                                <!-- Product actions-->
+                                <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                    <div class="text-center"><a class="btn btn-outline-dark mt-auto view-options" href="#" data-product-id="${productId}">View options</a></div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
             container.append(productHtml);
           });
+
+          // Cập nhật liên kết phân trang
+          updatePagination(response);
         } else {
           console.error('Expected an array but got:', products);
           container.append('<p class="text-danger">Error: Expected an array but got invalid data format.</p>');
@@ -84,8 +93,38 @@
         container.append('<p class="text-danger">Error fetching products. Please try again later.</p>');
       }
     });
+  }
 
-    // Bắt sự kiện click vào liên kết
+  function updatePagination(response) {
+    var paginationContainer = $('.pagination');
+    paginationContainer.empty(); // Xóa nội dung cũ
+
+    var totalPages = response.totalPages;
+    var currentPage = response.pageable.pageNumber + 1; // Cập nhật số trang hiện tại
+
+    for (var i = 1; i <= totalPages; i++) {
+      var activeClass = (i === currentPage) ? 'active' : '';
+      var pageItem = `
+        <li class="page-item ${activeClass}">
+          <a class="page-link" href="#" data-page="${i}">${i}</a>
+        </li>
+      `;
+      paginationContainer.append(pageItem);
+    }
+  }
+
+  $(document).ready(function() {
+    fetchProducts(currentPage-1);
+
+    // Bắt sự kiện click vào liên kết phân trang
+    $(document).on('click', '.pagination .page-link', function(e) {
+      e.preventDefault(); // Ngăn chặn hành vi mặc định của thẻ <a>
+
+      var pageNo = $(this).data('page'); // Lấy số trang từ thuộc tính data
+      fetchProducts(pageNo-1); // Tải lại sản phẩm với trang mới
+    });
+
+    // Bắt sự kiện click vào liên kết View options
     $(document).on('click', '.view-options', function(e) {
       e.preventDefault(); // Ngăn chặn hành vi mặc định của thẻ <a>
 
@@ -95,9 +134,6 @@
       window.location.href = '/DetailSP/' + productId;
     });
   });
-
-
 </script>
-
-
+</body>
 </html>

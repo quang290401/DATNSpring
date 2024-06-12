@@ -17,6 +17,8 @@ import java.util.List;
 @NoArgsConstructor
 @Table(name ="Users")
 public class UserEntity extends SuperEntity{
+
+
     @Column(name = "taiKhoan", length = 50, nullable = false)
     private String taiKhoan;
     @Column(name = "ten", length =150, nullable = false,columnDefinition = "NVARCHAR(255)")
