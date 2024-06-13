@@ -29,6 +29,11 @@ public class LoginRestController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
         }
     }
+    @GetMapping("/logout")
+    public ResponseEntity<?> logout(HttpSession session) {
+        session.invalidate();  // Xóa bỏ session hiện tại
+        return ResponseEntity.ok("Logged out successfully");
+    }
 
     @GetMapping("/profile")
     public ResponseEntity<?> profile(HttpSession session) {
