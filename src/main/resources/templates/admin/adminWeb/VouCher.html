@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/jquery.validation/latest/jquery.validate.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <th:block th:replace="~{cssImport.html :: layout_import_css}"/>
+
+
+</head>
+<body class="no-skin">
+<div th:replace="admin/common/Header.html"></div>
+<div class="main-container" id="main-container">
+  <script type="text/javascript">
+    try {
+      ace.settings.check('main-container', 'fixed')
+    } catch (e) {
+    }
+  </script>
+  <div th:replace="admin/common/menu.html"></div>
+  <div class="container mt-4">
+    <form th:action="@{/voucher/add}" th:object="${vouCher}" method="post" id="voucherForm">
+      <div class="form-row">
+        <div class="form-group col-md-2">
+          <label for="ten">Tên</label>
+          <input type="text" class="form-control" id="ten" th:field="*{ten}" placeholder="Tên" required>
+        </div>
+        <div class="form-group col-md-4">
+          <label for="phanTramGiam">Phần trăm giảm</label>
+          <input type="text" class="form-control" id="phanTramGiam" th:field="*{phanTramGiam}" placeholder="Phần trăm giảm">
+        </div>
+        <div class="form-group col-md-2">
+          <label for="ngayBatDau">Ngày bắt đầu :</label>
+          <input type="date" class="form-control" id="ngayBatDau" th:field="*{ngayBatDau}" placeholder="Ngày bắt đầu" required>
+        </div>
+        <div class="form-group col-md-2">
+          <label for="ngayKetThuc">Ngày kết thúc:</label>
+          <input type="date" class="form-control" id="ngayKetThuc" th:field="*{ngayKetThuc}" placeholder="Ngày kết thúc" required>
+        </div>
+        <div class="form-group col-md-2 align-self-end">
+          <button type="submit" class="btn btn-success" id="btnAdd">Add</button>
+        </div>
+      </div>
+    </form>
+    <table class="table table-bordered">
+      <thead class="thead-dark">
+      <tr>
+
+        <th>Tên</th>
+        <th>Phần trăm giảm</th>
+        <th>Ngày bắt đầu</th>
+        <th>Ngày kết thúc</th>
+        <th>Ngày Tạo</th>
+        <th>Ngày Sửa</th>
+        <th>Trạng Thái</th>
+        <th>Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="vouCher : ${listVoucher}">
+        <td th:text="${vouCher.ten}"></td>
+        <td th:text="${vouCher.phanTramGiam}"></td>
+        <td th:text="${vouCher.ngayBatDau}"></td>
+        <td th:text="${vouCher.ngayKetThuc}"></td>
+        <td th:text="${vouCher.createDate}"></td>
+        <td th:text="${vouCher.updateDate}"></td>
+        <td th:text="${vouCher.trangThai}"></td>
+        <td>
+          <a th:href="@{/voucher/detail/{id}(id=${vouCher.id})}" class="btn btn-primary">Detail</a>
+          <form th:action="@{/voucher/delete/{id}(id=${vouCher.id})}" method="post">
+            <button type="submit" class="btn btn-danger">Delete</button>
+          </form>
+
+
+        </td>
+      </tr>
+      </tbody>
+    </table>
+    <div>
+      <ul class="pagination">
+        <li th:if="${listVoucher.hasPrevious()}" class="page-item">
+          <a th:href="@{/voucher/getAll(page=${listVoucher.number - 1}, size=${listVoucher.size})}" class="page-link">Previous</a>
+        </li>
+        <li th:each="i : ${#numbers.sequence(0, listVoucher.totalPages - 1)}" class="page-item" th:classappend="${listVoucher.number == i} ? 'active'">
+          <a th:href="@{/voucher/getAll(page=${i}, size=${listVoucher.size})}" class="page-link" th:text="${i + 1}">1</a>
+        </li>
+        <li th:if="${listVoucher.hasNext()}" class="page-item">
+          <a th:href="@{/voucher/getAll(page=${listVoucher.number + 1}, size=${listVoucher.size})}" class="page-link">Next</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div th:replace="admin/common/foodter.html"></div>
+  <script>
+    $(document).ready(function() {
+      $('#voucherForm').submit(function(event) {
+        var ngayBatDau = new Date($('#ngayBatDau').val());
+        var ngayKetThuc = new Date($('#ngayKetThuc').val());
+        var today = new Date();
+        today.setHours(0,0,0,0);
+
+        if (ngayBatDau < today) {
+          alert('Ngày Bắt Đầu không được trong quá khứ');
+          event.preventDefault();
+          return false;
+        }
+
+        if (ngayKetThuc < ngayBatDau) {
+          alert('Ngày Kết Thúc phải sau Ngày Bắt Đầu');
+          event.preventDefault();
+          return false;
+        }
+      });
+    });
+  </script>
+</body>
+</html>

@@ -5,8 +5,9 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
-import java.math.BigDecimal;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -16,17 +17,16 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SanPhamEntity extends SuperEntity{
+public class SanPhamEntity extends SuperEntity {
 
-    @Column(name = "tenSanPham", length = 150, nullable = false, unique = true)
+    @Column(name = "tenSanPham", length = 150, nullable = false, columnDefinition = "NVARCHAR(255)")
     private String tenSanPham;
 
-    @Column(name = "trangThai", length = 10, nullable = false, unique = false)
+    @Column(name = "trangThai", length = 10, nullable = false)
     private int trangThai;
     @JsonIgnore
     @OneToMany(mappedBy = "sanPham")
+    @ToString.Exclude
     private List<SanPhamChiTietEntity> sanPhamChiTiets = new ArrayList<SanPhamChiTietEntity>();
-
-
 
 }

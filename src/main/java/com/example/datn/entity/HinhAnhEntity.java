@@ -8,6 +8,7 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,18 +19,18 @@ import java.util.List;
 @Entity
 @Table(name = "HinhAnh")
 public class HinhAnhEntity extends SuperEntity {
-    @Column(name = "ma", length = 150, nullable = false, unique = true)
-    private String ma;
 
-    @Column(name = "ten", length = 150, nullable = false, unique = false)
+
+    @Column(name = "ten", length = 150, nullable = false,columnDefinition = "NVARCHAR(255)")
     private String ten;
-    @Column(name = "duongDan", length = 150, nullable = false, unique = true)
+    @Column(name = "duongDan", length = 150, nullable = false)
     private String duongDan;
 
-    @Column(name = "trangThai", length = 10, nullable = false, unique = false)
+    @Column(name = "trangThai", length = 10, nullable = false)
     private int trangThai;
     @JsonIgnore
     @OneToMany(mappedBy = "hinhAnh")
+    @ToString.Exclude
     private List<SanPhamChiTietEntity> sanPhamChiTiets = new ArrayList<SanPhamChiTietEntity>();
 
 }

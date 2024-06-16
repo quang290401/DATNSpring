@@ -8,6 +8,7 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,13 +20,14 @@ import java.util.List;
 @NoArgsConstructor
 public class NSXEntity extends SuperEntity {
 
-    @Column(name = "ten", length = 150, nullable = false, unique = true)
+    @Column(name = "ten", length = 150, nullable = false,columnDefinition = "NVARCHAR(255)")
     private String ten;
 
-    @Column(name = "trangThai", length = 10, nullable = false, unique = false)
+    @Column(name = "trangThai", length = 10, nullable = false)
     private int trangThai;
     @JsonIgnore
     @OneToMany(mappedBy = "nsx")
+    @ToString.Exclude
     private List<SanPhamChiTietEntity> sanPhamChiTiets = new ArrayList<SanPhamChiTietEntity>();
 
 }

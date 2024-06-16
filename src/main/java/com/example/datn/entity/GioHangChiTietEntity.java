@@ -23,16 +23,16 @@ public class GioHangChiTietEntity implements Serializable {
     @ManyToOne
     @JoinColumn(name = "sanPhamChitiet_id")
     private SanPhamChiTietEntity sanPhamChiTiet;
-    @Column(name = "soLuong", length = 10, nullable = false, unique = false)
+    @Column(name = "soLuong", length = 10, nullable = false)
     private int soLuong;
-    @Column(name = "thanhTien", length = 70, nullable = false, unique = false)
+    @Column(name = "thanhTien", length = 70, nullable = false)
     private BigDecimal thanhTien;
     @Column(name = "createDate")
     private LocalDate createDate;
 
     @Column(name = "updateDate")
     private LocalDate updateDate;
-    @Column(name = "trangThai", length = 50, nullable = false, unique = false)
+    @Column(name = "trangThai", length = 50, nullable = false, unique = true)
     private int trangThai;
 
 }

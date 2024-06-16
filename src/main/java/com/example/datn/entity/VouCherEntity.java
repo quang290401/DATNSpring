@@ -19,18 +19,16 @@ import java.util.List;
 @Entity
 @Table(name = "VouCher")
 public class  VouCherEntity extends SuperEntity {
-    @Column(name = "ma", length = 150, nullable = false, unique = true)
-    private String ma;
 
-    @Column(name = "ten", length = 150, nullable = false, unique = true)
+    @Column(name = "ten", length = 150, nullable = false,columnDefinition = "NVARCHAR(255)")
     private String ten;
-    @Column(name = "phanTramGiam", length = 10, nullable = false, unique = false)
+    @Column(name = "phanTramGiam", length = 10, nullable = false)
     private int phanTramGiam;
-    @Column(name = "ngayBatDau", length = 30, nullable = false, unique = false)
+    @Column(name = "ngayBatDau", length = 30, nullable = false)
     private LocalDate ngayBatDau;
-    @Column(name = "ngayKetThuc", length = 30, nullable = false, unique = false)
+    @Column(name = "ngayKetThuc", length = 30, nullable = false)
     private LocalDate ngayKetThuc;
-    @Column(name = "trangThai", length = 50, nullable = false, unique = false)
+    @Column(name = "trangThai", length = 50, nullable = false)
     private int trangThai;
     @JsonIgnore
     @OneToMany(mappedBy = "vouCher")

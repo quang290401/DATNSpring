@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
@@ -18,19 +19,19 @@ public class SuperEntity {
     private UUID id;
 
     @Column(name = "createDate")
-    private LocalDate createDate;
+    private LocalDateTime createDate;
 
     @Column(name = "updateDate")
-    private LocalDate updateDate;
+    private LocalDateTime updateDate;
 
     @PrePersist
     protected void onCreate() {
-        this.createDate = LocalDate.now();
+        this.createDate = LocalDateTime.now();
     }
 
     @PreUpdate
     protected void onUpdate() {
-        this.updateDate = LocalDate.now();
+        this.updateDate = LocalDateTime.now();
     }
 
 }
