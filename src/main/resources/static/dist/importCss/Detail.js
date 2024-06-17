@@ -1,5 +1,3 @@
-// scripts.js
-
 var url = document.location.pathname;
 var id = url.substring(url.lastIndexOf('/') + 1);
 
@@ -99,16 +97,17 @@ $(document).ready(function() {
     // Lấy userId từ phần tử input
     var userId = $('#userId').val();
     console.log('Đã lấy userId:', userId);
-    if(userId==null){
-        window.location.href = "/dang-nhap";
-        console.log('Quangf');
-        return
+    console.log('Kiểu dữ liệu của userId:', typeof userId);
 
+    // Kiểm tra giá trị của userId
+    // Kiểm tra giá trị của userId
+    if(userId === null || userId === "" || userId === "null" || userId === undefined) {
+        console.log('UserId is null, empty, undefined, or "null" string, redirecting to login page');
+        window.location.href = "http://localhost:8080/dang-nhap";
+        return;
     }
 
-    // Đảm bảo rằng userId đã được lấy đúng
-
-    // Gọi API để lấy chi tiết giỏ hàng sử dụng userId
+    // Tiếp tục nếu userId hợp lệ
     $.ajax({
         url: '/api/GH/user/' + userId,
         type: 'GET',
@@ -121,7 +120,7 @@ $(document).ready(function() {
             }
         },
         error: function(xhr) {
-            console.error('Đã xảy ra lỗi khi tải giỏ hàng  h:', xhr);
+            console.error('Đã xảy ra lỗi khi tải giỏ hàng:', xhr);
             alert('Đã xảy ra lỗi khi tải giỏ hàng. Vui lòng thử lại.');
         }
     });
