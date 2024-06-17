@@ -1,4 +1,4 @@
-package com.example.datn.repository;
+package com.example.datn.Repository;
 
 import com.example.datn.entity.SanPhamChiTietEntity;
 import org.springframework.data.domain.Pageable;

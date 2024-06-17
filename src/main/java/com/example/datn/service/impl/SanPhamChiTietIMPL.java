@@ -1,8 +1,9 @@
 package com.example.datn.service.impl;
 
+import com.example.datn.Repository.SanPhamChiTietRepository;
 import com.example.datn.dto.SanPhamChiTietDTO;
 import com.example.datn.entity.SanPhamChiTietEntity;
-import com.example.datn.repository.SanPhamChiTietRepository;
+
 import com.example.datn.service.SanPhamChiTietService;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;

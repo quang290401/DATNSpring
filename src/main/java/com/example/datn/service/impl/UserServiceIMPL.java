@@ -1,9 +1,9 @@
 package com.example.datn.service.impl;
 
+import com.example.datn.Repository.UsersRepository;
 import com.example.datn.dto.UserDTO;
 import com.example.datn.entity.UserEntity;
-import com.example.datn.repository.SanPhamChiTietRepository;
-import com.example.datn.repository.UsersRepository;
+
 import com.example.datn.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;

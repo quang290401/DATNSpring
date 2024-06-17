@@ -22,11 +22,17 @@
         <li class="nav-item" th:if="${session.user != null}"><a class="nav-link active" aria-current="page" th:href="@{/logout}">Thoát |</a></li>
         <li class="nav-item"><a class="nav-link" th:text="${session.user != null ? 'xin chào: ' + session.user.ten : 'User'}"></a></li>
       </ul>
-      <form class="d-flex" th:action="@{/cart}" method="get">
+      <form class="d-flex" th:if="${session.user != null}" th:action="@{/cart/{idUser}(idUser=${session.user.id})}" method="get">
         <button class="btn btn-outline-dark" type="submit">
           <i class="bi-cart-fill me-1"></i>
           Cart
           <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
+        </button>
+      </form>
+      <form class="d-flex" th:if="${session.user == null}" th:action="@{/dang-nhap}" method="get">
+        <button class="btn btn-outline-dark" type="submit">
+          <i class="bi-cart-fill me-1"></i>
+          Cart
         </button>
       </form>
     </div>

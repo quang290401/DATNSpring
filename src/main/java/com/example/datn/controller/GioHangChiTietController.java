@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class GioHangChiTietController {
-    @GetMapping("/cart")
+    @GetMapping("/cart/{id}")
     public String home(Model model, HttpSession session){
         UserDTO user = (UserDTO) session.getAttribute("user");
         if (user != null) {

@@ -70,6 +70,7 @@
             </div>
         </div>
     </form>
+    <input type="hidden" class="form-control" id="userId" name="userId" th:value="${session.user != null ? session.user.id : 'null'}" />
 </div>
 <h2 class="fw-bolder mb-4 text-center">Có Thể Bạn Quan Tâm ?</h2>
 
@@ -83,4 +84,5 @@
 
 <script th:src ="@{/dist/importCss/Detail.js}"></script>
 </body>
+
 </html>

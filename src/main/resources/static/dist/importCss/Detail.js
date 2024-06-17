@@ -2,8 +2,8 @@
 
 var url = document.location.pathname;
 var id = url.substring(url.lastIndexOf('/') + 1);
+
 $(document).ready(function() {
-    // Hàm để lấy chi tiết sản phẩm
     function fetchProductDetails(id) {
         $.ajax({
             url: `/api/SPCT/Detail/` + id, // Thay thế bằng endpoint API của bạn
@@ -32,6 +32,9 @@ $(document).ready(function() {
                 $('#productOldPrice').text(`$${(data.giaSanPham * 1.2).toFixed(2)}`); // Giả sử giá cũ cao hơn 20%
                 $('#productPrice').text(`$${data.giaSanPham.toFixed(2)}`);
                 $('#productDescription').html(`Mô Tả : ${data.moTa}<br>Kích Cỡ : ${data.kichCo.tenKichCo}<br>NSX : ${data.nsx.ten}`);
+
+                // Set the value of the hidden input field with id 'sanPham'
+                $('#sanPham').val(data.id);
             },
             error: function(err) {
                 console.error('Lỗi khi lấy chi tiết sản phẩm:', err);
@@ -91,4 +94,70 @@ $(document).ready(function() {
 
     // Gọi hàm fetchTop4Products khi trang được tải
     fetchTop4Products();
+});
+$(document).ready(function() {
+    // Lấy userId từ phần tử input
+    var userId = $('#userId').val();
+    console.log('Đã lấy userId:', userId);
+    if(userId==null){
+        window.location.href = "/dang-nhap";
+        console.log('Quangf');
+        return
+
+    }
+
+    // Đảm bảo rằng userId đã được lấy đúng
+
+    // Gọi API để lấy chi tiết giỏ hàng sử dụng userId
+    $.ajax({
+        url: '/api/GH/user/' + userId,
+        type: 'GET',
+        success: function(response) {
+            console.log('Phản hồi từ API:', response); // Ghi log phản hồi từ API
+            if (response && response.id) {
+                $('#gioHang').val(response.id); // Gán giá trị id cho trường nhập gioHang
+            } else {
+                console.error('Phản hồi không như mong đợi:', response);
+            }
+        },
+        error: function(xhr) {
+            console.error('Đã xảy ra lỗi khi tải giỏ hàng  h:', xhr);
+            alert('Đã xảy ra lỗi khi tải giỏ hàng. Vui lòng thử lại.');
+        }
+    });
+});
+
+$(document).ready(function() {
+    $('#btnAddCart').on('click', function() {
+        var gioHang = $('#gioHang').val();
+        var sanPham = $('#sanPham').val();
+        var soLuong = $('#soLuong').val();
+
+        if (!gioHang || !sanPham) {
+            alert('GioHang và SanPhamChiTiet không được để trống');
+            return;
+        }
+
+        var data = {
+            gioHang: gioHang,
+            sanPhamChiTiet: sanPham,
+            soLuong: parseInt(soLuong),  // Đảm bảo số lượng là số nguyên
+            trangThai: 1  // Thêm trạng thái nếu cần thiết
+        };
+
+        $.ajax({
+            url: '/api/GHCT',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(data),
+            success: function(response) {
+                console.log('Sản phẩm đã được thêm vào giỏ hàng:', response);
+                alert('Sản phẩm đã được thêm vào giỏ hàng!');
+            },
+            error: function(xhr, status, error) {
+                console.error('Lỗi khi thêm sản phẩm vào giỏ hàng:', xhr, status, error);
+                alert('Đã xảy ra lỗi khi thêm sản phẩm vào giỏ hàng. Vui lòng thử lại.');
+            }
+        });
+    });
 });
