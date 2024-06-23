@@ -28,7 +28,12 @@
                     <td><a href="/trang-chu" class="btn btn-warning"><i class="fa fa-angle-left"></i> Tiếp tục mua hàng</a>
                     </td>
                     <td colspan="2" class="hidden-xs"></td>
-                    <td><a href="#" class="btn btn-success btn-block">Thanh toán <i class="fa fa-angle-right"></i></a>
+                    <td class="text-center">
+                        <select id="voucherSelect" class="form-control">
+                            <option value="">Chọn Voucher</option>
+                        </select>
+                    </td>
+                    <td><button id="thanhToanBtn" class="btn btn-success btn-block">Thanh toán <i class="fa fa-angle-right"></i></button>
                     </td>
                 </tr>
                 </tfoot>
@@ -40,6 +45,7 @@
 <script>
     var url = document.location.pathname;
     var userId = url.substring(url.lastIndexOf('/') + 1);
+
     $(document).ready(function() {
         // Gọi API giỏ hàng chi tiết với userId
         $.ajax({
@@ -96,8 +102,46 @@
                 alert('An error occurred while loading the cart. Please try again.');
             }
         });
-    });
 
+        // Gọi API để lấy danh sách voucher
+        $.ajax({
+            url: '/api/voucher',
+            type: 'GET',
+            success: function(response) {
+                response.forEach(function(voucher) {
+                    $('#voucherSelect').append(`
+                        <option value="${voucher.id}">${voucher.ten} - ${voucher.phanTramGiam}%</option>
+                    `);
+                });
+            },
+            error: function(xhr) {
+                alert('An error occurred while loading the vouchers. Please try again.');
+            }
+        });
+
+        // Sự kiện khi click nút thanh toán
+        $('#thanhToanBtn').click(function() {
+            var selectedVoucher = $('#voucherSelect').val();
+
+            if (!selectedVoucher) {
+                alert('Vui lòng chọn một voucher.');
+                return;
+            }
+
+            $.ajax({
+                url: `/api/HDCT/`+userId +'/'+selectedVoucher,
+                type: 'POST',
+                success: function(response) {
+                    alert('Thanh toán thành công!');
+                    window.location.href = "http://localhost:8080/cart/"+userId;
+                },
+                error: function(xhr) {
+                    alert('Đã xảy ra lỗi trong quá trình thanh toán. Vui lòng thử lại.');
+                }
+            });
+        });
+    });
 </script>
 </body>
 </html>
+

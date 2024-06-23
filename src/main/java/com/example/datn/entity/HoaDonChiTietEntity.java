@@ -14,6 +14,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Entity
 @Table(name = "HoaDonChiTiet")
+@IdClass(HoaDonChiTietId.class)
 public class HoaDonChiTietEntity implements Serializable {
     @Id
     @ManyToOne
@@ -23,6 +24,9 @@ public class HoaDonChiTietEntity implements Serializable {
     @ManyToOne
     @JoinColumn(name = "sanPhamChitiet_id")
     private SanPhamChiTietEntity sanPhamChiTiet;
+    @ManyToOne
+    @JoinColumn(name  = "user_id")
+    private UserEntity user;
     @Column(name = "soLuong", length = 10, nullable = false)
     private int soLuong;
     @Column(name = "thanhTien", length = 70, nullable = false)

@@ -49,6 +49,9 @@ public class UserEntity extends SuperEntity{
     @JsonIgnore
     @OneToMany(mappedBy = "user")
     private List<HoaDonEntity> hoaDons = new ArrayList<HoaDonEntity>();
+    @JsonIgnore
+    @OneToMany(mappedBy = "user")
+    private List<HoaDonChiTietEntity> hoaDonEntities = new ArrayList<HoaDonChiTietEntity>();
 
 
 }

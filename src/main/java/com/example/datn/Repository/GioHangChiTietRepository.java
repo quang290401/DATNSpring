@@ -20,4 +20,9 @@ public interface GioHangChiTietRepository extends JpaRepository<GioHangChiTietEn
     @Transactional
     @Query("DELETE FROM GioHangChiTietEntity c WHERE c.sanPhamChiTiet.id = :id")
     void deleteById(UUID id);
+
+    @Modifying
+    @Transactional
+    @Query("DELETE FROM GioHangChiTietEntity c WHERE c.gioHang.id = :id")
+    void deleteByIdGH(UUID id);
 }

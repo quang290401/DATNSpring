@@ -15,7 +15,7 @@ import java.util.UUID;
 @MappedSuperclass
 public class SuperEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
     @Column(name = "createDate")
