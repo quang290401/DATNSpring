@@ -28,5 +28,5 @@ public class DiaChiEntity extends SuperEntity {
     @OneToMany(mappedBy = "diaChi")
     private List<UserEntity> userEntities = new ArrayList<UserEntity>();
     @Column(name = "trangThai", length = 10, nullable = false)
-    private int trangThai;
+    private String trangThai;
 }

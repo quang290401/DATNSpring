@@ -21,6 +21,5 @@ public class DiaChiDTO extends SuperDTO{
 
     private String quocGia;
 
-
-    private int trangThai;
+    private String trangThai;
 }
