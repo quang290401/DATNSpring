@@ -16,14 +16,15 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "BaoHanh")
-public class BaoHanhEntity extends SuperEntity {
+@Table(name = "bao_hanh")
+public class
+BaoHanhEntity extends SuperEntity {
 
 
     @Column(name = "ten", length = 150, nullable = false)
     private String ten;
-    @Column(name = "thoiHan", length = 150, nullable = false)
-    private String thoiHan;
+    //@Column(name = "thoiHan", length = 150, nullable = false)
+    //private String thoiHan;
 
 
     @Column(name = "trangThai", length = 10, nullable = false)
