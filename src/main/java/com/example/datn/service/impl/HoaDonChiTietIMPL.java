@@ -29,12 +29,14 @@ public class HoaDonChiTietIMPL implements HoaDonChiTietService {
     private final HoaDonChiTietRepository hoaDonChiTietRepository;
     private final VouCherRepository vouCherRepository;
     private final UsersRepository usersRepository;
+    private final TrangThaiHDRepository trangThaiHDRepository;
 
     @Override
     @Transactional
-    public HoaDonCHiTietCrud addHoaDonCT(UUID idUser, UUID idVoucher) {
+    public HoaDonCHiTietCrud addHoaDonCT(UUID idUser, UUID idVoucher,UUID idTrangThaiHD) {
         Optional<VouCherEntity> vouCher = vouCherRepository.findById(idVoucher);
         Optional<UserEntity> user = usersRepository.findById(idUser);
+        Optional<TrangThaiHDEntity> hdEntity = trangThaiHDRepository.findById(idTrangThaiHD);
         UUID idHD = UUID.randomUUID();
         HoaDonEntity hoaDonEntity = new HoaDonEntity();
         hoaDonEntity.setId(idHD);
@@ -43,6 +45,7 @@ public class HoaDonChiTietIMPL implements HoaDonChiTietService {
         hoaDonEntity.setNgayThanhToan(LocalDate.from(LocalDateTime.now()));
         hoaDonEntity.setCreateDate(LocalDate.from(LocalDateTime.now()));
         hoaDonEntity.setTongTien(BigDecimal.valueOf(0));
+        hoaDonEntity.setTrangThaiHD(hdEntity.get());
         hoaDonEntity = hoaDonRepository.save(hoaDonEntity);
         GioHangEntity gioHangEntity = gioHangRepository.findByUserId(idUser);
         List<GioHangChiTietEntity> gioHangChiTietEntities = gioHangChiTietRepository.findByGioHangId(gioHangEntity.getId());

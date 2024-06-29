@@ -16,9 +16,9 @@ import java.util.UUID;
 @RequestMapping("/api/HDCT")
 public class HoaDonChiTietRestController {
     private final HoaDonChiTietService hoaDonChiTietService;
-    @PostMapping("/{idUser}/{idVoucher}")
-    public HoaDonCHiTietCrud addHoaDonCT (@PathVariable UUID idUser, @PathVariable UUID idVoucher) {
-        return hoaDonChiTietService.addHoaDonCT(idUser,idVoucher);
+    @PostMapping("/{idUser}/{idVoucher}/{idTrangThaiHD}")
+    public HoaDonCHiTietCrud addHoaDonCT (@PathVariable UUID idUser, @PathVariable UUID idVoucher,@PathVariable UUID idTrangThaiHD) {
+        return hoaDonChiTietService.addHoaDonCT(idUser,idVoucher,idTrangThaiHD);
     }
     @GetMapping("/{idUser}")
     public List<HoaDonDTO> getALLHoaDonByIdUser (@PathVariable UUID idUser) {

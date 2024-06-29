@@ -95,6 +95,7 @@
             <tr>
                 <th>STT</th>
                 <th>Ngày Mua Hàng</th>
+                <th>Trạng Thái</th>
                 <th>Chọn</th>
             </tr>
             </thead>
@@ -161,6 +162,7 @@
                     var row = $('<tr></tr>');
                     row.append('<td>' + (index + 1) + '</td>');
                     row.append('<td>' + item.createDate + '</td>');
+                    row.append('<td>' + item.trangThaiHD.ten + '</td>');
                     row.append('<td><input type="checkbox" class="invoice-checkbox" value="' + item.id + '"></td>');
                     invoiceList.append(row); // Thêm hàng vào invoiceList
                 });

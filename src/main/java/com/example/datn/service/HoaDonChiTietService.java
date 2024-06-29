@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface HoaDonChiTietService {
-   HoaDonCHiTietCrud addHoaDonCT(UUID idUser,UUID idVoucher);
+   HoaDonCHiTietCrud addHoaDonCT(UUID idUser,UUID idVoucher,UUID idTrangThaiHD);
    List<HoaDonChiTietDTO> getALlHoaDonCTByIdHoaDon(UUID hoaDon);
    List<HoaDonDTO> getAllHoaDonByIdUser(UUID idUser);
 }

@@ -146,13 +146,13 @@
                         <option value="">Chọn Voucher</option>
                     </select>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="shipCode" name="paymentMethod">
+                        <input class="form-check-input" type="checkbox" id="shipCode" name="paymentMethod" value="F9B48755-83BF-4DF5-BA40-F788F189774D">
                         <label class="form-check-label" for="shipCode">
                             Ship Code
                         </label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="onlinePayment" name="paymentMethod">
+                        <input class="form-check-input" type="checkbox" id="onlinePayment" name="paymentMethod" value="A95E37DC-4DF6-4CDF-A2AD-2823151EFB49">
                         <label class="form-check-label" for="onlinePayment">
                             Thanh Toán Online
                         </label>
@@ -322,6 +322,9 @@
                     }
                 });
             });
+            // Đặt mặc định cho Ship Code
+            $('#shipCode').prop('checked', true); // Đặt mặc định cho Ship Code
+            $('#onlinePayment').prop('checked', false);
 
             $('#shipCode').change(function () {
                 if ($(this).is(':checked')) {
@@ -338,7 +341,7 @@
             $('#idXacNhan').click(function () {
                 var userId = $('#userId').val();
                 var selectedVoucher = $('#voucherSelect').val();
-                var paymentMethod = $('input[name="paymentMethod"]:checked').attr('id');
+                var paymentMethod = $('input[name="paymentMethod"]:checked').val();
 
                 if (!selectedVoucher) {
                     alert('Vui lòng chọn một voucher.');
@@ -349,9 +352,8 @@
                     alert('Vui lòng chọn phương thức thanh toán.');
                     return;
                 }
-
                 $.ajax({
-                    url: `/api/HDCT/` + userId + '/' + selectedVoucher,
+                    url: `/api/HDCT/` + userId + '/' + selectedVoucher +'/'+paymentMethod,
                     type: 'POST',
                     data: { paymentMethod: paymentMethod },
                     success: function (response) {
