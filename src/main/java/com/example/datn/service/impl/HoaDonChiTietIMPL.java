@@ -1,10 +1,7 @@
 package com.example.datn.service.impl;
 
 import com.example.datn.Repository.*;
-import com.example.datn.dto.GioHangChiTietCrud;
-import com.example.datn.dto.GioHangChiTietDTO;
-import com.example.datn.dto.HoaDonCHiTietCrud;
-import com.example.datn.dto.HoaDonChiTietDTO;
+import com.example.datn.dto.*;
 import com.example.datn.entity.*;
 import com.example.datn.service.HoaDonChiTietService;
 import jakarta.transaction.Transactional;
@@ -44,6 +41,7 @@ public class HoaDonChiTietIMPL implements HoaDonChiTietService {
         hoaDonEntity.setUser(user.get());
         hoaDonEntity.setVouCher(vouCher.get());
         hoaDonEntity.setNgayThanhToan(LocalDate.from(LocalDateTime.now()));
+        hoaDonEntity.setCreateDate(LocalDate.from(LocalDateTime.now()));
         hoaDonEntity.setTongTien(BigDecimal.valueOf(0));
         hoaDonEntity = hoaDonRepository.save(hoaDonEntity);
         GioHangEntity gioHangEntity = gioHangRepository.findByUserId(idUser);
@@ -65,11 +63,20 @@ public class HoaDonChiTietIMPL implements HoaDonChiTietService {
     }
 
     @Override
-    public List<HoaDonChiTietDTO> getALlHoaDonCTByIdUser(UUID idUser) {
-        Optional<UserEntity> user =  usersRepository.findById(idUser);
-        List<HoaDonChiTietEntity> entityList = hoaDonChiTietRepository.findByHoaDonChiTietByIdUser(user.get().getId());
+    public List<HoaDonChiTietDTO> getALlHoaDonCTByIdHoaDon(UUID idHoaDon) {
+        Optional<HoaDonEntity> hoaDon =  hoaDonRepository.findById(idHoaDon);
+        List<HoaDonChiTietEntity> entityList = hoaDonChiTietRepository.findByHoaDonChiTietByIdHoaDon(hoaDon.get().getId());
         return entityList.stream()
                 .map(entity -> modelMapper.map(entity, HoaDonChiTietDTO.class))
+                .collect( Collectors.toList());
+    }
+
+    @Override
+    public List<HoaDonDTO> getAllHoaDonByIdUser(UUID idUser) {
+        Optional<UserEntity> user =  usersRepository.findById(idUser);
+        List<HoaDonEntity> entityList = hoaDonRepository.findByHoaByIdUser(user.get().getId());
+        return entityList.stream()
+                .map(entity -> modelMapper.map(entity, HoaDonDTO.class))
                 .collect( Collectors.toList());
     }
 

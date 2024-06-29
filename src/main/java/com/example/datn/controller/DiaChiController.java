@@ -106,10 +106,10 @@ public String getDiaChiDetail(@PathVariable("id") UUID id, Model model) {
 
 
             existingdiaChi.setDiaChi(updateDiaChi.getDiaChi());
-            existingdiaChi.setThanhPho(updateDiaChi.getThanhPho());
+            existingdiaChi.setTinh(updateDiaChi.getTinh());
             existingdiaChi.setUpdateDate(updateDiaChi.getUpdateDate());
             existingdiaChi.setTrangThai(updateDiaChi.getTrangThai());
-            existingdiaChi.setQuocGia(updateDiaChi.getQuocGia());
+            existingdiaChi.setHuyen(updateDiaChi.getHuyen());
            diaChiRepository.save(existingdiaChi);
             System.out.println(existingdiaChi);
             return "redirect:/diachi/getAll";

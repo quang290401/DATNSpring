@@ -19,14 +19,14 @@ public class SuperEntity {
     private UUID id;
 
     @Column(name = "createDate")
-    private LocalDateTime createDate;
+    private LocalDate createDate;
 
     @Column(name = "updateDate")
     private LocalDateTime updateDate;
 
     @PrePersist
     protected void onCreate() {
-        this.createDate = LocalDateTime.now();
+        this.createDate = LocalDate.now();
     }
 
     @PreUpdate

@@ -3,6 +3,7 @@ package com.example.datn.restcontroller;
 import com.example.datn.dto.GioHangChiTietDTO;
 import com.example.datn.dto.HoaDonCHiTietCrud;
 import com.example.datn.dto.HoaDonChiTietDTO;
+import com.example.datn.dto.HoaDonDTO;
 import com.example.datn.service.HoaDonChiTietService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +21,11 @@ public class HoaDonChiTietRestController {
         return hoaDonChiTietService.addHoaDonCT(idUser,idVoucher);
     }
     @GetMapping("/{idUser}")
-    public List<HoaDonChiTietDTO> getALLHDCTByIdUser (@PathVariable UUID idUser) {
-        return hoaDonChiTietService.getALlHoaDonCTByIdUser(idUser);
+    public List<HoaDonDTO> getALLHoaDonByIdUser (@PathVariable UUID idUser) {
+        return hoaDonChiTietService.getAllHoaDonByIdUser(idUser);
+    }
+    @GetMapping("/GetALL/{idHoaDon}")
+    public List<HoaDonChiTietDTO> getALLHoaDonByIdHoaDon (@PathVariable UUID idHoaDon) {
+        return hoaDonChiTietService.getALlHoaDonCTByIdHoaDon(idHoaDon);
     }
 }

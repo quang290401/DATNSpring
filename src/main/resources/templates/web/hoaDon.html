@@ -41,18 +41,18 @@
             margin-bottom: 20px;
         }
 
-        .invoice-details table, .customer-details table, .invoice-items table {
+        .invoice-details table, .customer-details table, .invoice-items table, .product-list table {
             width: 100%;
             border-collapse: collapse;
         }
 
-        .invoice-details th, .invoice-details td, .customer-details th, .customer-details td, .invoice-items th, .invoice-items td {
+        .invoice-details th, .invoice-details td, .customer-details th, .customer-details td, .invoice-items th, .invoice-items td, .product-list th, .product-list td {
             border: 1px solid #ddd;
             padding: 8px;
             text-align: left;
         }
 
-        .invoice-items th {
+        .invoice-items th, .product-list th {
             background-color: #f4f4f4;
         }
 
@@ -75,32 +75,49 @@
         <table>
             <tr>
                 <th>Họ Tên</th>
-                <td th:text="${session.user.ho+' '+session.user.tenDem+' '+session.user.ten}"></td>
+                <td id="userName"></td>
             </tr>
             <tr>
                 <th>Địa Chỉ</th>
-                <td th:text="${session.user.diaChi.quocGia+' '+session.user.diaChi.thanhPho+' '+session.user.diaChi.diaChi}"></td>
+                <td id="userAddress"></td>
             </tr>
             <tr>
                 <th>Điện Thoại</th>
-                <td th:text="${session.user.sdt}"></td>
+                <td id="userPhone"></td>
             </tr>
         </table>
     </div>
     <input type="hidden" class="form-control" id="user" name="user" th:value="${session.user.id}"/>
     <div class="invoice-items">
+        <h2>Danh Sách Hóa Đơn</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>STT</th>
+                <th>Ngày Mua Hàng</th>
+                <th>Chọn</th>
+            </tr>
+            </thead>
+            <tbody id="invoice-list">
+            <!-- Hóa đơn sẽ được tải ở đây bởi JavaScript -->
+            </tbody>
+        </table>
+        <input type="hidden" class="form-control" id="userId" name="userId" th:value="${ session.user.id }"/>
+    </div>
+    <div class="product-list">
         <h2>Danh Sách Sản Phẩm</h2>
         <table>
             <thead>
             <tr>
-                <th>Tên Sản Phẩm</th>
+                <th>Ảnh</th>
+                <th>Tên</th>
+                <th>Kích Cỡ</th>
                 <th>Số Lượng</th>
-                <th>Đơn Giá</th>
-                <th>Thành Tiền</th>
+                <th>Giá Sản Phẩm</th>
             </tr>
             </thead>
             <tbody id="product-list">
-            <!-- Products will be loaded here by JavaScript -->
+            <!-- Sản phẩm sẽ được tải ở đây bởi JavaScript -->
             </tbody>
         </table>
     </div>
@@ -108,44 +125,84 @@
         <p>Cảm ơn quý khách đã mua hàng!</p>
     </div>
 </div>
-
+<div th:replace="web/common/foodter.html"></div>
 <script>
+    $(document).ready(function() {
+        var userId = $('#userId').val();  // Thay thế bằng userId thực tế của bạn
+        $.ajax({
+            type: 'GET',
+            url: '/api/user/' + userId,
+            success: function(response) {
+                var user = response;
+                $('#userName').text(user.ho + ' ' + user.tenDem + ' ' + user.ten);
+                $('#userAddress').text(user.diaChi.tinh + ' ' + user.diaChi.huyen + ' ' + user.diaChi.xa + ' ' + user.diaChi.diaChi);
+                $('#userPhone').text(user.sdt);
+            },
+            error: function(error) {
+                console.error('Error fetching user data:', error);
+                alert('Failed to fetch user data.');
+            }
+        });
+    });
+
     $(document).ready(function() {
         var id = $('#user').val();
         console.log("User ID: " + id); // Kiểm tra giá trị của id
 
-        // Gọi API để lấy danh sách sản phẩm
+        // Gọi API để lấy danh sách hóa đơn
         $.ajax({
             url: '/api/HDCT/' + id,
             method: 'GET',
             success: function(data) {
-                var productList = $('#product-list');
-                productList.empty();
+                var invoiceList = $('#invoice-list');
+                invoiceList.empty();
 
-                var totalAmount = 0;
-
-                data.forEach(function(item) {
+                data.forEach(function(item, index) {
                     var row = $('<tr></tr>');
-                    row.append('<td>' + item.sanPhamChiTiet.sanPham.tenSanPham + '</td>');
-                    row.append('<td>' + item.soLuong + '</td>');
-                    row.append('<td>' + item.sanPhamChiTiet.giaSanPham + ' VND</td>');
-                    row.append('<td>' + item.thanhTien + ' VND</td>');
-
-                    totalAmount += item.thanhTien;
-                    productList.append(row);
+                    row.append('<td>' + (index + 1) + '</td>');
+                    row.append('<td>' + item.createDate + '</td>');
+                    row.append('<td><input type="checkbox" class="invoice-checkbox" value="' + item.id + '"></td>');
+                    invoiceList.append(row); // Thêm hàng vào invoiceList
                 });
 
-                var totalRow = $('<tr class="total-row"></tr>');
-                totalRow.append('<td colspan="3">Tổng Cộng</td>');
-                totalRow.append('<td>' + totalAmount + ' VND</td>');
-                productList.append(totalRow);
+                // Thêm sự kiện thay đổi cho các checkbox
+                $('.invoice-checkbox').change(function() {
+                    // Bỏ chọn tất cả các checkbox khác
+                    $('.invoice-checkbox').not(this).prop('checked', false);
+                    // Gọi API để lấy danh sách sản phẩm cho hóa đơn đã chọn
+                    var invoiceId = $(this).val();
+                    loadProducts(invoiceId);
+                });
             },
             error: function(error) {
                 console.error('Lỗi khi gọi API', error);
             }
         });
-    });
 
+        function loadProducts(invoiceId) {
+            $.ajax({
+                url: '/api/HDCT/GetALL/' + invoiceId,
+                method: 'GET',
+                success: function(data) {
+                    var productList = $('#product-list');
+                    productList.empty();
+
+                    data.forEach(function(item) {
+                        var row = $('<tr></tr>');
+                        row.append('<td><img src="' + item.sanPhamChiTiet.hinhAnh.duongDan + '" alt="Ảnh sản phẩm" style="width: 50px; height: 50px;"></td>');
+                        row.append('<td>' + item.sanPhamChiTiet.sanPham.tenSanPham + '</td>');
+                        row.append('<td>' + item.sanPhamChiTiet.kichCo.tenKichCo + '</td>');
+                        row.append('<td>' + item.soLuong + '</td>');
+                        row.append('<td>' + item.sanPhamChiTiet.giaSanPham + '</td>');
+                        productList.append(row); // Thêm hàng vào productList
+                    });
+                },
+                error: function(error) {
+                    console.error('Lỗi khi gọi API sản phẩm', error);
+                }
+            });
+        }
+    });
 </script>
 </body>
 </html>

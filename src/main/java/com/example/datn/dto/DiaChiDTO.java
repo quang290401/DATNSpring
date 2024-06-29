@@ -16,10 +16,11 @@ import java.util.List;
 @Data
 public class DiaChiDTO extends SuperDTO{
     private String diaChi;
+    private String xa;
 
-    private String thanhPho;
+    private String huyen;
 
-    private String quocGia;
+    private String tinh;
 
 
     private int trangThai;

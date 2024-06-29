@@ -20,10 +20,12 @@ import java.util.List;
 public class DiaChiEntity extends SuperEntity {
     @Column(name = "diaChi", length = 120, nullable = false,columnDefinition = "NVARCHAR(255)")
     private String diaChi;
-    @Column(name = "thanhPho", length = 150, nullable = false,columnDefinition = "NVARCHAR(255)")
-    private String thanhPho;
-    @Column(name = "quocGia", length = 150, nullable = false,columnDefinition = "NVARCHAR(255)")
-    private String quocGia;
+    @Column(name = "xa", length = 150, nullable = false,columnDefinition = "NVARCHAR(255)")
+    private String xa;
+    @Column(name = "huyen", length = 150, nullable = false,columnDefinition = "NVARCHAR(255)")
+    private String huyen;
+    @Column(name = "tinh", length = 150, nullable = false,columnDefinition = "NVARCHAR(255)")
+    private String tinh;
     @JsonIgnore
     @OneToMany(mappedBy = "diaChi")
     private List<UserEntity> userEntities = new ArrayList<UserEntity>();
