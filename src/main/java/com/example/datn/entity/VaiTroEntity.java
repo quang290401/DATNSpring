@@ -2,6 +2,7 @@ package com.example.datn.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,6 +20,7 @@ public class VaiTroEntity extends SuperEntity {
 
 
     @Column(name = "tenVaiTro", length = 150, nullable = false)
+    @NotBlank(message = "Khong duoc de trong!")
     private String tenVaiTro;
     @JsonIgnore
     @OneToMany(mappedBy = "vaiTro")

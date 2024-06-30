@@ -5,6 +5,8 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,8 +21,10 @@ import java.util.List;
 @Table(name = "TrangThaiHD")
 public class TrangThaiHDEntity extends SuperEntity {
     @Column(name = "ten", length = 120, nullable = false)
+    @NotBlank(message = "Khong duoc de trong!")
     private String ten;
     @Column(name = "trangThai", length = 120, nullable = false)
+    @NotNull(message = "Khong duoc de trong!")
     private String trangThai;
 
     @JsonIgnore

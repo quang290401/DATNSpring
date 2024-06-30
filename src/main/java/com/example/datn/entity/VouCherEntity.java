@@ -5,6 +5,9 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,14 +24,19 @@ import java.util.List;
 public class  VouCherEntity extends SuperEntity {
 
     @Column(name = "ten", length = 150, nullable = false)
+    @NotBlank(message = "Khong duoc de trong!")
     private String ten;
     @Column(name = "phanTramGiam", length = 10, nullable = false)
+    @NotNull(message = "Khong duoc de trong!")
     private int phanTramGiam;
     @Column(name = "ngayBatDau", length = 30, nullable = false)
+    @Min(value = 1, message = "Phan tram phai lon hon 1!")
+    @NotNull(message = "Khong duoc de trong!")
     private LocalDate ngayBatDau;
     @Column(name = "ngayKetThuc", length = 30, nullable = false)
     private LocalDate ngayKetThuc;
     @Column(name = "trangThai", length = 50, nullable = false)
+    @NotNull(message = "Khong duoc de trong!")
     private int trangThai;
     @JsonIgnore
     @OneToMany(mappedBy = "vouCher")

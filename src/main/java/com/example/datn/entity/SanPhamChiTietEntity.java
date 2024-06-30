@@ -2,6 +2,9 @@ package com.example.datn.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,12 +22,19 @@ import java.util.UUID;
 public class SanPhamChiTietEntity extends SuperEntity{
 
     @Column(name = "giaSanPham", length = 150, nullable = false)
+    @NotNull(message = "Khong duoc de trong!")
+    @Min(value = 1000, message = "Gia tien phai hon 1000 dong!")
     private BigDecimal giaSanPham;
     @Column(name = "soLuong", length = 50, nullable = false)
+    @NotNull(message = "Khong duoc de trong!")
+    @Min(value = 1, message = "So luong phai lon hon 1!")
     private int soLuong;
     @Column(name = "trongLuong", length = 150, nullable = false)
+    @NotNull(message = "Khong duoc de trong!")
+    @Min(value = 1, message = "Trong luong phai lon hon 1!")
     private String trongLuong;
     @Column(name = "gioiTinh", length = 10, nullable = false)
+    @NotBlank(message = "Khong duoc de trong!")
     private int gioiTinh;
     @Column(name = "moTa", length = 150, nullable = false)
     private String moTa;

@@ -5,6 +5,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,6 +22,7 @@ public class DanhMucEntity extends SuperEntity{
 
 
     @Column(name = "tenDanhMuc", length = 20, nullable = false)
+    @NotBlank(message = "Khong duoc de trong!")
     private String tenDanhMuc;
 
     @JsonIgnore
