@@ -19,13 +19,13 @@ import java.util.UUID;
 
 @Controller
 public class DiaChiController {
- @Autowired
+    @Autowired
     DiaChiRepository diaChiRepository;
 
     @GetMapping("/diachi/getAll")
     public String getAllDiaChi(@RequestParam(defaultValue = "0") int page,
-                                @RequestParam(defaultValue = "5") int size,
-                                Model model) {
+                               @RequestParam(defaultValue = "5") int size,
+                               Model model) {
         Pageable pageable = PageRequest.of(page, size);
         Page<DiaChiEntity> diaChiList = diaChiRepository.findAll(pageable);
         model.addAttribute("diaChiList", diaChiList);
@@ -49,7 +49,8 @@ public class DiaChiController {
         }
 
     }
-//
+
+    //
     @PostMapping("/diachi/delete/{id}")
     public String deleteChatLieu(@PathVariable("id") UUID id, Model model) {
         try {
@@ -73,18 +74,19 @@ public class DiaChiController {
             return "admin/adminWeb/DiaChi";
         }
     }
-@GetMapping("/diachi/detail/{id}")
-public String getDiaChiDetail(@PathVariable("id") UUID id, Model model) {
-    Optional<DiaChiEntity> diaChiOptional = diaChiRepository.findById(id);
-    if (diaChiOptional.isPresent()) {
-        DiaChiEntity diaChi = diaChiOptional.get();
-        model.addAttribute("diaChi", diaChi);
-        return "admin/adminWeb/DiaChiDetail";
-    } else {
-        model.addAttribute("errorMessage", "Địa chỉ không tồn tại.");
-        return "admin/adminWeb/DiaChi";
+
+    @GetMapping("/diachi/detail/{id}")
+    public String getDiaChiDetail(@PathVariable("id") UUID id, Model model) {
+        Optional<DiaChiEntity> diaChiOptional = diaChiRepository.findById(id);
+        if (diaChiOptional.isPresent()) {
+            DiaChiEntity diaChi = diaChiOptional.get();
+            model.addAttribute("diaChi", diaChi);
+            return "admin/adminWeb/DiaChiDetail";
+        } else {
+            model.addAttribute("errorMessage", "Địa chỉ không tồn tại.");
+            return "admin/adminWeb/DiaChi";
+        }
     }
-}
 
     @PostMapping("/diachi/update/{id}")
     public String updateChatLieu(@PathVariable("id") UUID id, @ModelAttribute("chatLieu") DiaChiEntity updateDiaChi, Model model) {
@@ -104,13 +106,12 @@ public String getDiaChiDetail(@PathVariable("id") UUID id, Model model) {
             }
 
 
-
             existingdiaChi.setDiaChi(updateDiaChi.getDiaChi());
             existingdiaChi.setTinh(updateDiaChi.getTinh());
             existingdiaChi.setUpdateDate(updateDiaChi.getUpdateDate());
             existingdiaChi.setTrangThai(updateDiaChi.getTrangThai());
             existingdiaChi.setHuyen(updateDiaChi.getHuyen());
-           diaChiRepository.save(existingdiaChi);
+            diaChiRepository.save(existingdiaChi);
             System.out.println(existingdiaChi);
             return "redirect:/diachi/getAll";
         } catch (Exception e) {
