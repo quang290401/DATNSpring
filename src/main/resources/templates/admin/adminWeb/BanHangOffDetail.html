@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chi Tiết Chat Lieu</title>
+    <title>Detail Sản Phẩm</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/jquery.validation/latest/jquery.validate.min.js"></script>
@@ -34,6 +34,13 @@
         </div>
         <div class="card-body">
             <div class="row">
+                <form th:action="@{/GioHang/add}" th:object="${GioHang}" method="post">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label >Tên:</label>
+                        <input type="text" class="form-control" th:value="${sanpham.getId()}" id="sanPhamChitiet_id" >
+                    </div>
+                </div>
                 <div class="col-md-6">
                     <div class="form-group">
                         <label >Tên:</label>
@@ -46,21 +53,45 @@
                         <textarea  class="form-control"
                                   th:text="${sanpham.getMauSac().getTen()}"></textarea>
                     </div>
-                    <div class="form-group">
+                <div class="form-group">
                         <label >Trạng Thái:</label>
                         <input type="text" class="form-control"
                                th:value="${sanpham.getKichCo().getTenKichCo()}">
-                    </div>
                 </div>
+                <div class="form-group">
+                        <label >Hình Ảnh:</label>
+                        <img type="text" class="form-control" th:src="|${sanpham.getHinhAnh().getDuongDan()}|">
+                </div>
+                <div class="input-group-prepend">
+                      <button class="btn btn-dark btn-sm" id="minus-btn"><i class="fa fa-minus"></i></button>
+                </div>
+                      <input type="number" id="soLuong" class="form-control" value="1" min="1">
+                <div class="input-group-prepend">
+                     <button class="btn btn-dark btn-sm" id="plus-btn"><i class="fa fa-plus"></i></button>
+                </div>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-success">Thêm vào giỏ hàng</button>
+                        <a href="/BanHangOff" class="btn btn-secondary">Quay lại</a>
+                    </div>
             </div>
-            <div class="text-center">
-                <button type="submit" class="btn btn-success">Thêm vào giỏ hàng</button>
-                <a href="/BanHangOff" class="btn btn-secondary">Quay lại</a>
-            </div>
-        </form>
-        </div>
+                </form>
     </div>
 </div>
 <div th:replace="admin/common/foodter.html"></div>
 </body>
+<script>
+    $(document).ready(function(){
+        $('#soLuong').prop('disabled', true);
+        $('#plus-btn').click(function(){
+            $('#soLuong').val(parseInt($('#soLuong').val()) + 1 );
+        });
+        $('#minus-btn').click(function(){
+            $('#soLuong').val(parseInt($('#soLuong').val()) - 1 );
+            if ($('#soLuong').val() == 0) {
+                $('#soLuong').val(1);
+            }
+
+        });
+    });
+</script>
 </html>

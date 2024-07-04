@@ -3,6 +3,7 @@ package com.example.datn.Repository;
 import com.example.datn.entity.SanPhamChiTietEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
@@ -20,6 +21,8 @@ public interface ChiTietSPRepository extends JpaRepository<SanPhamChiTietEntity,
 //    """,
 //            nativeQuery = true)
 //    Collection<Object> findAllActiveUsersNative();
-
+    @Query(value = "select ct from SanPhamChiTietEntity ct join SanPhamEntity sp on ct.sanPham.id = sp.id where sp.tenSanPham like %:ten%")
+    List<SanPhamChiTietEntity> getData(@Param("ten") String ten);
+    List<SanPhamChiTietEntity> getAllBySanPham_TenSanPham( String ten);
 
 }
