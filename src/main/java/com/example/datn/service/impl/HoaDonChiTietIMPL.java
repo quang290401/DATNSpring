@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 public class HoaDonChiTietIMPL implements HoaDonChiTietService {
     private final ModelMapper modelMapper;
     private final HoaDonRepository hoaDonRepository;
+    private final SanPhamChiTietRepository sanPhamChiTietRepository;
     private final GioHangChiTietRepository gioHangChiTietRepository;
     private final GioHangRepository gioHangRepository;
     private final HoaDonChiTietRepository hoaDonChiTietRepository;
@@ -49,18 +50,23 @@ public class HoaDonChiTietIMPL implements HoaDonChiTietService {
         hoaDonEntity = hoaDonRepository.save(hoaDonEntity);
         GioHangEntity gioHangEntity = gioHangRepository.findByUserId(idUser);
         List<GioHangChiTietEntity> gioHangChiTietEntities = gioHangChiTietRepository.findByGioHangId(gioHangEntity.getId());
+        BigDecimal tongTien = BigDecimal.ZERO;
         HoaDonChiTietEntity hoaDonChiTietEntity = new HoaDonChiTietEntity();
         for (GioHangChiTietEntity gioHang : gioHangChiTietEntities) {
             hoaDonChiTietEntity.setSanPhamChiTiet(gioHang.getSanPhamChiTiet());
             hoaDonChiTietEntity.setHoaDon(hoaDonEntity); // Liên kết với HoaDonEntity đã lưu
             hoaDonChiTietEntity.setSoLuong(gioHang.getSoLuong()); // Bạn có thể thay đổi số lượng dựa trên logic của mình
-            hoaDonChiTietEntity.setThanhTien(
-                    gioHang.getSanPhamChiTiet().getGiaSanPham().multiply(BigDecimal.valueOf(gioHang.getSoLuong()))
-            );
+            BigDecimal thanhTien = gioHang.getSanPhamChiTiet().getGiaSanPham().multiply(BigDecimal.valueOf(gioHang.getSoLuong()));
+            hoaDonChiTietEntity.setThanhTien(thanhTien);
             hoaDonChiTietEntity.setUser(user.get());
             hoaDonChiTietRepository.save(hoaDonChiTietEntity);
             gioHangChiTietRepository.deleteByIdGH(gioHangEntity.getId());
+            sanPhamChiTietRepository.updateSoLuong(gioHang.getSanPhamChiTiet().getId(),gioHang.getSoLuong());
+            tongTien = tongTien.add(thanhTien);
         }
+        hoaDonEntity.setTongTien(tongTien);
+        hoaDonRepository.save(hoaDonEntity);
+
 
         return modelMapper.map(hoaDonChiTietEntity, HoaDonCHiTietCrud.class);
     }
