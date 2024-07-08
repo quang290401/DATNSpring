@@ -2,15 +2,13 @@ package com.example.datn.controller;
 
 import com.example.datn.Repository.ChiTietSPRepository;
 //import com.example.datn.Repository.GioHangChiTietRepository;
-import com.example.datn.entity.ChatLieuEntity;
-import com.example.datn.entity.GioHangChiTietEntity;
 import com.example.datn.entity.SanPhamChiTietEntity;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,9 +31,28 @@ public class BanHangOff {
         model.addAttribute("SanPham", new SanPhamChiTietEntity());
         return "/admin/adminWeb/BanHangOff";
     }
+
+    @GetMapping("/BanHangOff/page")
+    public String PhanTrang(@RequestParam(value = "so", defaultValue = "0", required = false) Optional<Integer> page, Model model){
+        Pageable pageable = PageRequest.of(page.orElse(0), 6);
+        Page<SanPhamChiTietEntity> sanPhamChiTiet = chiTietSPRepository.pageAll(pageable);
+        model.addAttribute("sanPhamChiTiet", sanPhamChiTiet);
+        model.addAttribute("SanPham", new SanPhamChiTietEntity());
+        return "/admin/adminWeb/BanHangOff";
+    }
+
     @GetMapping("/BanHangOff/Search")
     public String Search(@RequestParam("ten") String ten, Model model){
         List<SanPhamChiTietEntity> sanPhamChiTiet = chiTietSPRepository.getData(ten);
+        model.addAttribute("sanPhamChiTiet", sanPhamChiTiet);
+        model.addAttribute("SanPham", new SanPhamChiTietEntity());
+        return "/admin/adminWeb/BanHangOff";
+    }
+
+    @GetMapping("/BanHangOff/Search/page")
+    public String SearchPage(@RequestParam(value = "so", defaultValue = "0", required = false) Optional<Integer> page, @RequestParam("ten") String ten, Model model){
+        Pageable pageable = PageRequest.of(page.orElse(0), 6);
+        Page<SanPhamChiTietEntity> sanPhamChiTiet = chiTietSPRepository.pageSearch(pageable, ten);
         model.addAttribute("sanPhamChiTiet", sanPhamChiTiet);
         model.addAttribute("SanPham", new SanPhamChiTietEntity());
         return "/admin/adminWeb/BanHangOff";
