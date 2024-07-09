@@ -169,25 +169,27 @@
        th:value="${session.user.ho + ' ' + session.user.tenDem + ' ' + session.user.ten}"/>
 
 <script>
-    $(document).ready(function() {
+    $(document).ready(function () {
         var userId = $('#userId').val();
+
         function populateAddress(user) {
             $('#displayAddress').text('Địa Chỉ: ' + user.diaChi.tinh + ', ' + user.diaChi.huyen + ', ' + user.diaChi.xa + ', ' + user.diaChi.diaChi);
         }
+
         $.ajax({
             type: 'GET',
             url: '/api/user/' + userId,
-            success: function(response) {
+            success: function (response) {
                 var user = response;
                 populateAddress(user);
             },
-            error: function(error) {
+            error: function (error) {
                 console.error('Error fetching user data:', error);
                 alert('Failed to fetch user data.');
             }
         });
     });
-        $(document).ready(function () {
+    $(document).ready(function () {
         console.log('Document is ready'); // Kiểm tra xem đoạn mã đã chạy khi trang sẵn sàng chưa
 
         $('#thanhToanBtn').on('click', function () {
@@ -298,14 +300,14 @@
                     $('#cart tbody').append(`
                         <tr>
                             <td colspan="3" class="text-right"><strong>Tổng tiền:</strong></td>
-                            <td colspan="2" class="text-center"><strong>${totalAmount}</strong></td>
+                              <td colspan="2" class="text-center"><strong id="totalAmount">${totalAmount}</strong></td>
                         </tr>
                     `);
 
                     $('#cart2 tbody').append(`
                         <tr>
                             <td colspan="3" class="text-right"><strong>Tổng tiền:</strong></td>
-                            <td colspan="2" class="text-center"><strong>${totalAmount}</strong></td>
+                                <td colspan="2" class="text-center"><strong id="totalAmount2">${totalAmount}</strong></td>
                         </tr>
                     `);
 
@@ -343,6 +345,7 @@
                         if ($('#cart2 tbody').find('tr').length === 0) {
                             $('#idXacNhan').hide();
                         }
+                        loadCart();
                     },
                     error: function (xhr) {
                         alert('An error occurred while deleting the product. Please try again.');
@@ -354,21 +357,39 @@
         loadCart(); // Gọi hàm để tải giỏ hàng khi trang được tải
 
         // Gọi API để lấy danh sách voucher
+
         $.ajax({
             url: '/api/voucher',
             type: 'GET',
-            success: function (response) {
-                response.forEach(function (voucher) {
+            success: function(response) {
+                response.forEach(function(voucher) {
                     $('#voucherSelect').append(`
-                        <option value="${voucher.id}">${voucher.ten} - ${voucher.phanTramGiam}%</option>
-                    `);
+                    <option value="${voucher.id}" data-discount="${voucher.phanTramGiam}">${voucher.ten} - ${voucher.phanTramGiam}%</option>
+                `);
                 });
             },
-            error: function (xhr) {
+            error: function(xhr) {
                 alert('An error occurred while loading the vouchers. Please try again.');
             }
         });
 
+        $('#voucherSelect').change(function() {
+            var selectedOption = $(this).find('option:selected').val();
+            var originalTotalAmount = parseFloat($('#cart2 tbody').find('strong').last().text().replace(/,/g, '')); // Lưu giá tiền gốc ban đầu
+            var formattedOriginalTotalAmount = originalTotalAmount.toLocaleString('en'); // Định dạng giá trị ban đầu
+            if (selectedOption === "") {
+              loadCart();
+            } else {
+                var selectedDiscount = $(this).find('option:selected').data('discount');
+                var newTotalAmount = originalTotalAmount - (originalTotalAmount * (selectedDiscount / 100));
+                var formattedAmount = parseFloat(newTotalAmount).toLocaleString('en');
+
+                formattedAmount = formattedAmount.replace(/,/g, '.').replace(/\./g, '');
+
+                $('#totalAmount').text(formattedAmount);
+                $('#totalAmount2').text(formattedAmount);// Cập nhật tổng tiền trong modal
+            }
+        });
         $('#updateAddressButton').click(function () {
             var userId = $('#userId').val();
             var province = $('#provinces').find('option:selected').text();
@@ -427,7 +448,7 @@
             $.ajax({
                 url: `/api/HDCT/` + userId + '/' + selectedVoucher + '/' + paymentMethod,
                 type: 'POST',
-                data: { paymentMethod: paymentMethod },
+                data: {paymentMethod: paymentMethod},
                 success: function (response) {
                     alert('Thanh toán thành công!');
                     loadCart(); // Làm mới bảng giỏ hàng mà không cần tải lại trang
