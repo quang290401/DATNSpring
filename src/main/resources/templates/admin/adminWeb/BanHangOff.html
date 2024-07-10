@@ -47,7 +47,7 @@
             <td th:text="${SanPham.getKichCo().getTenKichCo()}"></td>
             <td th:text="${SanPham.soLuong}"></td>
             <td th:text="${SanPham.giaSanPham}"></td>
-            <td>Còn Hàng</td>
+            <td th:text="${SanPham.getSoLuong() > 0 ? 'Còn hàng' : 'Hết hàng'}"></td>
             <td>
                 <a th:href="@{/Detail/{id}(id=${SanPham.id})}" class="btn btn-primary">Detail</a>
             </td>
