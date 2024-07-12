@@ -1,12 +1,17 @@
 let currentPage = 1;
 let pageSize = 8;
+let keySearch = "";
 
 function fetchProducts(pageNo) {
+    let url2 = `/api/SPCT?pageNo=${pageNo}&pageSize=${pageSize}`;
+    if (keySearch) {
+        url2 += `&moTa=${keySearch}`;
+    }
     $.ajax({
-        url: `/api/SPCT?pageNo=${pageNo}&pageSize=${pageSize}`,
+        url: url2,
         method: 'GET',
         dataType: 'json',
-        success: function(response) {
+        success: function (response) {
             console.log('Data received from API:', response); // Kiểm tra dữ liệu nhận được
             var container = $('.row-cols-2.row-cols-md-3.row-cols-xl-4.justify-content-center');
             container.empty(); // Xóa nội dung cũ
@@ -16,7 +21,7 @@ function fetchProducts(pageNo) {
 
             // Kiểm tra nếu products là một mảng
             if (Array.isArray(products)) {
-                products.forEach(function(product) { // Sửa tên biến thành product
+                products.forEach(function (product) { // Sửa tên biến thành product
                     var productId = product.id; // Lấy id của sản phẩm
                     var productHtml = `
                         <div class="col mb-5">
@@ -29,7 +34,10 @@ function fetchProducts(pageNo) {
                                         <!-- Product name-->
                                         <h5 class="fw-bolder">${product.sanPham.tenSanPham}</h5>
                                         <!-- Product price-->
-                                        ${product.giaSanPham.toLocaleString('vi-VN', {style: 'currency', currency: 'VND'})}
+                                        ${product.giaSanPham.toLocaleString('vi-VN', {
+                        style: 'currency',
+                        currency: 'VND'
+                    })}
                                     </div>
                                 </div>
                                 <!-- Product actions-->
@@ -49,7 +57,7 @@ function fetchProducts(pageNo) {
                 container.append('<p class="text-danger">Error: Expected an array but got invalid data format.</p>');
             }
         },
-        error: function(err) {
+        error: function (err) {
             console.error('Error fetching products:', err);
             var container = $('.row-cols-2.row-cols-md-3.row-cols-xl-4.justify-content-center');
             container.empty(); // Xóa nội dung cũ
@@ -58,6 +66,12 @@ function fetchProducts(pageNo) {
     });
 }
 
+function searchProduct() {
+    console.log('Quang');
+    keySearch = $("#keySearch").val();
+    currentPage = 1;
+    fetchProducts(currentPage - 1);
+}
 function updatePagination(response) {
     var paginationContainer = $('.pagination');
     paginationContainer.empty(); // Xóa nội dung cũ
@@ -76,19 +90,19 @@ function updatePagination(response) {
     }
 }
 
-$(document).ready(function() {
-    fetchProducts(currentPage-1);
+$(document).ready(function () {
+    fetchProducts(currentPage - 1);
 
     // Bắt sự kiện click vào liên kết phân trang
-    $(document).on('click', '.pagination .page-link', function(e) {
+    $(document).on('click', '.pagination .page-link', function (e) {
         e.preventDefault(); // Ngăn chặn hành vi mặc định của thẻ <a>
 
         var pageNo = $(this).data('page'); // Lấy số trang từ thuộc tính data
-        fetchProducts(pageNo-1); // Tải lại sản phẩm với trang mới
+        fetchProducts(pageNo - 1); // Tải lại sản phẩm với trang mới
     });
 
     // Bắt sự kiện click vào liên kết View options
-    $(document).on('click', '.view-options', function(e) {
+    $(document).on('click', '.view-options', function (e) {
         e.preventDefault(); // Ngăn chặn hành vi mặc định của thẻ <a>
 
         var productId = $(this).data('product-id'); // Lấy id từ thuộc tính data

@@ -34,7 +34,7 @@ public class HoaDonChiTietIMPL implements HoaDonChiTietService {
 
     @Override
     @Transactional
-    public HoaDonCHiTietCrud addHoaDonCT(UUID idUser, UUID idVoucher,UUID idTrangThaiHD) {
+    public HoaDonCHiTietCrud addHoaDonCT(UUID idUser, UUID idVoucher, UUID idTrangThaiHD) {
         Optional<VouCherEntity> vouCher = vouCherRepository.findById(idVoucher);
         Optional<UserEntity> user = usersRepository.findById(idUser);
         Optional<TrangThaiHDEntity> hdEntity = trangThaiHDRepository.findById(idTrangThaiHD);
@@ -48,28 +48,44 @@ public class HoaDonChiTietIMPL implements HoaDonChiTietService {
         hoaDonEntity.setTongTien(BigDecimal.valueOf(0));
         hoaDonEntity.setTrangThaiHD(hdEntity.get());
         hoaDonEntity = hoaDonRepository.save(hoaDonEntity);
+
         GioHangEntity gioHangEntity = gioHangRepository.findByUserId(idUser);
         List<GioHangChiTietEntity> gioHangChiTietEntities = gioHangChiTietRepository.findByGioHangId(gioHangEntity.getId());
         BigDecimal tongTien = BigDecimal.ZERO;
-        HoaDonChiTietEntity hoaDonChiTietEntity = new HoaDonChiTietEntity();
+
+        // Tính tổng tiền của giỏ hàng
         for (GioHangChiTietEntity gioHang : gioHangChiTietEntities) {
+            BigDecimal thanhTien = gioHang.getSanPhamChiTiet().getGiaSanPham().multiply(BigDecimal.valueOf(gioHang.getSoLuong()));
+            tongTien = tongTien.add(thanhTien);
+        }
+
+        // Áp dụng giảm giá từ voucher
+        if (vouCher.isPresent()) {
+            BigDecimal discount = BigDecimal.valueOf(vouCher.get().getPhanTramGiam());
+            tongTien = tongTien.subtract(tongTien.multiply(discount).divide(BigDecimal.valueOf(100)));
+        }
+
+        // Cập nhật tổng tiền vào hóa đơn
+        hoaDonEntity.setTongTien(tongTien);
+        hoaDonEntity = hoaDonRepository.save(hoaDonEntity);
+
+        // Lưu chi tiết hóa đơn
+        for (GioHangChiTietEntity gioHang : gioHangChiTietEntities) {
+            HoaDonChiTietEntity hoaDonChiTietEntity = new HoaDonChiTietEntity();
             hoaDonChiTietEntity.setSanPhamChiTiet(gioHang.getSanPhamChiTiet());
-            hoaDonChiTietEntity.setHoaDon(hoaDonEntity); // Liên kết với HoaDonEntity đã lưu
-            hoaDonChiTietEntity.setSoLuong(gioHang.getSoLuong()); // Bạn có thể thay đổi số lượng dựa trên logic của mình
+            hoaDonChiTietEntity.setHoaDon(hoaDonEntity);
+            hoaDonChiTietEntity.setSoLuong(gioHang.getSoLuong());
             BigDecimal thanhTien = gioHang.getSanPhamChiTiet().getGiaSanPham().multiply(BigDecimal.valueOf(gioHang.getSoLuong()));
             hoaDonChiTietEntity.setThanhTien(thanhTien);
             hoaDonChiTietEntity.setUser(user.get());
             hoaDonChiTietRepository.save(hoaDonChiTietEntity);
             gioHangChiTietRepository.deleteByIdGH(gioHangEntity.getId());
-            sanPhamChiTietRepository.updateSoLuong(gioHang.getSanPhamChiTiet().getId(),gioHang.getSoLuong());
-            tongTien = tongTien.add(thanhTien);
+            sanPhamChiTietRepository.updateSoLuong(gioHang.getSanPhamChiTiet().getId(), gioHang.getSoLuong());
         }
-        hoaDonEntity.setTongTien(tongTien);
-        hoaDonRepository.save(hoaDonEntity);
 
-
-        return modelMapper.map(hoaDonChiTietEntity, HoaDonCHiTietCrud.class);
+        return modelMapper.map(hoaDonEntity, HoaDonCHiTietCrud.class);
     }
+
 
     @Override
     public List<HoaDonChiTietDTO> getALlHoaDonCTByIdHoaDon(UUID idHoaDon) {

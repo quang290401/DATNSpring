@@ -2,7 +2,9 @@ package com.example.datn.restcontroller;
 
 import com.example.datn.common.Appcontants;
 import com.example.datn.dto.SanPhamChiTietDTO;
+import com.example.datn.dto.SanPhamChiTietFiterDTO;
 import com.example.datn.service.SanPhamChiTietService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,9 +23,10 @@ public class SanPhamChiTietRestController {
     @GetMapping()
     public Page<SanPhamChiTietDTO> getAllProducts (
             @RequestParam(value = "pageNo", defaultValue = Appcontants.DEFAULT_PAGE_NUMBER, required = false) int pageNo,
-            @RequestParam(value = "pageSize", defaultValue = Appcontants.DEFAULT_TOTAL_NUMBER, required = false) int pageSize) {
+            @RequestParam(value = "pageSize", defaultValue = Appcontants.DEFAULT_TOTAL_NUMBER, required = false) int pageSize
+    , @Valid SanPhamChiTietFiterDTO filterForm) {
 
-        return sanPhamChiTietService.getAllSanPhamChiTiet(pageNo, pageSize);
+        return sanPhamChiTietService.getAllSanPhamChiTiet(pageNo, pageSize,filterForm);
     }
     @GetMapping("/Detail/{id}")
     public  SanPhamChiTietDTO getById(@PathVariable UUID id){

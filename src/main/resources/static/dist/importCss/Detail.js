@@ -55,7 +55,7 @@ $(document).ready(function() {
                 // Ghi dữ liệu vào console để gỡ lỗi
                 console.log('Dữ liệu sản phẩm:', data);
 
-                // Lặp qua danh sách sản phẩm và tạo HTML cho mỗi sản phẩm
+
                 var productContainer = $('#productContainer');
                 productContainer.empty(); // Xóa nội dung cũ (nếu có)
 
@@ -155,7 +155,7 @@ $(document).ready(function() {
             },
             error: function(xhr, status, error) {
                 console.error('Lỗi khi thêm sản phẩm vào giỏ hàng:', xhr, status, error);
-                alert('Đã xảy ra lỗi khi thêm sản phẩm vào giỏ hàng. Vui lòng thử lại.');
+                alert('Vượt quá số lượng sản phẩm');
             }
         });
     });

@@ -48,6 +48,9 @@ public class GioHangChiTietIMPL implements GioHangChiTietService {
         if (gioHang.isEmpty() || sanPhamChiTiet.isEmpty()) {
             throw new EntityNotFoundException("Không tìm thấy gioHang hoặc sanPhamChiTiet trong cơ sở dữ liệu");
         }
+        if (!checkStockAvailability(gioHangChiTietDTO.getSanPhamChiTiet(), gioHangChiTietDTO.getSoLuong())) {
+            throw new IllegalArgumentException("Số lượng sản phẩm yêu cầu vượt quá số lượng tồn kho");
+        }
         GioHangChiTietEntity gioHangChiTietEntity = GioHangChiTietEntity.builder()
                 .gioHang(gioHang.get())
                 .sanPhamChiTiet(sanPhamChiTiet.get())
@@ -64,6 +67,15 @@ public class GioHangChiTietIMPL implements GioHangChiTietService {
     @Override
     public void deleteGioHangCT(UUID id) {
         gioHangChiTietRepository.deleteById(id);
+    }
+
+    @Override
+    public boolean checkStockAvailability(UUID sanPhamChiTietId, int soLuongYeuCau) {
+        Optional<SanPhamChiTietEntity> sanPhamChiTiet = sanPhamChiTietRepository.findById(sanPhamChiTietId);
+        if (sanPhamChiTiet.isEmpty()) {
+            throw new EntityNotFoundException("Không tìm thấy sản phẩm chi tiết trong cơ sở dữ liệu");
+        }
+        return sanPhamChiTiet.get().getSoLuong() >= soLuongYeuCau;
     }
 
 }

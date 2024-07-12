@@ -4,37 +4,45 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Product Detail</title>
-    <link rel="stylesheet" th:href="@{/dist/web/csspaging/styles.css}" />
+    <link rel="stylesheet" th:href="@{/dist/web/csspaging/styles.css}"/>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <style>
-        .custom-input-group {
+        .product-page .custom-input-group {
             display: flex;
             align-items: center;
         }
-        .custom-input-group .form-control {
+
+        .product-page .custom-input-group .form-control {
             flex: 1;
             margin-right: 15px; /* Adjust the margin as needed */
         }
-        .custom-input-group .btn {
+
+        .product-page .custom-input-group .btn {
             flex: none;
         }
-        .card-custom {
+
+        .product-page .card-custom {
             width: 20rem; /* Điều chỉnh chiều rộng của thẻ */
         }
-        .card-img-top-custom {
+
+        .product-page .card-img-top-custom {
             height: 300px; /* Điều chỉnh chiều cao của hình ảnh */
             object-fit: cover; /* Đảm bảo hình ảnh không bị méo */
         }
-        .card-body-custom h5 {
+
+        .product-page .card-body-custom h5 {
             font-size: 1rem; /* Điều chỉnh kích thước font chữ của tên sản phẩm */
         }
-        .card-body-custom div {
+
+        .product-page .card-body-custom div {
             font-size: 0.9rem; /* Điều chỉnh kích thước font chữ của giá sản phẩm */
         }
-        .card-footer-custom a {
+
+        .product-page .card-footer-custom a {
             font-size: 0.85rem; /* Điều chỉnh kích thước font chữ của nút */
         }
-        .product-detail-container {
+
+        .product-page .product-detail-container {
             max-width: 1300px;
             margin: 40px auto; /* Center the form and add some margin from the top */
             padding: 20px; /* Add some padding */
@@ -45,44 +53,47 @@
     </style>
 </head>
 <body>
-<div th:replace="web/common/header.html"></div>
-<div class="product-detail-container">
-    <form id="formSubmit">
-        <div class="row gx-4 gx-lg-5 align-items-center">
-            <div class="col-md-6">
-                <img class="card-img-top" id="productImage" src="" alt="..."
-                     style="width: 100%; max-width: 500px; height: auto;"/>
-            </div>
-            <div class="col-md-6">
-                <div class="small mb-1"></div>
-                <h1 class="display-5 fw-bolder" id="productName">Tên Sản Phẩm</h1>
-                <div class="fs-5 mb-5">
-                    <span class="text-decoration-line-through" id="productOldPrice">$1245.00</span>
-                    <span id="productPrice">Giá SP</span>
+<div th:replace="~{web/common/header.html}"></div>
+<div class="product-page">
+    <div class="product-detail-container">
+        <form id="formSubmit">
+            <div class="row gx-4 gx-lg-5 align-items-center">
+                <div class="col-md-6">
+                    <img class="card-img-top" id="productImage" src="" alt="..."
+                         style="width: 100%; max-width: 500px; height: auto;"/>
                 </div>
-                <p class="lead" id="productDescription"></p>
-                <div class="custom-input-group">
-                    <input type="hidden" class="form-control" id="gioHang" name="gioHang" value=""/>
-                    <input type="hidden" class="form-control" id="sanPham" name="sanPham" value=""/>
-                    <input class="form-control" value="1" type="number" id="soLuong" name="soLuong">
-                    <a class="btn btn-outline-dark mt-auto" id="btnAddCart">Add to cart</a>
+                <div class="col-md-6">
+                    <div class="small mb-1"></div>
+                    <h1 class="display-5 fw-bolder" id="productName">Tên Sản Phẩm</h1>
+                    <div class="fs-5 mb-5">
+                        <span class="text-decoration-line-through" id="productOldPrice">$1245.00</span>
+                        <span id="productPrice">Giá SP</span>
+                    </div>
+                    <p class="lead" id="productDescription"></p>
+                    <div class="custom-input-group">
+                        <input type="hidden" class="form-control" id="gioHang" name="gioHang" value=""/>
+                        <input type="hidden" class="form-control" id="sanPham" name="sanPham" value=""/>
+                        <input class="form-control" value="1" type="number" id="soLuong" name="soLuong">
+                        <a class="btn btn-outline-dark mt-auto" id="btnAddCart">Add to cart</a>
+                    </div>
                 </div>
             </div>
-        </div>
-    </form>
-    <input type="hidden" class="form-control" id="userId" name="userId" th:value="${session.user != null ? session.user.id : 'null'}" />
-</div>
-<h2 class="fw-bolder mb-4 text-center">Có Thể Bạn Quan Tâm ?</h2>
+        </form>
+        <input type="hidden" class="form-control" id="userId" name="userId"
+               th:value="${session.user != null ? session.user.id : 'null'}"/>
+    </div>
+    <h2 class="fw-bolder mb-4 text-center">Có Thể Bạn Quan Tâm ?</h2>
 
-<div class="container">
-    <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center" id="productContainer">
-        <!-- Product cards will be appended here by JavaScript -->
+    <div class="container">
+        <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center"
+             id="productContainer">
+            <!-- Product cards will be appended here by JavaScript -->
+        </div>
     </div>
 </div>
+<div th:replace="~{web/common/foodter.html}"></div>
 
-<div th:replace="web/common/foodter.html"></div>
-
-<script th:src ="@{/dist/importCss/Detail.js}"></script>
+<script th:src="@{/dist/importCss/Detail.js}"></script>
 </body>
 
 </html>
