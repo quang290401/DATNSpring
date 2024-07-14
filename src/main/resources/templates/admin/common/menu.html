@@ -29,22 +29,71 @@
         <li>
             <a href="#" class="dropdown-toggle">
                 <i class="menu-icon fa fa-list"></i>
-                <span class="menu-text"> Quản lý bài viết </span>
+                <span class="menu-text"> Quản lý Sản Phẩm </span>
                 <b class="arrow fa fa-angle-down"></b>
             </a>
             <b class="arrow"></b>
             <ul class="submenu">
                 <li>
-                    <a href='<c:url value="/admin-product?page=1&maxPageItem=4&type=list"/>'>
+                    <a href='<c:url value="/admin-product?page=1&maxPageItem=4&type=list"/>' th:href="@{/BanHangOff/page}">
                         <i class="menu-icon fa fa-caret-right"></i>
-                        DS bài viết
+                        Danh Sách Sản Phẩm
                     </a>
                     <b class="arrow"></b>
                 </li>
                 <li>
-                    <a href='<c:url value="/admin-product?page=1&maxPageItem=4&type=list"/>' th:href="@{/BanHangOff/page}">
+                    <a href='<c:url value="/admin-product?page=1&maxPageItem=4&type=list"/>' th:href="@{/chatlieu/getAll}">
                         <i class="menu-icon fa fa-caret-right"></i>
-                        Bán Hàng
+                        Chất Liệu
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+                <li>
+                    <a href='<c:url value="/admin-product?page=1&maxPageItem=4&type=list"/>' th:href="@{/diachi/getAll}">
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        Địa Chỉ
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+                <li>
+                    <a href='<c:url value="/admin-product?page=1&maxPageItem=4&type=list"/>' th:href="@{/danhmuc/getAll}">
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        Danh Mục
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+                <li>
+                    <a href='<c:url value="/admin-product?page=1&maxPageItem=4&type=list"/>' th:href="@{/kichco/getAll}">
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        Kích Cỡ
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+                <li>
+                    <a href='<c:url value="/admin-product?page=1&maxPageItem=4&type=list"/>' th:href="@{/mausac/getAll}">
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        Màu Sắc
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+                <li>
+                    <a href='<c:url value="/admin-product?page=1&maxPageItem=4&type=list"/>' th:href="@{/nsx/getAll}">
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        Nhà Sản Xuất
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+                <li>
+                    <a href='<c:url value="/admin-product?page=1&maxPageItem=4&type=list"/>' th:href="@{/sanpham/getAll}">
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        Sản Phầm
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+                <li>
+                    <a href='<c:url value="/admin-product?page=1&maxPageItem=4&type=list"/>' th:href="@{/voucher/getAll}">
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        VouCher
                     </a>
                     <b class="arrow"></b>
                 </li>

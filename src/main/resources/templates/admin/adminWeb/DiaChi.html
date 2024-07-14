@@ -12,12 +12,23 @@
 
 <body>
 <div th:replace="admin/common/Header.html"></div>
-<div class="container mt-4">
+<div class="main-container" id="main-container">
+    <script type="text/javascript">
+        try {
+            ace.settings.check('main-container', 'fixed')
+        } catch (e) {
+        }
+    </script>
+    <!-- header -->
+    <!-- Thay thế các đoạn mã này bằng thymeleaf block -->
+    <div th:replace="admin/common/menu.html"></div>
+    <!-- header -->
+<div class="main-content">
     <form th:action="@{/diachi/add}" th:object="${diaChi}" method="post">
         <div class="form-row">
             <div class="form-group col-md-2">
                 <label for="ma">Mã</label>
-                <input type="text" class="form-control" id="ma" th:field="*{ma}" placeholder="Ma" required>
+                <input type="text" class="form-control" id="id" th:field="*{id}" placeholder="Ma" required>
             </div>
             <div class="form-group col-md-2">
                 <label for="diaChi">Địa Chỉ</label>
@@ -43,7 +54,7 @@
     <table class="table table-bordered">
         <thead class="thead-dark">
         <tr>
-            <th>Mã</th>
+            <th>ID</th>
             <th>Địa Chỉ</th>
             <th>Thành Phố</th>
             <th>Quốc gia</th>
@@ -55,7 +66,7 @@
         </thead>
         <tbody>
         <tr th:each="diaChi : ${diaChiList}">
-            <td th:text="${diaChi.ma}"></td>
+            <td th:text="${diaChi.id}"></td>
             <td th:text="${diaChi.diaChi}"></td>
             <td th:text="${diaChi.thanhPho}"></td>
             <td th:text="${diaChi.quocGia}"></td>
@@ -75,5 +86,10 @@
     </table>
 </div>
 <div th:replace="admin/common/foodter.html"></div>
+</div>
+<div th:replace="admin/common/foodter.html"></div>
+<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse display">
+    <i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
+</a>
 </body>
 </html>

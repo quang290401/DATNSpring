@@ -12,7 +12,18 @@
 
 <body>
 <div th:replace="admin/common/Header.html"></div>
-<div class="container mt-4">
+<div class="main-container" id="main-container">
+  <script type="text/javascript">
+    try {
+      ace.settings.check('main-container', 'fixed')
+    } catch (e) {
+    }
+  </script>
+  <!-- header -->
+  <!-- Thay thế các đoạn mã này bằng thymeleaf block -->
+  <div th:replace="admin/common/menu.html"></div>
+  <!-- header -->
+<div class="main-content">
   <form th:action="@{/danhmuc/add}" th:object="${danhMuc}" method="post">
     <div class="form-row">
       <div class="form-group col-md-2">
@@ -21,8 +32,9 @@
       </div>
       <button type="submit" class="btn btn-success" id="btnAdd">Add</button>
     </div>
-</div>
-</form>
+    </form>
+  </div>
+
 <table class="table table-bordered">
   <thead class="thead-dark">
   <tr>
@@ -50,5 +62,8 @@
 </table>
 </div>
 <div th:replace="admin/common/foodter.html"></div>
+<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse display">
+  <i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
+</a>
 </body>
 </html>

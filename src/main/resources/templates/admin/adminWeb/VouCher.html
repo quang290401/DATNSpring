@@ -12,12 +12,23 @@
 
 <body>
 <div th:replace="admin/common/Header.html"></div>
+<div class="main-container" id="main-container">
+  <script type="text/javascript">
+    try {
+      ace.settings.check('main-container', 'fixed')
+    } catch (e) {
+    }
+  </script>
+  <!-- header -->
+  <!-- Thay thế các đoạn mã này bằng thymeleaf block -->
+  <div th:replace="admin/common/menu.html"></div>
+  <!-- header -->
 <div class="container mt-4">
   <form th:action="@{/voucher/add}" th:object="${vouCher}" method="post" id="voucherForm">
     <div class="form-row">
       <div class="form-group col-md-2">
-        <label for="ma">Mã</label>
-        <input type="text" class="form-control" id="ma" th:field="*{ma}" placeholder="Ma" required>
+        <label for="id">Mã</label>
+        <input type="text" class="form-control" id="id" th:field="*{id}" placeholder="ID" required>
       </div>
       <div class="form-group col-md-2">
         <label for="ten">Tên</label>
@@ -47,7 +58,7 @@
   <table class="table table-bordered">
     <thead class="thead-dark">
     <tr>
-      <th>Mã</th>
+      <th>ID</th>
       <th>Tên</th>
       <th>Phần Trăm Giảm</th>
       <th>Ngày Bắt Đầu</th>
@@ -60,7 +71,7 @@
     </thead>
     <tbody>
     <tr th:each="vouCher : ${listVoucher}">
-      <td th:text="${vouCher.ma}"></td>
+      <td th:text="${vouCher.id}"></td>
       <td th:text="${vouCher.ten}"></td>
       <td th:text="${vouCher.phanTramGiam}"%></td>
       <td th:text="${vouCher.ngayBatDau}"></td>
@@ -103,5 +114,8 @@
   });
 </script>
 <div th:replace="admin/common/foodter.html"></div>
+  <a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse display">
+    <i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
+  </a>
 </body>
 </html>

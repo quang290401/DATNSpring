@@ -18,6 +18,17 @@
 </head>
 <body>
 <div th:replace="admin/common/Header.html"></div>
+<div class="main-container" id="main-container">
+    <script type="text/javascript">
+        try {
+            ace.settings.check('main-container', 'fixed')
+        } catch (e) {
+        }
+    </script>
+    <!-- header -->
+    <!-- Thay thế các đoạn mã này bằng thymeleaf block -->
+    <div th:replace="admin/common/menu.html"></div>
+    <!-- header -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container">
         <a class="navbar-brand" href="#">Chi Tiết Chat Lieu</a>
@@ -27,13 +38,13 @@
         </div>
     </div>
 </nav>
-<div class="container mt-4">
+<div class="main-content">
     <div class="card">
         <div class="card-header">
             Thông Tin Chất Liệu
         </div>
         <div class="card-body">
-            <<form >
+            <form >
         <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
@@ -50,11 +61,11 @@
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="moTa">Mô Tả:</label>
-                            <textarea id="moTa" class="form-control"
-                                      th:text="${chatLieu.moTa}" name="moTa"></textarea>
-                        </div>
+<!--                        <div class="form-group">-->
+<!--                            <label for="moTa">Mô Tả:</label>-->
+<!--                            <textarea id="moTa" class="form-control"-->
+<!--                                      th:text="${chatLieu.moTa}" name="moTa"></textarea>-->
+<!--                        </div>-->
                         <div class="form-group">
                             <label for="trangThai">Trạng Thái:</label>
                             <input type="text" id="trangThai" class="form-control"
@@ -71,5 +82,9 @@
     </div>
 </div>
 <div th:replace="admin/common/foodter.html"></div>
+<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse display">
+    <i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
+</a>
+</div>
 </body>
 </html>
