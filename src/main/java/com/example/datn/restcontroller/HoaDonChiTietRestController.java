@@ -8,6 +8,7 @@ import com.example.datn.service.HoaDonChiTietService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
@@ -16,9 +17,11 @@ import java.util.UUID;
 @RequestMapping("/api/HDCT")
 public class HoaDonChiTietRestController {
     private final HoaDonChiTietService hoaDonChiTietService;
-    @PostMapping("/{idUser}/{idVoucher}/{idTrangThaiHD}")
-    public HoaDonCHiTietCrud addHoaDonCT (@PathVariable UUID idUser, @PathVariable UUID idVoucher,@PathVariable UUID idTrangThaiHD) {
-        return hoaDonChiTietService.addHoaDonCT(idUser,idVoucher,idTrangThaiHD);
+    @PostMapping("/{idUser}/{idVoucher}/{idTrangThaiHD}/{tongTien}")
+    public HoaDonCHiTietCrud addHoaDonCT (@PathVariable UUID idUser, @PathVariable UUID idVoucher,
+                                          @PathVariable UUID idTrangThaiHD,
+                                          @PathVariable BigDecimal tongTien) {
+        return hoaDonChiTietService.addHoaDonCT(idUser,idVoucher,idTrangThaiHD,tongTien);
     }
     @GetMapping("/{idUser}")
     public List<HoaDonDTO> getALLHoaDonByIdUser (@PathVariable UUID idUser) {

@@ -34,7 +34,7 @@ public class HoaDonChiTietIMPL implements HoaDonChiTietService {
 
     @Override
     @Transactional
-    public HoaDonCHiTietCrud addHoaDonCT(UUID idUser, UUID idVoucher, UUID idTrangThaiHD) {
+    public HoaDonCHiTietCrud addHoaDonCT(UUID idUser, UUID idVoucher, UUID idTrangThaiHD,BigDecimal tongtien) {
         Optional<VouCherEntity> vouCher = vouCherRepository.findById(idVoucher);
         Optional<UserEntity> user = usersRepository.findById(idUser);
         Optional<TrangThaiHDEntity> hdEntity = trangThaiHDRepository.findById(idTrangThaiHD);
@@ -48,25 +48,9 @@ public class HoaDonChiTietIMPL implements HoaDonChiTietService {
         hoaDonEntity.setTongTien(BigDecimal.valueOf(0));
         hoaDonEntity.setTrangThaiHD(hdEntity.get());
         hoaDonEntity = hoaDonRepository.save(hoaDonEntity);
-
         GioHangEntity gioHangEntity = gioHangRepository.findByUserId(idUser);
         List<GioHangChiTietEntity> gioHangChiTietEntities = gioHangChiTietRepository.findByGioHangId(gioHangEntity.getId());
-        BigDecimal tongTien = BigDecimal.ZERO;
-
-        // Tính tổng tiền của giỏ hàng
-        for (GioHangChiTietEntity gioHang : gioHangChiTietEntities) {
-            BigDecimal thanhTien = gioHang.getSanPhamChiTiet().getGiaSanPham().multiply(BigDecimal.valueOf(gioHang.getSoLuong()));
-            tongTien = tongTien.add(thanhTien);
-        }
-
-        // Áp dụng giảm giá từ voucher
-        if (vouCher.isPresent()) {
-            BigDecimal discount = BigDecimal.valueOf(vouCher.get().getPhanTramGiam());
-            tongTien = tongTien.subtract(tongTien.multiply(discount).divide(BigDecimal.valueOf(100)));
-        }
-
-        // Cập nhật tổng tiền vào hóa đơn
-        hoaDonEntity.setTongTien(tongTien);
+        hoaDonEntity.setTongTien(tongtien);
         hoaDonEntity = hoaDonRepository.save(hoaDonEntity);
 
         // Lưu chi tiết hóa đơn
@@ -82,7 +66,6 @@ public class HoaDonChiTietIMPL implements HoaDonChiTietService {
             gioHangChiTietRepository.deleteByIdGH(gioHangEntity.getId());
             sanPhamChiTietRepository.updateSoLuong(gioHang.getSanPhamChiTiet().getId(), gioHang.getSoLuong());
         }
-
         return modelMapper.map(hoaDonEntity, HoaDonCHiTietCrud.class);
     }
 

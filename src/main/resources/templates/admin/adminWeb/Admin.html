@@ -6,16 +6,13 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/jquery.validation/latest/jquery.validate.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <th:block th:replace="~{cssImport.html :: layout_import_css}"/>
-
-
 </head>
 <body class="no-skin">
 <!-- header -->
-<!-- Thay thế các đoạn mã này bằng thymeleaf block -->
-<div th:replace="admin/common/Header.html"></div>
+<div th:replace="~{admin/common/Header.html}"></div>
 <!-- header -->
-
 
 <div class="main-container" id="main-container">
     <script type="text/javascript">
@@ -24,92 +21,38 @@
         } catch (e) {
         }
     </script>
-    <!-- header -->
-    <!-- Thay thế các đoạn mã này bằng thymeleaf block -->
-    <div th:replace="admin/common/menu.html"></div>
-    <!-- header -->
+    <!-- menu -->
+    <div th:replace="~{admin/common/menu.html}"></div>
+    <!-- menu -->
+
     <div class="main-content">
         <div class="main-content-inner">
             <div class="page-content">
-                <form id="insert-product">
-                    <div class="form-row">
-                        <div class="form-group col-md-6">
-                            <label >Tên sản phẩm</label>
-                            <input type="text" class="form-control" id="name-product" name="name-product">
-                        </div>
-                        <div class="form-group col-md-6">
-                            <label >Giá sản phẩm</label>
-                            <input type="text" class="form-control" id="price-product" name="price-product">
-                        </div>
+                <div class="card border-primary mb-3" style="max-width: 90%; margin: auto;">
+                    <div class="card-header">
+                        <h3>Quản lý sản phẩm</h3>
                     </div>
-                    <div class="form-row">
-                        <div class="form-group col-md-6">
-                            <label >Số lượng</label>
-                            <input type="number" class="form-control" id="quantity" name="quantity">
-                        </div>
-                        <div class="form-group col-md-6">
-                            <label >Màu sắc</label>
-                            <input type="text" class="form-control" id="Color" name="Color">
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group col-md-6">
-                            <label >Trạng thái</label>
-                            <input type="text" class="form-control" id="Status" name="Status">
-                        </div>
-                        <div class="form-group col-md-6">
-                            <label>Loại</label>
-                            <select class="form-control" id="categorySelect" name="categorySelect">
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <button type="submit" class="btn btn-primary" id="btn-save">Submit</button>
-                    </div>
-                </form>
-
-                <div class="form-row">
-                    <div class="form-group col-md-8">
-                        <input class="form-control" type="search" placeholder="Tìm kiếm" aria-label="Search" id="keySearch">
-                    </div>
-                    <div class="form-group col-md-4">
-                        <button type="button" class="btn btn-primary btn-block" id="btn-search" onclick="searchProduct()">Tìm kiếm</button>
+                    <div class="card-body">
+                        <form id="product-form">
+                            <div class="form-group">
+                                <label for="name-product">Tên sản phẩm</label>
+                                <input type="text" class="form-control" id="name-product" name="name-product" style="width: 100%;">
+                            </div>
+                            <div class="form-group">
+                                <button type="button" class="btn btn-primary" id="btn-add">Thêm</button>
+                                <button type="button" class="btn btn-secondary" id="btn-update">Cập nhật</button>
+                                <button type="button" class="btn btn-info" id="btn-view">Xem chi tiết</button>
+                                <button type="reset" class="btn btn-warning" id="btn-reset">Reset</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
-
-
-                <br>
-
-                <table class="table" id="productTable">
-                    <thead>
-                    <tr>
-                        <th scope="col">nameProduct</th>
-                        <th scope="col">priceProduct</th>
-                        <th scope="col">Color</th>
-                        <th scope="col">quantity</th>
-                        <th scope="col">status</th>
-                        <th scope="col">Action</th>
-                    </tr>
-                    </thead>
-                    <tbody id="productTableId">
-
-                    </tbody>
-                </table>
-
-
             </div>
         </div>
-        <nav aria-label="Page navigation example">
-            <ul class="pagination">
-
-            </ul>
-        </nav>
-
     </div>
 
     <!-- footer -->
-    <!-- Thay thế các đoạn mã này bằng thymeleaf block -->
-    <div th:replace="admin/common/foodter.html"></div>
+    <div th:replace="~{admin/common/foodter.html}"></div>
     <!-- footer -->
 
     <a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse display">
@@ -117,6 +60,4 @@
     </a>
 </div>
 </body>
-
-
 </html>
