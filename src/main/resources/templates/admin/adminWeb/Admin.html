@@ -12,8 +12,9 @@
     <th:block th:replace="~{cssImport.html :: layout_import_css}"/>
     <style>
         .modal-lg {
-            max-width: 70%;
+            max-width: 90%;
         }
+
         .modal-header,
         .modal-body {
             display: flex;
@@ -43,85 +44,79 @@
 <body class="no-skin">
 <!-- header -->
 <div th:replace="~{admin/common/Header.html}"></div>
+<div th:replace="~{admin/common/menu.html}"></div>
 <!-- header -->
 
-<div class="main-container" id="main-container">
-    <script type="text/javascript">
-        try {
-            ace.settings.check('main-container', 'fixed')
-        } catch (e) {
-        }
-    </script>
-    <!-- menu -->
-    <div th:replace="~{admin/common/menu.html}"></div>
-    <!-- menu -->
-
-    <div class="main-content">
-        <div class="main-content-inner">
-            <div class="page-content">
-                <div class="card border-primary mb-3" style="max-width: 90%; margin: auto;">
-                    <div class="card-header">
-                        <h3>Quản lý sản phẩm</h3>
-                    </div>
-                    <div class="card-body">
-                        <form id="product-form">
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label for="name-product">Tên sản phẩm</label>
-                                    <input type="text" class="form-control" id="name-product" name="name-product">
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="code-product">Mã sản phẩm</label>
-                                    <input type="text" class="form-control" id="code-product" name="code-product">
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="checkbox" id="active-product"
-                                               name="active-product">
-                                        <label class="form-check-label" for="active-product">Đang kinh doanh</label>
+<div class="content-wrapper">
+    <section class="content">
+        <div class="main-content">
+            <div class="main-content-inner">
+                <div class="page-content">
+                    <div class="card border-primary mb-3" style="max-width: 90%; margin: auto;">
+                        <div class="card-header">
+                            <h3>Quản lý sản phẩm</h3>
+                        </div>
+                        <div class="card-body">
+                            <form id="product-form">
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="name-product">Tên sản phẩm</label>
+                                        <input type="text" class="form-control" id="name-product" name="name-product">
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="code-product">Mã sản phẩm</label>
+                                        <input type="hidden" class="form-control" id="code-product" name="code-product">
                                     </div>
                                 </div>
-                                <div class="form-group col-md-6">
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="checkbox" id="inactive-product"
-                                               name="inactive-product">
-                                        <label class="form-check-label" for="inactive-product">Ngừng kinh doanh</label>
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="active-product"
+                                                   name="active-product">
+                                            <label class="form-check-label" for="active-product">Đang kinh doanh</label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="inactive-product"
+                                                   name="inactive-product">
+                                            <label class="form-check-label" for="inactive-product">Ngừng kinh
+                                                doanh</label>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                <button type="button" class="btn btn-primary" id="btn-add">Thêm</button>
-                                <button type="button" class="btn btn-secondary" id="btn-update">Cập nhật</button>
-                                <button type="button" class="btn btn-info" id="btn-view">Xem chi tiết</button>
-                                <button type="reset" class="btn btn-warning" id="btn-reset">Reset</button>
-                            </div>
-                        </form>
+                                <div class="form-group">
+                                    <button type="button" class="btn btn-primary" id="btn-add">Thêm</button>
+                                    <button type="button" class="btn btn-secondary" id="btn-update">Cập nhật</button>
+                                    <button type="button" class="btn btn-info" id="btn-view">Xem chi tiết</button>
+                                    <button type="reset" class="btn btn-warning" id="btn-reset">Reset</button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
-                </div>
 
-                <!-- Bảng sản phẩm -->
-                <div class="table-responsive">
-                    <table class="table table-bordered table-striped">
-                        <thead>
-                        <tr>
-                            <th>Tên Sản Phẩm</th>
-                            <th>Ngày Nhập</th>
-                            <th>Trạng Thái</th>
-                            <th>Chọn</th>
-                        </tr>
-                        </thead>
-                        <tbody id="productTable">
-                        <!-- Dữ liệu sản phẩm sẽ được thêm vào đây -->
-                        </tbody>
-                    </table>
-                </div>
-                <!-- /Bảng sản phẩm -->
+                    <!-- Bảng sản phẩm -->
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                            <tr>
+                                <th>Tên Sản Phẩm</th>
+                                <th>Ngày Nhập</th>
+                                <th>Trạng Thái</th>
+                                <th>Chọn</th>
+                            </tr>
+                            </thead>
+                            <tbody id="productTable">
+                            <!-- Dữ liệu sản phẩm sẽ được thêm vào đây -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /Bảng sản phẩm -->
 
+                </div>
             </div>
         </div>
-    </div>
+    </section>
 
     <div class="modal fade" id="thanhToanModal" tabindex="-1" role="dialog" aria-labelledby="thanhToanModalLabel"
          aria-hidden="true">
@@ -139,11 +134,15 @@
                             <table id="cart2" class="table table-hover table-condensed">
                                 <thead>
                                 <tr>
-                                    <th style="width: 50%">Tên sản phẩm</th>
-                                    <th style="width: 10%">Giá</th>
+                                    <th style="width: 20%">Tên sản phẩm</th>
+                                    <th style="width: 8%">Giá</th>
                                     <th style="width: 8%">Số lượng</th>
-                                    <th style="width: 22%" class="text-center">Thành tiền</th>
-                                    <th style="width: 10%"></th>
+                                    <th style="width: 8%">Màu Sắc</th>
+                                    <th style="width: 8%">Kích Cỡ</th>
+                                    <th style="width: 8%">NSX</th>
+                                    <th style="width: 20%">Mô Tả</th>
+                                    <th style="width: 20%">Hình annh</th>
+                                    <th style="width: 10%">Chọn</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -155,7 +154,6 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
                         <button type="button" id="idXacNhan" class="btn btn-primary">Xác nhận</button>
-
                     </div>
                 </div>
             </div>
@@ -171,6 +169,7 @@
         <i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
     </a>
 </div>
+<th:block th:replace="jsImport.html :: layout_import_js"/>
 </body>
 <script>
     $(document).ready(function () {
@@ -185,7 +184,6 @@
                     pageSize: 10 // Số lượng sản phẩm mỗi trang
                 },
                 success: function (response) {
-
                     let products = response.content; // Giả sử API trả về dữ liệu theo dạng {content: [...]}
                     let productTable = $('#productTable');
                     productTable.empty(); // Xóa các hàng hiện tại
@@ -231,7 +229,48 @@
         }
 
         $('#btn-view').on('click', function () {
-            $('#thanhToanModal').modal('show');
+            let idSp = $('#code-product').val();
+
+            if (!idSp) {
+                alert('Vui lòng chọn sản phẩm.');
+                return;
+            }
+
+            $.ajax({
+                url: '/api/SPCT/idSP',
+                type: 'GET',
+                data: {
+                    idSP: idSp,
+                    pageNo: 0,
+                    pageSize: 10
+                },
+                success: function (response) {
+                    let products = response.content;
+                    let cartTable = $('#cart2 tbody');
+                    cartTable.empty();
+
+                    $.each(products, function (index, product) {
+                        let row = `<tr>
+                            <td>${product.sanPham.tenSanPham}</td>
+                            <td>${product.giaSanPham}</td>
+                            <td>${product.soLuong}</td>
+                            <td>${product.mauSac.ten}</td>
+                            <td>${product.kichCo.tenKichCo}</td>
+                            <td>${product.nsx.ten}</td>
+                            <td>${product.moTa}
+                          <td><img src="${product.hinhAnh.duongDan}"
+                          alt="Hình ảnh sản phẩm" style="max-width: 100px; max-height: 100px;"></td>
+                             <td><input type="checkbox" class="product-checkbox"}"></td>
+                        </tr>`;
+                        cartTable.append(row);
+                    });
+
+                    $('#thanhToanModal').modal('show');
+                },
+                error: function (error) {
+                    console.log('Error:', error);
+                }
+            });
         });
     });
 </script>

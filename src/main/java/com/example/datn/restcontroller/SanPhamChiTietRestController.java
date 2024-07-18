@@ -28,6 +28,14 @@ public class SanPhamChiTietRestController {
 
         return sanPhamChiTietService.getAllSanPhamChiTiet(pageNo, pageSize,filterForm);
     }
+    @GetMapping("/idSP")
+    public Page<SanPhamChiTietDTO> getAllProductsByidSP (
+            @RequestParam(value = "pageNo", defaultValue = Appcontants.DEFAULT_PAGE_NUMBER, required = false) int pageNo,
+            @RequestParam(value = "pageSize", defaultValue = Appcontants.DEFAULT_TOTAL_NUMBER, required = false) int pageSize
+            , @Valid UUID idSP) {
+
+        return sanPhamChiTietService.getAllSanPhamChiTietBYidSP(idSP,pageNo, pageSize);
+    }
     @GetMapping("/Detail/{id}")
     public  SanPhamChiTietDTO getById(@PathVariable UUID id){
         return sanPhamChiTietService.findById(id);

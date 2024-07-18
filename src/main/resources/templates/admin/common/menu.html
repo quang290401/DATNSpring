@@ -1,51 +1,63 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<div id="sidebar" class="sidebar responsive ace-save-state">
-    <script type="text/javascript">
-        try { ace.settings.loadState('sidebar') } catch (e) {}
-    </script>
-    <div class="sidebar-shortcuts" id="sidebar-shortcuts">
-        <div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
-            <button class="btn btn-success">
-                <i class="ace-icon fa fa-signal"></i>
-            </button>
-            <button class="btn btn-info">
-                <i class="ace-icon fa fa-pencil"></i>
-            </button>
-            <button class="btn btn-warning">
-                <i class="ace-icon fa fa-users"></i>
-            </button>
-            <button class="btn btn-danger">
-                <i class="ace-icon fa fa-cogs"></i>
-            </button>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<aside class="main-sidebar sidebar-dark-primary elevation-4" th:fragment="layout_user_menuUser">
+    <!-- Brand Logo -->
+    <a href="index.html" class="brand-link">
+        <img src="/dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+        <span class="brand-text font-weight-light">AdminLTE 3</span>
+    </a>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <!-- SidebarSearch Form -->
+        <div class="form-inline">
+            <div class="input-group" data-widget="sidebar-search">
+                <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
+                <div class="input-group-append">
+                    <button class="btn btn-sidebar">
+                        <i class="fas fa-search fa-fw"></i>
+                    </button>
+                </div>
+            </div>
         </div>
-        <div class="sidebar-shortcuts-mini" id="sidebar-shortcuts-mini">
-            <span class="btn btn-success"></span>
-            <span class="btn btn-info"></span>
-            <span class="btn btn-warning"></span>
-            <span class="btn btn-danger"></span>
-        </div>
-    </div>
-    <ul class="nav nav-list">
-        <li>
-            <a href="#" class="dropdown-toggle">
-                <i class="menu-icon fa fa-list"></i>
-                <span class="menu-text"> Quản lý bài viết </span>
-                <b class="arrow fa fa-angle-down"></b>
-            </a>
-            <b class="arrow"></b>
-            <ul class="submenu">
-                <li>
-                    <a href='<c:url value="/admin-product?page=1&maxPageItem=4&type=list"/>'>
-                        <i class="menu-icon fa fa-caret-right"></i>
-                        DS bài viết
+
+        <!-- Sidebar Menu -->
+        <nav class="mt-2">
+            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                <!-- Add icons to the links using the .nav-icon class
+                     with font-awesome or any other icon font library -->
+                <li class="nav-item menu-open">
+                    <a href="#" class="nav-link active">
+                        <i class="nav-icon fas fa-tachometer-alt"></i>
+                        <p>
+                            User
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
                     </a>
-                    <b class="arrow"></b>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="/view/user" class="nav-link active">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Quản lý sản phẩm</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/view/role" class="nav-link active">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Quản lý hóa đơn</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/view/category" class="nav-link active">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Quản lý User</p>
+                            </a>
+                        </li>
+                    </ul>
                 </li>
             </ul>
-        </li>
-    </ul>
-    <div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">
-        <i class="ace-icon fa fa-angle-double-left ace-save-state" data-icon1="ace-icon fa fa-angle-double-left" data-icon2="ace-icon fa fa-angle-double-right"></i>
+        </nav>
+        <!-- /.sidebar-menu -->
     </div>
-</div>
-
+    <!-- /.sidebar -->
+</aside>
+</html>

@@ -53,6 +53,18 @@ public class SanPhamChiTietIMPL implements SanPhamChiTietService {
         return new PageImpl<>(dtos, pageable, entityPage.getTotalElements());
     }
 
+    @Override
+    public Page<SanPhamChiTietDTO> getAllSanPhamChiTietBYidSP(UUID idSP, Integer totalPage, Integer totalItem) {
+        Pageable pageable = PageRequest.of(totalPage, totalItem);
+        Page<SanPhamChiTietEntity> entityPage = sanPhamChiTietRepository.findAllSpChiTietByIdSp(idSP, pageable);
+
+        List<SanPhamChiTietDTO> dtos = entityPage.getContent().stream()
+                .map(entity -> modelMapper.map(entity, SanPhamChiTietDTO.class))
+                .collect(Collectors.toList());
+
+        return new PageImpl<>(dtos, pageable, entityPage.getTotalElements());
+    }
+
 
     @Override
     public SanPhamChiTietDTO findById(UUID id) {

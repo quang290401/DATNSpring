@@ -26,5 +26,8 @@ public interface SanPhamChiTietRepository extends JpaRepository<SanPhamChiTietEn
     @Transactional
     @Query("UPDATE SanPhamChiTietEntity sp SET sp.soLuong = sp.soLuong - :soLuong WHERE sp.id = :id")
     void updateSoLuong(UUID id, int soLuong);
+    @Query("SELECT spct FROM SanPhamChiTietEntity spct LEFT JOIN spct.sanPham sp WHERE sp.id = :idSp")
+    Page<SanPhamChiTietEntity> findAllSpChiTietByIdSp(@Param("idSp") UUID idSp, Pageable pageable);
+
 
 }
