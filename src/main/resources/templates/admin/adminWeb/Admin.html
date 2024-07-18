@@ -3,11 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/jquery.validation/latest/jquery.validate.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <title>Quản lý sản phẩm</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
     <th:block th:replace="~{cssImport.html :: layout_import_css}"/>
+    <style>
+        .modal-lg {
+            max-width: 70%;
+        }
+        .modal-header,
+        .modal-body {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        /* Đảm bảo modal được hiển thị rõ ràng */
+        .modal-content {
+            background-color: white !important;
+            filter: none !important;
+            opacity: 1 !important;
+        }
+
+        /* Lớp nền mờ */
+        .modal-backdrop {
+            background-color: rgba(0, 0, 0, 0.5) !important;
+        }
+    </style>
 </head>
 <body class="no-skin">
 <!-- header -->
@@ -34,9 +65,31 @@
                     </div>
                     <div class="card-body">
                         <form id="product-form">
-                            <div class="form-group">
-                                <label for="name-product">Tên sản phẩm</label>
-                                <input type="text" class="form-control" id="name-product" name="name-product" style="width: 100%;">
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="name-product">Tên sản phẩm</label>
+                                    <input type="text" class="form-control" id="name-product" name="name-product">
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="code-product">Mã sản phẩm</label>
+                                    <input type="text" class="form-control" id="code-product" name="code-product">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" id="active-product"
+                                               name="active-product">
+                                        <label class="form-check-label" for="active-product">Đang kinh doanh</label>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" id="inactive-product"
+                                               name="inactive-product">
+                                        <label class="form-check-label" for="inactive-product">Ngừng kinh doanh</label>
+                                    </div>
+                                </div>
                             </div>
                             <div class="form-group">
                                 <button type="button" class="btn btn-primary" id="btn-add">Thêm</button>
@@ -47,9 +100,68 @@
                         </form>
                     </div>
                 </div>
+
+                <!-- Bảng sản phẩm -->
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                        <tr>
+                            <th>Tên Sản Phẩm</th>
+                            <th>Ngày Nhập</th>
+                            <th>Trạng Thái</th>
+                            <th>Chọn</th>
+                        </tr>
+                        </thead>
+                        <tbody id="productTable">
+                        <!-- Dữ liệu sản phẩm sẽ được thêm vào đây -->
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /Bảng sản phẩm -->
+
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="thanhToanModal" tabindex="-1" role="dialog" aria-labelledby="thanhToanModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="thanhToanModalLabel">Xác nhận thanh toán</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="container px-4 px-lg-5 mt-3">
+                        <div class="container">
+                            <table id="cart2" class="table table-hover table-condensed">
+                                <thead>
+                                <tr>
+                                    <th style="width: 50%">Tên sản phẩm</th>
+                                    <th style="width: 10%">Giá</th>
+                                    <th style="width: 8%">Số lượng</th>
+                                    <th style="width: 22%" class="text-center">Thành tiền</th>
+                                    <th style="width: 10%"></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                        <button type="button" id="idXacNhan" class="btn btn-primary">Xác nhận</button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /Modal -->
 
     <!-- footer -->
     <div th:replace="~{admin/common/foodter.html}"></div>
@@ -60,4 +172,67 @@
     </a>
 </div>
 </body>
+<script>
+    $(document).ready(function () {
+        loadProducts();
+
+        function loadProducts() {
+            $.ajax({
+                url: '/api/sp',
+                type: 'GET',
+                data: {
+                    pageNo: 0, // Số trang bắt đầu từ 0
+                    pageSize: 10 // Số lượng sản phẩm mỗi trang
+                },
+                success: function (response) {
+
+                    let products = response.content; // Giả sử API trả về dữ liệu theo dạng {content: [...]}
+                    let productTable = $('#productTable');
+                    productTable.empty(); // Xóa các hàng hiện tại
+
+                    $.each(products, function (index, product) {
+                        let trangThai = product.trangThai === 1 ? "Đang kinh doanh" : "Ngừng kinh doanh";
+                        let row = `<tr>
+                                <td>${product.tenSanPham}</td>
+                                <td>${product.createDate}</td>
+                                <td>${trangThai}</td>
+                                <td><input type="checkbox" class="product-checkbox" data-id="${product.id}" data-name="${product.tenSanPham}" data-status="${product.trangThai}"></td>
+                            </tr>`;
+                        productTable.append(row);
+                    });
+
+                    // Thêm sự kiện click cho các ô checkbox
+                    $('.product-checkbox').on('click', function () {
+                        // Bỏ chọn tất cả các ô checkbox khác
+                        $('.product-checkbox').not(this).prop('checked', false);
+                        // Đẩy giá trị ID, tên sản phẩm, và trạng thái lên các ô nhập liệu
+                        if ($(this).is(':checked')) {
+                            $('#code-product').val($(this).data('id'));
+                            $('#name-product').val($(this).data('name'));
+                            if ($(this).data('status') === 1) {
+                                $('#active-product').prop('checked', true);
+                                $('#inactive-product').prop('checked', false);
+                            } else {
+                                $('#active-product').prop('checked', false);
+                                $('#inactive-product').prop('checked', true);
+                            }
+                        } else {
+                            $('#code-product').val('');
+                            $('#name-product').val('');
+                            $('#active-product').prop('checked', false);
+                            $('#inactive-product').prop('checked', false);
+                        }
+                    });
+                },
+                error: function (error) {
+                    console.log('Error:', error);
+                }
+            });
+        }
+
+        $('#btn-view').on('click', function () {
+            $('#thanhToanModal').modal('show');
+        });
+    });
+</script>
 </html>
