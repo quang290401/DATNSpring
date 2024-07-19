@@ -7,4 +7,6 @@ import org.springframework.data.domain.Page;
 
 public interface SanPhamService {
     Page<SanPhamDTO> getAllSanPham(Integer totalPage, Integer totalItem);
+    SanPhamDTO addSanPham(SanPhamDTO sanPhamDTO);
+    SanPhamDTO upDateSanPham(SanPhamDTO sanPhamDTO);
 }

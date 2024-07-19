@@ -2,10 +2,7 @@ package com.example.datn.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 
 import java.util.ArrayList;
@@ -17,6 +14,7 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class SanPhamEntity extends SuperEntity {
 
     @Column(name = "tenSanPham", length = 150, nullable = false, columnDefinition = "NVARCHAR(255)")
@@ -28,5 +26,6 @@ public class SanPhamEntity extends SuperEntity {
     @OneToMany(mappedBy = "sanPham")
     @ToString.Exclude
     private List<SanPhamChiTietEntity> sanPhamChiTiets = new ArrayList<SanPhamChiTietEntity>();
+
 
 }

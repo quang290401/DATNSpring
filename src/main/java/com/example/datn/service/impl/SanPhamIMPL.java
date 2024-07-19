@@ -7,6 +7,7 @@ import com.example.datn.dto.SanPhamDTO;
 import com.example.datn.entity.SanPhamChiTietEntity;
 import com.example.datn.entity.SanPhamEntity;
 import com.example.datn.service.SanPhamService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -17,6 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -40,4 +42,30 @@ public class SanPhamIMPL implements SanPhamService {
 
         return new PageImpl<>(dtos, pageable, entityPage.getTotalElements());
     }
+
+    @Override
+    public SanPhamDTO addSanPham(SanPhamDTO sanPhamDTO) {
+        SanPhamEntity sanPhamEntity = SanPhamEntity.builder()
+                .tenSanPham(sanPhamDTO.getTenSanPham())
+                .trangThai(sanPhamDTO.getTrangThai()).build();
+        sanPhamRepository.save(sanPhamEntity);
+        return modelMapper.map(sanPhamEntity, SanPhamDTO.class);
+
+    }
+
+    @Override
+    public SanPhamDTO upDateSanPham(SanPhamDTO sanPhamDTO) {
+        Optional<SanPhamEntity> optionalSanPham = sanPhamRepository.findById(sanPhamDTO.getId());
+        if (optionalSanPham.isPresent()) {
+            SanPhamEntity sanPhamEntity = optionalSanPham.get();
+            sanPhamEntity.setTenSanPham(sanPhamDTO.getTenSanPham());
+            sanPhamEntity.setTrangThai(sanPhamDTO.getTrangThai());
+            sanPhamRepository.save(sanPhamEntity);
+
+            return modelMapper.map(sanPhamEntity, SanPhamDTO.class);
+        } else {
+            throw new EntityNotFoundException("Không tìm thấy sản phẩm với id: " + sanPhamDTO.getId());
+        }
+    }
+
 }

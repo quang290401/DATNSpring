@@ -131,6 +131,76 @@
                 <div class="modal-body">
                     <div class="container px-4 px-lg-5 mt-3">
                         <div class="container">
+                            <form id="product-details-form">
+                                <div class="form-row">
+                                    <div class="form-group col-md-4">
+                                        <label for="giaSanPham">Giá sản phẩm</label>
+                                        <input type="number" class="form-control" id="giaSanPham" name="giaSanPham"
+                                               required>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label for="gioiTinh">Giới tính</label>
+                                        <select class="form-control" id="gioiTinh" name="gioiTinh" required>
+                                            <option value="nam">Nam</option>
+                                            <option value="nu">Nữ</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label for="soLuong">Số lượng</label>
+                                        <input type="number" class="form-control" id="soLuong" name="soLuong" required>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-4">
+                                        <label for="trongLuong">Trọng lượng</label>
+                                        <input type="number" class="form-control" id="trongLuong" name="trongLuong"
+                                               required>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label for="danhMuc">Danh mục</label>
+                                        <select class="form-control" id="danhMuc" name="danhMuc" required>
+                                            <!-- Options for Danh mục -->
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label for="hinhAnh">Hình ảnh</label>
+                                        <input type="file" class="form-control" id="hinhAnh" name="hinhAnh" required>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-4">
+                                        <label for="kichCo">Kích cỡ</label>
+                                        <select class="form-control" id="kichCo" name="kichCo" required>
+                                            <!-- Options for Kích cỡ -->
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label for="nsx">NSX</label>
+                                        <select class="form-control" id="nsx" name="nsx" required>
+                                            <!-- Options for NSX -->
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label for="mauSac">Màu sắc</label>
+                                        <select class="form-control" id="mauSac" name="mauSac" required>
+                                            <!-- Options for Màu sắc -->
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-4">
+                                        <label for="chatLieu">Chất liệu</label>
+                                        <select class="form-control" id="chatLieu" name="chatLieu" required>
+                                            <!-- Options for Chất liệu -->
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-8">
+                                        <label for="moTa">Mô tả</label>
+                                        <textarea class="form-control" id="moTa" name="moTa" rows="3"
+                                                  required></textarea>
+                                    </div>
+                                </div>
+                            </form>
                             <table id="cart2" class="table table-hover table-condensed">
                                 <thead>
                                 <tr>
@@ -141,7 +211,7 @@
                                     <th style="width: 8%">Kích Cỡ</th>
                                     <th style="width: 8%">NSX</th>
                                     <th style="width: 20%">Mô Tả</th>
-                                    <th style="width: 20%">Hình annh</th>
+                                    <th style="width: 20%">Hình ảnh</th>
                                     <th style="width: 10%">Chọn</th>
                                 </tr>
                                 </thead>
@@ -150,7 +220,6 @@
                             </table>
                         </div>
                     </div>
-
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
                         <button type="button" id="idXacNhan" class="btn btn-primary">Xác nhận</button>
@@ -159,6 +228,7 @@
             </div>
         </div>
     </div>
+
     <!-- /Modal -->
 
     <!-- footer -->
@@ -227,6 +297,51 @@
                 }
             });
         }
+
+        $('#btn-update').on('click', function () {
+            let sanPhamDTO = {
+                tenSanPham: $('#name-product').val(),
+                id: $('#code-product').val(),
+                trangThai: $('#active-product').is(':checked') ? 1 : 0
+            };
+
+            $.ajax({
+                url: '/api/sp',
+                type: 'PUT',
+                contentType: 'application/json',
+                data: JSON.stringify(sanPhamDTO),
+                success: function (response) {
+                    alert('Sản phẩm đã được thêm thành công!');
+                    loadProducts();
+                },
+                error: function (error) {
+                    console.log('Error:', error);
+                    alert('Đã xảy ra lỗi khi thêm sản phẩm.');
+                }
+            });
+        });
+
+        $('#btn-add').on('click', function () {
+            let sanPhamDTO = {
+                tenSanPham: $('#name-product').val(),
+                trangThai: $('#active-product').is(':checked') ? 1 : 0
+            };
+
+            $.ajax({
+                url: '/api/sp',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(sanPhamDTO),
+                success: function (response) {
+                    alert('Sản phẩm đã được thêm thành công!');
+                    loadProducts();
+                },
+                error: function (error) {
+                    console.log('Error:', error);
+                    alert('Đã xảy ra lỗi khi thêm sản phẩm.');
+                }
+            });
+        });
 
         $('#btn-view').on('click', function () {
             let idSp = $('#code-product').val();

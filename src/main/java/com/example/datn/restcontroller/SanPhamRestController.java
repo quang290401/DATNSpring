@@ -5,10 +5,7 @@ import com.example.datn.dto.SanPhamDTO;
 import com.example.datn.service.SanPhamService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,5 +20,15 @@ public class SanPhamRestController {
     ) {
 
         return service.getAllSanPham(pageNo, pageSize);
+    }
+    @PostMapping()
+    public SanPhamDTO addSanPham(@RequestBody SanPhamDTO sanPhamDTO){
+    return service.addSanPham(sanPhamDTO);
+
+    }
+    @PutMapping()
+    public SanPhamDTO upDateSanPham(@RequestBody SanPhamDTO sanPhamDTO){
+        return service.upDateSanPham(sanPhamDTO);
+
     }
 }
