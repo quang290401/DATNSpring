@@ -31,25 +31,79 @@
     <div class="main-content">
         <div class="main-content-inner">
             <div class="page-content">
-                <form id="insert-product">
+                <form id="insert-product" th:action="@{admin/SanPhamAdd}" th:object="${sanPham}" method="post">
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <label >Tên sản phẩm</label>
-                            <input type="text" class="form-control" id="name-product" name="name-product">
+                            <select id="sanPham" name="sanPham" class="form-control">
+                                <option value="">--Chọn Tên--</option>
+                                <th:block th:each="ten : ${tenSanPham}">
+                                    <option th:value="${ten.id}" th:text="${ten.tenSanPham.length() > 20 ? ten.tenSanPham.substring(0, 20) : ten.tenSanPham}"
+                                    ></option>
+                                </th:block>
+                            </select>
                         </div>
                         <div class="form-group col-md-6">
                             <label >Giá sản phẩm</label>
-                            <input type="text" class="form-control" id="price-product" name="price-product">
+                            <input type="text" class="form-control" id="giaSanPham" name="price-product">
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-6">
-                            <label >Số lượng</label>
-                            <input type="number" class="form-control" id="quantity" name="quantity">
+                            <label >Màu sắc</label>
+                            <select id="mauSac" name="mauSac" class="form-control">
+                                <option value="">--Chọn Màu Sắc--</option>
+                                <th:block th:each="ten : ${tenMauSac}">
+                                    <option th:value="${ten.id}" th:text="${ten.getTen()}"></option>
+                                </th:block>
+                            </select>
                         </div>
                         <div class="form-group col-md-6">
-                            <label >Màu sắc</label>
-                            <input type="text" class="form-control" id="Color" name="Color">
+                            <label >Số lượng</label>
+                            <input type="number" class="form-control" id="soLuong" name="quantity">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label >Giới Tính</label>
+                            <select id="gioiTinh" name="gioiTinh" class="form-control">
+                                <option value="1">Nam</option>
+                                <option value="0">Nữ</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label >Mô Tả</label>
+                            <input type="text" class="form-control" id="moTa" name="moTa">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label >Chất Liệu</label>
+                            <select id="chatLieu" name="chatLieu" class="form-control">
+                                <option value="">--Chọn Chất Liệu--</option>
+                                <th:block th:each="ten : ${tenChatLieu}">
+                                    <option th:value="${ten.id}" th:text="${ten.getTen()}"></option>
+                                </th:block>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label >Danh Mục</label>
+                            <select id="danhMuc" name="danhMuc" class="form-control">
+                                <option value="">--Chọn Danh Mục--</option>
+                                <th:block th:each="ten : ${tenDanhMuc}">
+                                    <option th:value="${ten.id}" th:text="${ten.getTenDanhMuc()}"></option>
+                                </th:block>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label >Hình Ảnh</label>
+                            <input type="text" class="form-control" id="hinhAnh" name="hinhAnh" placeholder="Gắn Link ảnh">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label >Trọng Lượng</label>
+                            <input type="text" class="form-control" id="trongLuong" name="moTa">
                         </div>
                     </div>
                     <div class="form-row">
@@ -58,13 +112,28 @@
                             <input type="text" class="form-control" id="Status" name="Status">
                         </div>
                         <div class="form-group col-md-6">
-                            <label>Loại</label>
-                            <select class="form-control" id="categorySelect" name="categorySelect">
+                            <label >Kích Cỡ</label>
+                            <select id="kichCo" name="kichCo" class="form-control">
+                                <option value="">--Chọn Kích Cỡ--</option>
+                                <th:block th:each="ten : ${tenKichCo}">
+                                    <option th:value="${ten.id}" th:text="${ten.getTenKichCo()}"></option>
+                                </th:block>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label >Nhà Sản Xuất</label>
+                            <select id="nsx" name="nsx" class="form-control">
+                                <option value="">--Chọn Nhà Sản Xuất--</option>
+                                <th:block th:each="ten : ${tenNsx}">
+                                    <option th:value="${ten.id}" th:text="${ten.getTen().length()> 20 ? ten.getTen().substring(0, 20) : ten.getTen()}"></option>
+                                </th:block>
                             </select>
                         </div>
                     </div>
                     <div class="form-group">
-                        <button type="submit" class="btn btn-primary" id="btn-save">Submit</button>
+                        <button type="submit" class="btn btn-primary form-control" id="btn-save" >Submit</button>
                     </div>
                 </form>
 
@@ -83,16 +152,46 @@
                 <table class="table" id="productTable">
                     <thead>
                     <tr>
-                        <th scope="col">nameProduct</th>
-                        <th scope="col">priceProduct</th>
-                        <th scope="col">Color</th>
-                        <th scope="col">quantity</th>
-                        <th scope="col">status</th>
-                        <th scope="col">Action</th>
+                        <th scope="col">ID</th>
+                        <th scope="col">Tên Sản Phẩm</th>
+                        <th scope="col">Màu Sắc</th>
+                        <th scope="col">Giá</th>
+                        <th scope="col">Giới Tính</th>
+                        <th scope="col">Mô Tả</th>
+                        <th scope="col">Số Lượng</th>
+                        <th scope="col">Trọng Lượng</th>
+<!--                        <th scope="col">Bảo Hành</th>-->
+                        <th scope="col">Chất Liệu</th>
+                        <th scope="col">Danh Mục</th>
+                        <th scope="col">Hình Ảnh</th>
+                        <th scope="col">Kích Cỡ</th>
+                        <th scope="col">Nhà Sản Xuất</th>
+                        <th scope="col">Actions</th>
                     </tr>
                     </thead>
                     <tbody id="productTableId">
-
+                        <tr th:each="sanPham : ${sanPhamList}">
+                            <td th:text="${sanPham.getId()}"></td>
+                            <td th:text="${sanPham.getSanPham().getTenSanPham().length() > 10 ? #strings.substring(sanPham.getSanPham().getTenSanPham(), 0, 10) : sanPham.getSanPham().getTenSanPham()}"></td>
+                            <td th:text="${sanPham.getMauSac().getTen()}"></td>
+                            <td th:text="${sanPham.getGiaSanPham()}"></td>
+                            <td th:text="${sanPham.getGioiTinh()}"></td>
+                            <td th:text="${sanPham.getMoTa().length() > 10 ? #strings.substring(sanPham.getMoTa(), 0, 10) : sanPham.getMoTa()}"></td>
+                            <td th:text="${sanPham.getSoLuong()}"></td>
+                            <td th:text="${sanPham.getTrongLuong().length() > 10 ? #strings.substring(sanPham.getTrongLuong(), 0, 10) : sanPham.getTrongLuong()}"></td>
+<!--                            <td th:text="${sanPham.getBaoHanh()}"></td>-->
+                            <td th:text="${sanPham.getChatLieu().getTen()}"></td>
+                            <td th:text="${sanPham.getDanhMuc().getTenDanhMuc()}"></td>
+                            <td th:text="${sanPham.getHinhAnh().getTen().length() > 10 ? #strings.substring(sanPham.getHinhAnh().getTen(), 0, 10) : sanPham.getHinhAnh().getTen()}"></td>
+                            <td th:text="${sanPham.getKichCo().getTenKichCo()}"></td>
+                            <td th:text="${sanPham.getNsx().getTen()}"></td>
+                            <td>
+                                <a th:href="@{/chatlieu/detail/{id}(id=${chatLieu.id})}" class="btn btn-primary">Detail</a>
+                                <form th:action="@{/admin/delete/{id}(id=${sanPham.id})}" method="post">
+                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
 
