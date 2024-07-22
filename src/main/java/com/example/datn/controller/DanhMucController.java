@@ -21,11 +21,8 @@ public class DanhMucController {
 
 
     @GetMapping("/danhmuc/getAll")
-    public String getAllDanhMuc(@RequestParam(defaultValue = "0") int page,
-                                @RequestParam(defaultValue = "5") int size,
-                                Model model) {
-        Pageable pageable = PageRequest.of(page, size);
-        Page<DanhMucEntity> danhMucList = danhMucRepository.findAll(pageable);
+    public String getAllDanhMuc(Model model) {
+        List<DanhMucEntity> danhMucList = danhMucRepository.findAll();
         model.addAttribute("danhMucList", danhMucList);
         model.addAttribute("danhMuc", new DanhMucEntity());
         return "admin/adminWeb/DanhMuc";

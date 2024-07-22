@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Quản lý sản phẩm</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
@@ -14,30 +13,33 @@
         .modal-lg {
             max-width: 90%;
         }
-
         .modal-header,
         .modal-body {
             display: flex;
             flex-direction: column;
             gap: 10px;
         }
-
         .modal-footer {
             display: flex;
             justify-content: flex-end;
             gap: 10px;
         }
-
         /* Đảm bảo modal được hiển thị rõ ràng */
         .modal-content {
             background-color: white !important;
             filter: none !important;
             opacity: 1 !important;
         }
-
         /* Lớp nền mờ */
         .modal-backdrop {
             background-color: rgba(0, 0, 0, 0.5) !important;
+        }
+        .image-select-container {
+            display: flex;
+            align-items: center;
+        }
+        .image-select-container select {
+            margin-right: 10px;
         }
     </style>
 </head>
@@ -46,7 +48,6 @@
 <div th:replace="~{admin/common/Header.html}"></div>
 <div th:replace="~{admin/common/menu.html}"></div>
 <!-- header -->
-
 <div class="content-wrapper">
     <section class="content">
         <div class="main-content">
@@ -94,7 +95,6 @@
                             </form>
                         </div>
                     </div>
-
                     <!-- Bảng sản phẩm -->
                     <div class="table-responsive">
                         <table class="table table-bordered table-striped">
@@ -112,18 +112,16 @@
                         </table>
                     </div>
                     <!-- /Bảng sản phẩm -->
-
                 </div>
             </div>
         </div>
     </section>
-
     <div class="modal fade" id="thanhToanModal" tabindex="-1" role="dialog" aria-labelledby="thanhToanModalLabel"
          aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="thanhToanModalLabel">Xác nhận thanh toán</h5>
+                    <h5 class="modal-title" id="thanhToanModalLabel">Sản Phầm Chi Tiết</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -159,12 +157,17 @@
                                     <div class="form-group col-md-4">
                                         <label for="danhMuc">Danh mục</label>
                                         <select class="form-control" id="danhMuc" name="danhMuc" required>
-                                            <!-- Options for Danh mục -->
                                         </select>
                                     </div>
+
                                     <div class="form-group col-md-4">
-                                        <label for="hinhAnh">Hình ảnh</label>
-                                        <input type="file" class="form-control" id="hinhAnh" name="hinhAnh" required>
+                                        <label for="hinhAnh">Hình Ảnh</label>
+                                        <div class="image-select-container">
+                                            <select class="form-control" id="hinhAnh" name="hinhAnh" required></select>
+                                            <div id="imageContainer">
+                                                <img id="selectedImage" src="" alt="Hình ảnh đã chọn" style="width: 50px; height: 50px; display: none;">
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="form-row">
@@ -220,6 +223,7 @@
                             </table>
                         </div>
                     </div>
+
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
                         <button type="button" id="idXacNhan" class="btn btn-primary">Xác nhận</button>
@@ -234,7 +238,6 @@
     <!-- footer -->
     <div th:replace="~{admin/common/foodter.html}"></div>
     <!-- footer -->
-
     <a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse display">
         <i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
     </a>
@@ -242,9 +245,79 @@
 <th:block th:replace="jsImport.html :: layout_import_js"/>
 </body>
 <script>
+    $(document).ready(function() {
+        // Gọi API để lấy danh mục
+        $.ajax({
+            url: '/api/danhmuc/getAll',
+            method: 'GET',
+            success: function(data) {
+                // Xóa các tùy chọn hiện tại của select danh mục
+                $('#danhMuc').empty();
+
+                // Thêm các tùy chọn mới vào select danh mục
+                $.each(data, function(index, item) {
+                    $('#danhMuc').append($('<option>', {
+                        value: item.id, // Hoặc thuộc tính phù hợp từ danh mục
+                        text: item.tenDanhMuc // Hoặc thuộc tính phù hợp từ danh mục
+                    }));
+                });
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.error('Lỗi khi gọi API: ', textStatus, errorThrown);
+            }
+        });
+        $.ajax({
+            url: '/api/mausac/getAll',
+            method: 'GET',
+            success: function(data) {
+                // Xóa các tùy chọn hiện tại của select danh mục
+                $('#mauSac').empty();
+
+                // Thêm các tùy chọn mới vào select danh mục
+                $.each(data, function(index, item) {
+                    $('#mauSac').append($('<option>', {
+                        value: item.id, // Hoặc thuộc tính phù hợp từ danh mục
+                        text: item.ten // Hoặc thuộc tính phù hợp từ danh mục
+                    }));
+                });
+                console.error('Lỗi khi gọi API: ', textStatus, errorThrown);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+           }
+        });
+        $.ajax({
+            url: '/api/hinhanh/getAll',
+            method: 'GET',
+            success: function(data) {
+                // Xóa các tùy chọn hiện tại của select danh mục
+                $('#hinhAnh').empty();
+
+                // Thêm các tùy chọn mới vào select danh mục
+                $.each(data, function(index, item) {
+                    $('#hinhAnh').append($('<option>', {
+                        value: item.duongDan, // Đường dẫn hình ảnh
+                        text: item.duongDan // Văn bản hiển thị
+                    }));
+                });
+
+                // Thêm sự kiện thay đổi cho ô select
+                $('#hinhAnh').on('change', function() {
+                    var selectedImagePath = $(this).val();
+                    if (selectedImagePath) {
+                        $('#selectedImage').attr('src', selectedImagePath).show();
+                    } else {
+                        $('#selectedImage').hide();
+                    }
+                });
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.error('Lỗi khi gọi API: ', textStatus, errorThrown);
+            }
+        });
+
+    });
     $(document).ready(function () {
         loadProducts();
-
         function loadProducts() {
             $.ajax({
                 url: '/api/sp',
@@ -257,7 +330,6 @@
                     let products = response.content; // Giả sử API trả về dữ liệu theo dạng {content: [...]}
                     let productTable = $('#productTable');
                     productTable.empty(); // Xóa các hàng hiện tại
-
                     $.each(products, function (index, product) {
                         let trangThai = product.trangThai === 1 ? "Đang kinh doanh" : "Ngừng kinh doanh";
                         let row = `<tr>
@@ -268,7 +340,6 @@
                             </tr>`;
                         productTable.append(row);
                     });
-
                     // Thêm sự kiện click cho các ô checkbox
                     $('.product-checkbox').on('click', function () {
                         // Bỏ chọn tất cả các ô checkbox khác
@@ -350,7 +421,6 @@
                 alert('Vui lòng chọn sản phẩm.');
                 return;
             }
-
             $.ajax({
                 url: '/api/SPCT/idSP',
                 type: 'GET',
@@ -363,7 +433,6 @@
                     let products = response.content;
                     let cartTable = $('#cart2 tbody');
                     cartTable.empty();
-
                     $.each(products, function (index, product) {
                         let row = `<tr>
                             <td>${product.sanPham.tenSanPham}</td>
@@ -379,7 +448,6 @@
                         </tr>`;
                         cartTable.append(row);
                     });
-
                     $('#thanhToanModal').modal('show');
                 },
                 error: function (error) {
