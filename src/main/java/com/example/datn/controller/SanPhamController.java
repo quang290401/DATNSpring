@@ -4,13 +4,13 @@ import com.example.datn.Repository.SanPhamRepository;
 import com.example.datn.entity.SanPhamEntity;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,11 +21,8 @@ public class SanPhamController {
     SanPhamRepository sanPhamRepository;
 
     @GetMapping("/sanpham/getAll")
-    public String getAllSanPham(@RequestParam(defaultValue = "0") int page,
-                            @RequestParam(defaultValue = "5") int size,
-                            Model model) {
-        Pageable pageable = PageRequest.of(page, size);
-        Page<SanPhamEntity> listSanPham = sanPhamRepository.findAll(pageable);
+    public String getAllSanPham(Model model) {
+        List<SanPhamEntity> listSanPham = sanPhamRepository.findAll();
         model.addAttribute("listSanPham", listSanPham);
         model.addAttribute("sanPham", new SanPhamEntity());
         return "admin/adminWeb/SanPham";
@@ -60,7 +57,7 @@ public class SanPhamController {
             //Xóa
             sanPhamRepository.deleteById(id);
             // Sau khi xóa thành công quay lại trang getAll
-            return "redirect:/sanpham/getAll";
+            return "redirect:/chatlieu/getAll";
         } catch (Exception e) {
             // Trả ra thông báo nếu có ngoại lệ
             model.addAttribute("errorMessage", "Đã xảy ra lỗi vui lòng thử lại");

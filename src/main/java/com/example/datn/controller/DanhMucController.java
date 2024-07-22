@@ -6,10 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -18,19 +19,13 @@ public class DanhMucController {
     @Autowired
     DanhMucRepository danhMucRepository;
 
-
-
     @GetMapping("/danhmuc/getAll")
-    public String getAllDanhMuc(@RequestParam(defaultValue = "0") int page,
-                                @RequestParam(defaultValue = "5") int size,
-                                Model model) {
-        Pageable pageable = PageRequest.of(page, size);
-        Page<DanhMucEntity> danhMucList = danhMucRepository.findAll(pageable);
+    public String getAllDanhMuc(Model model) {
+        List<DanhMucEntity> danhMucList = danhMucRepository.findAll();
         model.addAttribute("danhMucList", danhMucList);
         model.addAttribute("danhMuc", new DanhMucEntity());
         return "admin/adminWeb/DanhMuc";
     }
-
     @PostMapping("/danhmuc/add")
     public String addChatLieu(@Valid @ModelAttribute("danhMuc") DanhMucEntity danhMuc, BindingResult result, Model model) {
         if (result.hasErrors()) {

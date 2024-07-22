@@ -1,32 +1,34 @@
-package com.example.datn.entity;
+    package com.example.datn.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+    import com.fasterxml.jackson.annotation.JsonIgnore;
+    import jakarta.persistence.*;
+    import lombok.AllArgsConstructor;
+    import lombok.Data;
+    import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+    import java.math.BigDecimal;
+    import java.util.ArrayList;
+    import java.util.List;
+    import java.util.UUID;
 
-@Entity
-@Table(name = "SanPham")
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class SanPhamEntity extends SuperEntity{
+    @Entity
+    @Table(name = "SanPham")
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public class SanPhamEntity extends SuperEntity{
 
-    @Column(name = "tenSanPham", length = 150, nullable = false)
-    private String tenSanPham;
+        @Column(name = "tenSanPham", length = 150, nullable = false)
+        private String tenSanPham;
 
-    @Column(name = "trangThai", length = 10, nullable = false)
-    private int trangThai;
-    @JsonIgnore
-    @OneToMany(mappedBy = "sanPham")
-    private List<SanPhamChiTietEntity> sanPhamChiTiets = new ArrayList<SanPhamChiTietEntity>();
+        @Column(name = "trangThai", length = 10, nullable = false)
+        private int trangThai;
+        @Column(name = "anhSanPham")
+        private String anhSanPham;
+        @JsonIgnore
+        @OneToMany(mappedBy = "sanPham")
+        private List<SanPhamChiTietEntity> sanPhamChiTiets = new ArrayList<SanPhamChiTietEntity>();
 
 
 
-}
+    }

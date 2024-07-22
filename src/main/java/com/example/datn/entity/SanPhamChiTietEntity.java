@@ -2,9 +2,7 @@ package com.example.datn.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -13,7 +11,8 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "SanPhamChiTiet")
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class SanPhamChiTietEntity extends SuperEntity{
@@ -29,15 +28,18 @@ public class SanPhamChiTietEntity extends SuperEntity{
     @Column(name = "moTa", length = 150, nullable = false)
     private String moTa;
 
-    @ManyToOne
-    @JoinColumn(name  = "sanpham_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "sanpham_id")
     private SanPhamEntity sanPham;
-    @ManyToOne
-    @JoinColumn(name  = "mauSac_id")
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "mauSac_id")
     private MauSacEntity mauSac;
-    @ManyToOne
-    @JoinColumn(name  = "kichCo_id")
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "kichCo_id")
     private KichCoEntity kichCo;
+
     @ManyToOne
     @JoinColumn(name  = "NXS_id")
     private NSXEntity nsx;
