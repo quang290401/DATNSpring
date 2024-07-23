@@ -323,7 +323,7 @@ public class HoaDonController {
             } else {
                 // Create new HoaDonChiTietEntity instance
                 hoaDonChiTiet = new HoaDonChiTietEntity();
-                hoaDonChiTiet.setId(primaryKey);
+//                hoaDonChiTiet.setId(primaryKey);
                 hoaDonChiTiet.setHoaDon(hoaDon);
                 hoaDonChiTiet.setSanPhamChiTiet(sanPhamChiTiet);
                 hoaDonChiTiet.setSoLuong(quantity);
@@ -674,7 +674,7 @@ public class HoaDonController {
 
             // Update hoaDon with payment details
 //            hoaDon.setTrangThai(1); // Mark as paid
-            hoaDon.setNgayThanhToan(LocalDateTime.now().withNano(0));
+            hoaDon.setNgayThanhToan(LocalDate.from(LocalDateTime.now().withNano(0)));
             hoaDonRepository.save(hoaDon); // Save the updated hoaDon
 
             // Handling UserEntity

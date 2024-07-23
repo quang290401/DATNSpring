@@ -23,8 +23,6 @@
 
         @Column(name = "trangThai", length = 10, nullable = false)
         private int trangThai;
-        @Column(name = "anhSanPham")
-        private String anhSanPham;
         @JsonIgnore
         @OneToMany(mappedBy = "sanPham")
         private List<SanPhamChiTietEntity> sanPhamChiTiets = new ArrayList<SanPhamChiTietEntity>();

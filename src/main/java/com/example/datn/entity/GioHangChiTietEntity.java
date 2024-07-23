@@ -25,8 +25,6 @@ public class GioHangChiTietEntity implements Serializable {
     private SanPhamChiTietEntity sanPhamChiTiet;
     @Column(name = "soLuong", length = 10, nullable = false)
     private int soLuong;
-    @Column(name = "thanhTien", length = 70, nullable = false)
-    private BigDecimal thanhTien;
     @Column(name = "createDate")
     private LocalDate createDate;
 
