@@ -154,46 +154,47 @@ public class HoaDonController {
 
     @GetMapping("/getDetails/{hoaDonId}")
     public ResponseEntity<String> getDetails(@PathVariable("hoaDonId") String id) {
-        UUID hoaDonId;
-        try {
-            hoaDonId = UUID.fromString(id);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body("Định dạng UUID không hợp lệ");
-        }
-
-        List<HoaDonChiTietEntity> chiTietEntities = hoaDonCTRepository.findByHoaDon_Id(hoaDonId);
-
-        if (chiTietEntities == null || chiTietEntities.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-
-        // Chuyển đổif danh sách chi tiết hóa đơn sang DTO
-        List<HoaDonChiTietDTO> chiTietDTOs = chiTietEntities.stream()
-                .map(entity -> new HoaDonChiTietDTO(
-                        entity.getSanPhamChiTiet().getId(),
-                        entity.getSanPhamChiTiet().getSanPham().getTenSanPham(),
-                        entity.getSanPhamChiTiet().getMauSac().getTen(),
-                        entity.getSanPhamChiTiet().getKichCo().getTenKichCo(),
-                        entity.getSoLuong(),
-                        entity.getSanPhamChiTiet().getGiaSanPham(),
-                        entity.getThanhTien()
-                ))
-                .collect(Collectors.toList());
-
-        // Chuyển đổi danh sách DTO thành chuỗi JSON
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            String json = mapper.writeValueAsString(chiTietDTOs);
-
-            // Thiết lập header Content-Type là application/json
-            HttpHeaders headers = new HttpHeaders();
-            headers.add(HttpHeaders.CONTENT_TYPE, "application/json");
-
-            return new ResponseEntity<>(json, headers, HttpStatus.OK);
-        } catch (JsonProcessingException e) {
-            // Xử lý lỗi khi chuyển đổi sang JSON
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Lỗi chuyển đổi sang JSON");
-        }
+//        UUID hoaDonId;
+//        try {
+//            hoaDonId = UUID.fromString(id);
+//        } catch (IllegalArgumentException e) {
+//            return ResponseEntity.badRequest().body("Định dạng UUID không hợp lệ");
+//        }
+//
+//        List<HoaDonChiTietEntity> chiTietEntities = hoaDonCTRepository.findByHoaDon_Id(hoaDonId);
+//
+//        if (chiTietEntities == null || chiTietEntities.isEmpty()) {
+//            return ResponseEntity.notFound().build();
+//        }
+//
+//        // Chuyển đổif danh sách chi tiết hóa đơn sang DTO
+//        List<HoaDonChiTietDTO> chiTietDTOs = chiTietEntities.stream()
+//                .map(entity -> new HoaDonChiTietDTO(
+//                        entity.getSanPhamChiTiet().getId(),
+//                        entity.getSanPhamChiTiet().getSanPham().getTenSanPham(),
+//                        entity.getSanPhamChiTiet().getMauSac().getTen(),
+//                        entity.getSanPhamChiTiet().getKichCo().getTenKichCo(),
+//                        entity.getSoLuong(),
+//                        entity.getSanPhamChiTiet().getGiaSanPham(),
+//                        entity.getThanhTien()
+//                ))
+//                .collect(Collectors.toList());
+//
+//        // Chuyển đổi danh sách DTO thành chuỗi JSON
+//        ObjectMapper mapper = new ObjectMapper();
+//        try {
+//            String json = mapper.writeValueAsString(chiTietDTOs);
+//
+//            // Thiết lập header Content-Type là application/json
+//            HttpHeaders headers = new HttpHeaders();
+//            headers.add(HttpHeaders.CONTENT_TYPE, "application/json");
+//
+//            return new ResponseEntity<>(json, headers, HttpStatus.OK);
+//        } catch (JsonProcessingException e) {
+//            // Xử lý lỗi khi chuyển đổi sang JSON
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Lỗi chuyển đổi sang JSON");
+//        }
+        return null;
     }
 
     //    @PostMapping("/addToCart/{hoaDonId}")

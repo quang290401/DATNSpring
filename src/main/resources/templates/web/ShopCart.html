@@ -508,7 +508,7 @@
             if ($('#onlinePayment').is(':checked')) {
                 console.log('Online Payment selected');
                 $.ajax({
-                    url: `/api/HDCT/` + userId + '/' + selectedVoucher + '/' + paymentMethod,
+                    url: `/api/HDCT/` + userId + '/' + selectedVoucher + '/' + paymentMethod+'/'+totalAmount,
                     type: 'POST',
                     data: {
                         paymentMethod: paymentMethod,
