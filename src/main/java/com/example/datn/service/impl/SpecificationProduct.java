@@ -28,7 +28,7 @@ public class SpecificationProduct {
 
 
     @RequiredArgsConstructor
-    static class CustomSpecification implements org.springframework.data.jpa.domain.Specification<SanPhamChiTietEntity> {
+    static class CustomSpecification implements Specification<SanPhamChiTietEntity> {
         @NonNull
         private String field;
         @NonNull

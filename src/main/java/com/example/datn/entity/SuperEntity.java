@@ -1,5 +1,6 @@
 package com.example.datn.entity;
 
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,24 +16,23 @@ import java.util.UUID;
 @NoArgsConstructor
 @MappedSuperclass
 public class SuperEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID id;
 
-    @Column(name = "createDate")
-    private LocalDate createDate;
+        @Id
+        @GeneratedValue(strategy = GenerationType.UUID)
+        private UUID id;
+        @Column(name = "createDate")
+        private LocalDate createDate;
 
-    @Column(name = "updateDate")
-    private LocalDateTime updateDate;
+        @Column(name = "updateDate")
+        private LocalDateTime updateDate;
 
-    @PrePersist
-    protected void onCreate() {
-        this.createDate = LocalDate.now();
+
+        @PreUpdate
+        protected void onUpdate() {
+            this.updateDate = LocalDateTime.now();
+        }
+
     }
 
-    @PreUpdate
-    protected void onUpdate() {
-        this.updateDate = LocalDateTime.now();
-    }
 
-}
+

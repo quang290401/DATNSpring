@@ -16,6 +16,7 @@ import java.time.LocalDate;
 @Table(name = "HoaDonChiTiet")
 @IdClass(HoaDonChiTietId.class)
 public class HoaDonChiTietEntity implements Serializable {
+
     @Id
     @ManyToOne
     @JoinColumn(name = "hoaDon_id")
@@ -36,5 +37,5 @@ public class HoaDonChiTietEntity implements Serializable {
 
     @Column(name = "updateDate")
     private LocalDate updateDate;
-
+    // Constructors, getters, setters, and other methods
 }

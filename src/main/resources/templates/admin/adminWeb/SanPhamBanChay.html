@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sản Phẩm Bán Chạy Nhất</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      max-width: 1200px;
+      margin: auto;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    #myChart {
+      max-width: 800px;
+      margin: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      padding: 10px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+    img {
+      max-width: 100px;
+      height: auto;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>Sản Phẩm Bán Chạy Nhất</h1>
+  <canvas id="myChart"></canvas>
+
+  <table>
+    <thead>
+    <tr>
+      <th>Ảnh Sản Phẩm</th>
+      <th>Tên Sản Phẩm</th>
+      <th>Số Lượng Đã Bán</th>
+    </tr>
+    </thead>
+    <tbody id="productTableBody">
+    <!-- Rows will be added here dynamically -->
+    </tbody>
+  </table>
+</div>
+
+<!-- Include Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  fetch('/api/thongke/sanphambanchay')
+          .then(response => response.json())
+          .then(products => {
+            const labels = products.map(product => product[1]);
+            const data = products.map(product => product[2]);
+            const images = products.map(product => product[0]);
+
+            // Tạo biểu đồ
+            const ctx = document.getElementById('myChart').getContext('2d');
+            new Chart(ctx, {
+              type: 'bar',
+              data: {
+                labels: labels,
+                datasets: [{
+                  label: 'Số lượng đã bán',
+                  data: data,
+                  backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                  borderColor: 'rgba(75, 192, 192, 1)',
+                  borderWidth: 1
+                }]
+              },
+              options: {
+                scales: {
+                  y: {
+                    beginAtZero: true
+                  }
+                }
+              }
+            });
+
+            // Cập nhật bảng với dữ liệu sản phẩm
+            const tableBody = document.getElementById('productTableBody');
+            products.forEach(product => {
+              const row = document.createElement('tr');
+              row.innerHTML = `
+                        <td><img src="${product[0]}" alt="${product[1]}"></td> <!-- Hình ảnh sản phẩm -->
+                        <td>${product[1]}</td> <!-- Tên sản phẩm -->
+                        <td>${product[2]}</td> <!-- Số lượng đã bán -->
+                    `;
+              tableBody.appendChild(row);
+            });
+          })
+          .catch(error => console.error('Error fetching data:', error));
+</script>
+</body>
+</html>

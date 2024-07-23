@@ -27,15 +27,18 @@ public class SanPhamChiTietEntity extends SuperEntity{
     @Column(name = "moTa", length = 150, nullable = false,columnDefinition = "NVARCHAR(255)")
     private String moTa;
 
-    @ManyToOne
-    @JoinColumn(name  = "sanpham_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "sanpham_id")
     private SanPhamEntity sanPham;
-    @ManyToOne
-    @JoinColumn(name  = "mauSac_id")
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "mauSac_id")
     private MauSacEntity mauSac;
-    @ManyToOne
-    @JoinColumn(name  = "kichCo_id")
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "kichCo_id")
     private KichCoEntity kichCo;
+
     @ManyToOne
     @JoinColumn(name  = "NXS_id")
     private NSXEntity nsx;

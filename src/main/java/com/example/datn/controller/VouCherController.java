@@ -4,13 +4,13 @@ import com.example.datn.Repository.VouCherRepository;
 import com.example.datn.entity.VouCherEntity;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,14 +22,11 @@ public class VouCherController {
     VouCherRepository vouCherRepository;
 
     @GetMapping("/voucher/getAll")
-    public String getAllSanPham(@RequestParam(defaultValue = "0") int page,
-                                @RequestParam(defaultValue = "5") int size,
-                                Model model) {
-        Pageable pageable = PageRequest.of(page, size);
-        Page<VouCherEntity> listVoucher = vouCherRepository.findAll(pageable);
+    public String getAllVouCher(Model model) {
+        List<VouCherEntity> listVoucher = vouCherRepository.findAll();
         model.addAttribute("listVoucher", listVoucher);
         model.addAttribute("vouCher", new VouCherEntity());
-        return "admin/adminWeb/voucher";
+        return "admin/adminWeb/VouCher";
     }
 
     @PostMapping("/voucher/add")
@@ -99,10 +96,11 @@ public class VouCherController {
             // Lấy thông tin chất liệu cần cập nhật từ cơ sở dữ liệu
             VouCherEntity existingVouCher = vouCherRepository.findById(id).orElse(null);
             if (existingVouCher == null) {
-                return "redirect:/voucher/getAll";
+                return "redirect:/diachi/getAll";
             }
 
             // Cập nhật thông tin chất liệu
+            existingVouCher.setId(updateVouCher.getId());
             existingVouCher.setTen(updateVouCher.getTen());
             existingVouCher.setPhanTramGiam(updateVouCher.getPhanTramGiam());
             existingVouCher.setNgayBatDau(updateVouCher.getNgayBatDau());

@@ -27,6 +27,7 @@ public class DiaChiEntity extends SuperEntity {
     @Column(name = "tinh", length = 150, nullable = false,columnDefinition = "NVARCHAR(255)")
     private String tinh;
     @JsonIgnore
+
     @OneToMany(mappedBy = "diaChi")
     private List<UserEntity> userEntities = new ArrayList<UserEntity>();
     @Column(name = "trangThai", length = 10, nullable = false)

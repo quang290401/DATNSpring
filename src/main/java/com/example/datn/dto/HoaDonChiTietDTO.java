@@ -1,33 +1,35 @@
 package com.example.datn.dto;
 
-import com.example.datn.entity.HoaDonEntity;
-import com.example.datn.entity.SanPhamChiTietEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+
+import com.example.datn.entity.KichCoEntity;
+import com.example.datn.entity.MauSacEntity;
+import com.example.datn.entity.SanPhamEntity;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
-@AllArgsConstructor
+import java.util.UUID;
+
+@Getter
+@Setter
 @NoArgsConstructor
-@Data
+@AllArgsConstructor
 public class HoaDonChiTietDTO {
-
-    private HoaDonDTO hoaDon;
-
-    private SanPhamChiTietDTO sanPhamChiTiet;
-
+    private UUID sanPhamId;
+    private String sanPham;
+    private String mauSac;
+    private String kichCo;
     private int soLuong;
-
+    private BigDecimal giaBan;
     private BigDecimal thanhTien;
-
-    private LocalDate createDate;
-
-
-    private LocalDate updateDate;
-
+    public HoaDonChiTietDTO(SanPhamEntity sanPham, MauSacEntity mauSac, KichCoEntity kichCo, int soLuong, BigDecimal giaBan, BigDecimal thanhTien) {
+        this.sanPham = sanPham.getTenSanPham();  // Assuming SanPhamEntity has a method getTenSanPham() returning String
+        this.mauSac = String.valueOf(mauSac);  // Convert MauSacEntity to String as needed
+        this.kichCo = String.valueOf(kichCo);  // Convert KichCoEntity to String as needed
+        this.soLuong = soLuong;
+        this.giaBan = giaBan;
+        this.thanhTien = thanhTien;
+    }
 }

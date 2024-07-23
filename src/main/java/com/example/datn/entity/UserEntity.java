@@ -7,7 +7,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,15 +28,15 @@ public class UserEntity extends SuperEntity{
     private String tenDem;
     @Column(name = "ho", length = 150, nullable = false,columnDefinition = "NVARCHAR(255)")
     private String ho;
-    @Column(name = "sdt", length = 50, nullable = false)
+    @Column(name = "sdt", length = 50, nullable = true)
     private String sdt;
-    @Column(name = "matKhau", length = 30, nullable = false)
+    @Column(name = "matKhau", length = 30, nullable = true)
     private String matKhau;
-    @Column(name = "ngaySinh", length = 30, nullable = false)
+    @Column(name = "ngaySinh", length = 30, nullable = true)
     private LocalDate ngaySinh;
-    @Column(name = "gioiTinh", length = 10, nullable = false)
+    @Column(name = "gioiTinh", length = 10, nullable = true)
     private int gioiTinh;
-    @Column(name = "trangThai", length = 10, nullable = false)
+        @Column(name = "trangThai", length = 10, nullable = true)
     private int trangThai;
     @ManyToOne
     @JoinColumn(name  = "vaiTro_id")
@@ -55,5 +54,6 @@ public class UserEntity extends SuperEntity{
     @OneToMany(mappedBy = "user")
     private List<HoaDonChiTietEntity> hoaDonEntities = new ArrayList<HoaDonChiTietEntity>();
 
-
+    public void setDiaChi(String s) {
+    }
 }

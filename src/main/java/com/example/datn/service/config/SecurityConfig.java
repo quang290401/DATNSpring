@@ -1,4 +1,4 @@
-//package com.example.datn.service.config;
+package com.example.datn.service.config;//package com.example.datn.service.config;
 //
 //import org.springframework.beans.factory.annotation.Value;
 //import org.springframework.context.annotation.Bean;

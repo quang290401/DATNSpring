@@ -1,5 +1,6 @@
 package com.example.datn.entity;
 
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
@@ -29,3 +30,8 @@ public class SanPhamEntity extends SuperEntity {
 
 
 }
+
+
+
+
+

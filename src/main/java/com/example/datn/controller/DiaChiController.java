@@ -4,13 +4,13 @@ import com.example.datn.Repository.DiaChiRepository;
 import com.example.datn.entity.DiaChiEntity;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,17 +21,6 @@ import java.util.UUID;
 public class DiaChiController {
     @Autowired
     DiaChiRepository diaChiRepository;
-
-    @GetMapping("/diachi/getAll")
-    public String getAllDiaChi(@RequestParam(defaultValue = "0") int page,
-                               @RequestParam(defaultValue = "5") int size,
-                               Model model) {
-        Pageable pageable = PageRequest.of(page, size);
-        Page<DiaChiEntity> diaChiList = diaChiRepository.findAll(pageable);
-        model.addAttribute("diaChiList", diaChiList);
-        model.addAttribute("diaChi", new DiaChiEntity());
-        return "admin/adminWeb/DiaChi";
-    }
 
     @PostMapping("/diachi/add")
     public String addDiaChi(@Valid @ModelAttribute("diachi") DiaChiEntity diachi, BindingResult result, Model model) {
@@ -106,12 +95,17 @@ public class DiaChiController {
             }
 
 
+            // Cập nhật thông tin chất liệu
+            existingdiaChi.setId(updateDiaChi.getId());
+
             existingdiaChi.setDiaChi(updateDiaChi.getDiaChi());
             existingdiaChi.setTinh(updateDiaChi.getTinh());
-            existingdiaChi.setUpdateDate(updateDiaChi.getUpdateDate());
+            existingdiaChi.setDiaChi(updateDiaChi.getDiaChi());
             existingdiaChi.setTrangThai(updateDiaChi.getTrangThai());
-            existingdiaChi.setHuyen(updateDiaChi.getHuyen());
+
             diaChiRepository.save(existingdiaChi);
+
+           diaChiRepository.save(existingdiaChi);
             System.out.println(existingdiaChi);
             return "redirect:/diachi/getAll";
         } catch (Exception e) {

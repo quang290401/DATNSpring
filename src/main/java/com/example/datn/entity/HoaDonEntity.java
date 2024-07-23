@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,8 +16,9 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "HoaDon")
+@Table(name = "hoa_don")
 public class HoaDonEntity extends SuperEntity {
+
     @ManyToOne
     @JoinColumn(name  = "user_id")
     private UserEntity user;

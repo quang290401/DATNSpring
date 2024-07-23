@@ -4,13 +4,13 @@ import com.example.datn.Repository.KichCoRepository;
 import com.example.datn.entity.KichCoEntity;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,17 +22,14 @@ public class KichCoController {
     KichCoRepository kichCoRepository;
 
     @GetMapping("/kichco/getAll")
-    public String getAllKichCo(@RequestParam(defaultValue = "0") int page,
-                                @RequestParam(defaultValue = "5") int size,
-                                Model model) {
-        Pageable pageable = PageRequest.of(page, size);
-        Page<KichCoEntity> kichCoList = kichCoRepository.findAll(pageable);
+    public String getAllKichCo(Model model) {
+        List<KichCoEntity> kichCoList = kichCoRepository.findAll();
         model.addAttribute("kichCoList", kichCoList);
         model.addAttribute("kichCo", new KichCoEntity());
         return "admin/adminWeb/KichCo";
     }
     @PostMapping("/kichco/add")
-    public String addChatLieu(@Valid @ModelAttribute("kichCo") KichCoEntity kichCo, BindingResult result, Model model) {
+    public String addKichCo(@Valid @ModelAttribute("kichCo") KichCoEntity kichCo, BindingResult result, Model model) {
         if (result.hasErrors()) {
             List<KichCoEntity> kichCoList = kichCoRepository.findAll();
             model.addAttribute("kichCoList", kichCoList);
@@ -49,12 +46,12 @@ public class KichCoController {
     }
 
     @PostMapping("/kichco/delete/{id}")
-    public String deleteChatLieu(@PathVariable("id") UUID id, Model model) {
+    public String deleteKichCo(@PathVariable("id") UUID id, Model model) {
         try {
             //Kiểm tra xem nó có tồn tại không
             if (!kichCoRepository.existsById(id)) {
                 // Nếu không tồn tại
-                model.addAttribute("errorMessage", "Không tìm thấy Chất liệu này");
+                model.addAttribute("errorMessage", "Không tìm thấy Kích Cỡ này");
                 List<KichCoEntity> kichCoList = kichCoRepository.findAll();
                 model.addAttribute("kichCoList", kichCoList);
                 return "admin/adminWeb/KichCo";
