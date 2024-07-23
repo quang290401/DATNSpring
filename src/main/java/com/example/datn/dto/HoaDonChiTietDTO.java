@@ -4,10 +4,7 @@ package com.example.datn.dto;
 import com.example.datn.entity.KichCoEntity;
 import com.example.datn.entity.MauSacEntity;
 import com.example.datn.entity.SanPhamEntity;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -17,6 +14,7 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class HoaDonChiTietDTO {
     private HoaDonDTO hoaDon;
 

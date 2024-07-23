@@ -116,8 +116,7 @@
             </div>
         </div>
     </section>
-    <div class="modal fade" id="thanhToanModal" tabindex="-1" role="dialog" aria-labelledby="thanhToanModalLabel"
-         aria-hidden="true">
+    <div class="modal fade" id="thanhToanModal" tabindex="-1" role="dialog" aria-labelledby="thanhToanModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -127,40 +126,36 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div class="container px-4 px-lg-5 mt-3">
+                    <div class="container px-4 px-lg-5 mt-4">
                         <div class="container">
                             <form id="product-details-form">
                                 <div class="form-row">
-                                    <div class="form-group col-md-4">
+                                    <div class="form-group col-md-3">
                                         <label for="giaSanPham">Giá sản phẩm</label>
-                                        <input type="number" class="form-control" id="giaSanPham" name="giaSanPham"
-                                               required>
+                                        <input type="number" class="form-control" id="giaSanPham" name="giaSanPham" required>
                                     </div>
-                                    <div class="form-group col-md-4">
+                                    <div class="form-group col-md-3">
                                         <label for="gioiTinh">Giới tính</label>
                                         <select class="form-control" id="gioiTinh" name="gioiTinh" required>
                                             <option value="nam">Nam</option>
                                             <option value="nu">Nữ</option>
                                         </select>
                                     </div>
-                                    <div class="form-group col-md-4">
+                                    <div class="form-group col-md-3">
                                         <label for="soLuong">Số lượng</label>
                                         <input type="number" class="form-control" id="soLuong" name="soLuong" required>
                                     </div>
+                                    <div class="form-group col-md-3">
+                                        <label for="trongLuong">Trọng lượng</label>
+                                        <input type="number" class="form-control" id="trongLuong" name="trongLuong" required>
+                                    </div>
                                 </div>
                                 <div class="form-row">
-                                    <div class="form-group col-md-4">
-                                        <label for="trongLuong">Trọng lượng</label>
-                                        <input type="number" class="form-control" id="trongLuong" name="trongLuong"
-                                               required>
-                                    </div>
-                                    <div class="form-group col-md-4">
+                                    <div class="form-group col-md-3">
                                         <label for="danhMuc">Danh mục</label>
-                                        <select class="form-control" id="danhMuc" name="danhMuc" required>
-                                        </select>
+                                        <select class="form-control" id="danhMuc" name="danhMuc" required></select>
                                     </div>
-
-                                    <div class="form-group col-md-4">
+                                    <div class="form-group col-md-3">
                                         <label for="hinhAnh">Hình Ảnh</label>
                                         <div class="image-select-container">
                                             <select class="form-control" id="hinhAnh" name="hinhAnh" required></select>
@@ -169,38 +164,35 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="form-row">
-                                    <div class="form-group col-md-4">
+                                    <div class="form-group col-md-3">
                                         <label for="kichCo">Kích cỡ</label>
                                         <select class="form-control" id="kichCo" name="kichCo" required>
                                             <!-- Options for Kích cỡ -->
                                         </select>
                                     </div>
-                                    <div class="form-group col-md-4">
+                                    <div class="form-group col-md-3">
                                         <label for="nsx">NSX</label>
                                         <select class="form-control" id="nsx" name="nsx" required>
                                             <!-- Options for NSX -->
                                         </select>
                                     </div>
-                                    <div class="form-group col-md-4">
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-3">
                                         <label for="mauSac">Màu sắc</label>
                                         <select class="form-control" id="mauSac" name="mauSac" required>
                                             <!-- Options for Màu sắc -->
                                         </select>
                                     </div>
-                                </div>
-                                <div class="form-row">
-                                    <div class="form-group col-md-4">
+                                    <div class="form-group col-md-3">
                                         <label for="chatLieu">Chất liệu</label>
                                         <select class="form-control" id="chatLieu" name="chatLieu" required>
                                             <!-- Options for Chất liệu -->
                                         </select>
                                     </div>
-                                    <div class="form-group col-md-8">
+                                    <div class="form-group col-md-6">
                                         <label for="moTa">Mô tả</label>
-                                        <textarea class="form-control" id="moTa" name="moTa" rows="3"
-                                                  required></textarea>
+                                        <textarea class="form-control" id="moTa" name="moTa" rows="3" required></textarea>
                                     </div>
                                 </div>
                             </form>
@@ -232,6 +224,7 @@
             </div>
         </div>
     </div>
+
 
     <!-- /Modal -->
 
