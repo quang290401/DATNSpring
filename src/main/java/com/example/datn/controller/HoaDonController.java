@@ -2,11 +2,11 @@ package com.example.datn.controller;
 
 import com.example.datn.Repository.*;
 import com.example.datn.entity.*;
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.pdmodel.PDPageContentStream;
-import org.apache.pdfbox.pdmodel.font.PDType0Font;
-import org.apache.pdfbox.pdmodel.font.PDType1Font;
+//import org.apache.pdfbox.pdmodel.PDDocument;
+//import org.apache.pdfbox.pdmodel.PDPage;
+//import org.apache.pdfbox.pdmodel.PDPageContentStream;
+//import org.apache.pdfbox.pdmodel.font.PDType0Font;
+//import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -58,12 +58,12 @@ public class HoaDonController {
         List<UserEntity> listUser = userRepository.findAll();
         model.addAttribute("danhSachHoaDon", danhSachHoaDon);
         List<HoaDonEntity> danhSachHoaDonDaThanhToan = danhSachHoaDon.stream()
-                .filter(hd -> hd.getTrangThai() == 1) // Giả sử trạng thái 1 là đã thanh toán
+//                .filter(hd -> hd.getTrangThai() == 1) // Giả sử trạng thái 1 là đã thanh toán
                 .collect(Collectors.toList());
         model.addAttribute("danhSachHoaDonDaThanhToan", danhSachHoaDonDaThanhToan);
 
         List<HoaDonEntity> danhSachHoaDonChuaThanhToan = danhSachHoaDon.stream()
-                .filter(hd -> hd.getTrangThai() == 0) // Giả sử trạng thái 0 là chưa thanh toán
+//                .filter(hd -> hd.getTrangThai() == 0) // Giả sử trạng thái 0 là chưa thanh toán
                 .collect(Collectors.toList());
         model.addAttribute("danhSachHoaDonChuaThanhToan", danhSachHoaDonChuaThanhToan);
 
@@ -78,7 +78,7 @@ public class HoaDonController {
 
     @PostMapping("/create")
     public String createHoaDon(@ModelAttribute("hoaDon") HoaDonEntity hoaDon, RedirectAttributes redirectAttributes) {
-        hoaDon.setTrangThai(0);
+//        hoaDon.setTrangThai(0);
         if (hoaDon.getTongTien() == null) {
             hoaDon.setTongTien(BigDecimal.ZERO);
         }
@@ -124,15 +124,15 @@ public class HoaDonController {
         return ResponseEntity.ok("Chi tiết hóa đơn đã được xóa.");
     }
 
-    @GetMapping("/trangThai/{hoaDonId}")
-    public ResponseEntity<Integer> getInvoiceStatus(@PathVariable UUID hoaDonId) {
-        Integer trangThai = hoaDonRepository.findTrangThaiById(hoaDonId);
-        if (trangThai != null) {
-            return ResponseEntity.ok(trangThai);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
+//    @GetMapping("/trangThai/{hoaDonId}")
+//    public ResponseEntity<Integer> getInvoiceStatus(@PathVariable UUID hoaDonId) {
+//        Integer trangThai = hoaDonRepository.findTrangThaiById(hoaDonId);
+//        if (trangThai != null) {
+//            return ResponseEntity.ok(trangThai);
+//        } else {
+//            return ResponseEntity.notFound().build();
+//        }
+//    }
 
     @GetMapping("/sanphamCT/{sanPhamId}")
     public ResponseEntity<Map<String, Object>> layThongTinSanPhamChiTiet(@PathVariable("sanPhamId") UUID sanPhamChiTietId) {
@@ -575,7 +575,7 @@ public class HoaDonController {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
             }
             HoaDonEntity hoaDon = optionalHoaDon.get();
-            hoaDon.setTrangThai(hoaDon.getTrangThai() + 1);
+//            hoaDon.setTrangThai(hoaDon.getTrangThai() + 1);
             hoaDonRepository.save(hoaDon);
 
             response.put("message", "Trạng thái hóa đơn đã được cập nhật thành công");
@@ -673,7 +673,7 @@ public class HoaDonController {
             HoaDonEntity hoaDon = optionalHoaDon.get();
 
             // Update hoaDon with payment details
-            hoaDon.setTrangThai(1); // Mark as paid
+//            hoaDon.setTrangThai(1); // Mark as paid
             hoaDon.setNgayThanhToan(LocalDateTime.now().withNano(0));
             hoaDonRepository.save(hoaDon); // Save the updated hoaDon
 
@@ -715,62 +715,62 @@ public class HoaDonController {
         return "redirect:/hoaDon/getAll"; // Redirect to appropriate URL for displaying all invoices
     }
 
-    @GetMapping("/exportPDF/{hoaDonId}")
-    public ResponseEntity<InputStreamResource> exportToPdf(@PathVariable("hoaDonId") UUID hoaDonId) {
-        try {
-            Optional<HoaDonEntity> optionalHoaDon = hoaDonRepository.findById(hoaDonId);
-            if (optionalHoaDon.isEmpty()) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-            }
-
-            HoaDonEntity hoaDon = optionalHoaDon.get();
-
-            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            PDDocument document = new PDDocument();
-            PDPage page = new PDPage();
-            document.addPage(page);
-
-            // Sử dụng phông chữ TrueType nếu cần hỗ trợ nhiều ký tự hơn
-            PDType0Font font = PDType0Font.load(document, new File("path/to/your/font.ttf"));
-
-            try (PDPageContentStream contentStream = new PDPageContentStream(document, page)) {
-                contentStream.beginText();
-                contentStream.setFont(font, 12);
-                contentStream.newLineAtOffset(100, 700);
-
-                contentStream.showText("Hóa Đơn ID: " + hoaDon.getId());
-                contentStream.newLine();
-                contentStream.showText("Ngày Tạo: " + (hoaDon.getCreateDate() != null ? hoaDon.getCreateDate().toString() : "Chưa có"));
-                contentStream.newLine();
-                contentStream.showText("Ngày Thanh Toán: " + (hoaDon.getNgayThanhToan() != null ? hoaDon.getNgayThanhToan().toString() : "Chưa có"));
-                contentStream.newLine();
-                contentStream.showText("Sản phẩm: " +
-                        (hoaDon.getSanPhamChiTiet() != null ?
-                                hoaDon.getSanPhamChiTiet().getSanPham() + " " +
-                                        hoaDon.getSanPhamChiTiet().getKichCo() + " " +
-                                        hoaDon.getSanPhamChiTiet().getMauSac() : "Không có thông tin"));
-                contentStream.newLine();
-                contentStream.showText("Khách hàng: " + (hoaDon.getUser() != null ? hoaDon.getUser().getTen() : "Khách lẻ"));
-                contentStream.newLine();
-                contentStream.showText("Tổng tiền: " + hoaDon.getTongTien());
-
-                contentStream.endText();
-            }
-
-            document.save(outputStream);
-            document.close();
-
-            ByteArrayInputStream inputStream = new ByteArrayInputStream(outputStream.toByteArray());
-            HttpHeaders headers = new HttpHeaders();
-            headers.add("Content-Disposition", "attachment; filename=hoaDon_" + hoaDonId + ".pdf");
-
-            return ResponseEntity.ok()
-                    .headers(headers)
-                    .contentType(org.springframework.http.MediaType.APPLICATION_PDF)
-                    .body(new InputStreamResource(inputStream));
-        } catch (IOException e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-        }
-    }
+//    @GetMapping("/exportPDF/{hoaDonId}")
+//    public ResponseEntity<InputStreamResource> exportToPdf(@PathVariable("hoaDonId") UUID hoaDonId) {
+//        try {
+//            Optional<HoaDonEntity> optionalHoaDon = hoaDonRepository.findById(hoaDonId);
+//            if (optionalHoaDon.isEmpty()) {
+//                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+//            }
+//
+//            HoaDonEntity hoaDon = optionalHoaDon.get();
+//
+//            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+//            PDDocument document = new PDDocument();
+//            PDPage page = new PDPage();
+//            document.addPage(page);
+//
+//            // Sử dụng phông chữ TrueType nếu cần hỗ trợ nhiều ký tự hơn
+//            PDType0Font font = PDType0Font.load(document, new File("path/to/your/font.ttf"));
+//
+//            try (PDPageContentStream contentStream = new PDPageContentStream(document, page)) {
+//                contentStream.beginText();
+//                contentStream.setFont(font, 12);
+//                contentStream.newLineAtOffset(100, 700);
+//
+//                contentStream.showText("Hóa Đơn ID: " + hoaDon.getId());
+//                contentStream.newLine();
+//                contentStream.showText("Ngày Tạo: " + (hoaDon.getCreateDate() != null ? hoaDon.getCreateDate().toString() : "Chưa có"));
+//                contentStream.newLine();
+//                contentStream.showText("Ngày Thanh Toán: " + (hoaDon.getNgayThanhToan() != null ? hoaDon.getNgayThanhToan().toString() : "Chưa có"));
+//                contentStream.newLine();
+//                contentStream.showText("Sản phẩm: " +
+//                        (hoaDon.getSanPhamChiTiet() != null ?
+//                                hoaDon.getSanPhamChiTiet().getSanPham() + " " +
+//                                        hoaDon.getSanPhamChiTiet().getKichCo() + " " +
+//                                        hoaDon.getSanPhamChiTiet().getMauSac() : "Không có thông tin"));
+//                contentStream.newLine();
+//                contentStream.showText("Khách hàng: " + (hoaDon.getUser() != null ? hoaDon.getUser().getTen() : "Khách lẻ"));
+//                contentStream.newLine();
+//                contentStream.showText("Tổng tiền: " + hoaDon.getTongTien());
+//
+//                contentStream.endText();
+//            }
+//
+//            document.save(outputStream);
+//            document.close();
+//
+//            ByteArrayInputStream inputStream = new ByteArrayInputStream(outputStream.toByteArray());
+//            HttpHeaders headers = new HttpHeaders();
+//            headers.add("Content-Disposition", "attachment; filename=hoaDon_" + hoaDonId + ".pdf");
+//
+//            return ResponseEntity.ok()
+//                    .headers(headers)
+//                    .contentType(org.springframework.http.MediaType.APPLICATION_PDF)
+//                    .body(new InputStreamResource(inputStream));
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+//        }
+//    }
 }

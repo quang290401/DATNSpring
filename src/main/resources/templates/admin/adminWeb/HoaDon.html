@@ -52,14 +52,14 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="hoaDon : ${danhSachHoaDon}" th:if="${hoaDon.trangThai == 0}">
+            <tr th:each="hoaDon : ${danhSachHoaDon}">
                 <td>
                     <button class="detailsButton btn btn-success" th:attr="data-hoaDonId=${hoaDon.id}">+</button>
                 </td>
                 <td th:text="${hoaDon.id}"></td>
                 <td th:text="${hoaDon.createDate}"></td>
                 <td th:text="${hoaDon.ngayThanhToan}"></td>
-                <td th:text="${hoaDon.trangThai == 0 ? 'Chưa thanh toán' : 'Đã thanh toán'}"></td>
+<!--                <td th:text="${hoaDon.trangThai == 0 ? 'Chưa thanh toán' : 'Đã thanh toán'}"></td>-->
                 <td th:text="${hoaDon.tongTien}"></td>
 
                 <td>
@@ -76,7 +76,7 @@
 
                 </td>
             </tr>
-            <tr th:each="hoaDon : ${danhSachHoaDon}" th:if="${hoaDon.trangThai == 0}" th:id="'details-' + ${hoaDon.id}"
+            <tr th:each="hoaDon : ${danhSachHoaDon}" th:id="'details-' + ${hoaDon.id}"
                 style="display:none;">
                 <td colspan="8">
                     <div>
@@ -117,14 +117,14 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="hoaDon : ${danhSachHoaDon}" th:if="${hoaDon.trangThai == 1}">
+            <tr th:each="hoaDon : ${danhSachHoaDon}">
                 <td>
                     <button class="detailsButton btn btn-success" th:attr="data-hoaDonId=${hoaDon.id}">+</button>
                 </td>
                 <td th:text="${hoaDon.id}"></td>
                 <td th:text="${hoaDon.createDate}"></td>
                 <td th:text="${hoaDon.ngayThanhToan}"></td>
-                <td th:text="${hoaDon.trangThai == 0 ? 'Chưa thanh toán' : 'Đã thanh toán'}"></td>
+<!--                <td th:text="${hoaDon.trangThai == 0 ? 'Chưa thanh toán' : 'Đã thanh toán'}"></td>-->
                 <td th:text="${hoaDon.tongTien}"></td>
                 <td th:if="${hoaDon.user != null}" th:text="${hoaDon.user.ten + ' - ' + hoaDon.user.sdt}"></td>
                 <!--                <td>-->
@@ -140,7 +140,7 @@
                 <!--                    </form>-->
                 <!--                </td>-->
             </tr>
-            <tr th:each="hoaDon : ${danhSachHoaDon}" th:if="${hoaDon.trangThai == 1}" th:id="'details-' + ${hoaDon.id}"
+            <tr th:each="hoaDon : ${danhSachHoaDon}" th:id="'details-' + ${hoaDon.id}"
                 style="display:none;">
                 <td colspan="8">
                     <div>

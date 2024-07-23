@@ -15,7 +15,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Controller
-@RequestMapping("/admin")
+@RequestMapping()
 public class BanHangOff {
 
     @Autowired

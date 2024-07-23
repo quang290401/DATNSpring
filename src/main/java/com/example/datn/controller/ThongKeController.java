@@ -16,12 +16,12 @@ public class ThongKeController {
     @Autowired
     private HoaDonRepository hoaDonRepository;
 
-    @GetMapping("/theothang")
-    public List<Object[]> thongKeTheoThang() {
-        return hoaDonRepository.thongKeTheoThang();
-    }
-    @GetMapping("/sanphambanchay")
-    public List<Object[]> sanPhamBanChay() {
-        return hoaDonRepository.sanPhamBanChay();
-    }
+//    @GetMapping("/theothang")
+//    public List<Object[]> thongKeTheoThang() {
+//        return hoaDonRepository.thongKeTheoThang();
+//    }
+//    @GetMapping("/sanphambanchay")
+//    public List<Object[]> sanPhamBanChay() {
+//        return hoaDonRepository.sanPhamBanChay();
+//    }
 }

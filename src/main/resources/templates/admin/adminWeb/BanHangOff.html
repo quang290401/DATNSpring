@@ -35,8 +35,11 @@
         </thead>
         <tbody>
         <tr th:each="SanPham : ${sanPhamChiTiet}">
-            <td><img th:src="${SanPham.hinhAnh?.getDuongDan()}" alt="Image">
+            <td>
+                <img th:src="@{'/' + ${SanPham.hinhAnh.duongDan}}" alt="Image" style="width: 100px; height: 100px;">
             </td>
+
+
             <td th:text="${SanPham.sanPham?.tenSanPham}"></td>
             <td th:text="${SanPham.mauSac?.ten}"></td>
             <td th:text="${SanPham.kichCo?.tenKichCo}"></td>
@@ -46,9 +49,9 @@
                 <form th:action="@{'/hoaDon/addToCart/' + ${hoaDonId}}" method="post">
                     <input type="hidden" name="sanPhamChiTietId" th:value="${SanPham.id}">
                     <input type="number" name="quantity" id="quantity_${SanPham.id}" value="1" min="1" required>
-                    <span id="quantity-error_${SanPham.id}" style="color: red; display: none;">Vui lòng nhập số lượng</span>
-                    <button type="submit" class="btn btn-success">Thêm vào hóa đơn</button>
                 </form>
+                <span id="quantity-error_${SanPham.id}" style="color: red; display: none;">Vui lòng nhập số lượng</span>
+                    <button type="submit" class="btn btn-success">Thêm vào hóa đơn</button>
             </td>
         </tr>
         </tbody>

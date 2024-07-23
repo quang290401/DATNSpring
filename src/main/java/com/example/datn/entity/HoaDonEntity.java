@@ -30,10 +30,6 @@ public class HoaDonEntity extends SuperEntity {
     private BigDecimal tongTien;
     @Column(name = "ngay_thanh_toan")
     private LocalDateTime  ngayThanhToan;
-
-    @Column(name = "trang_thai", nullable = false)
-    private int trangThai;
-
     @ManyToOne
     @JoinColumn(name = "vouCher_id")
     private VouCherEntity vouCher;
