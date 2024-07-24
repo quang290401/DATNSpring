@@ -13,6 +13,7 @@ import java.util.UUID;
 @Table(name = "SanPhamChiTiet")
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 
 public class SanPhamChiTietEntity extends SuperEntity{
 

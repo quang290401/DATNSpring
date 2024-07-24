@@ -13,31 +13,37 @@
         .modal-lg {
             max-width: 90%;
         }
+
         .modal-header,
         .modal-body {
             display: flex;
             flex-direction: column;
             gap: 10px;
         }
+
         .modal-footer {
             display: flex;
             justify-content: flex-end;
             gap: 10px;
         }
+
         /* Đảm bảo modal được hiển thị rõ ràng */
         .modal-content {
             background-color: white !important;
             filter: none !important;
             opacity: 1 !important;
         }
+
         /* Lớp nền mờ */
         .modal-backdrop {
             background-color: rgba(0, 0, 0, 0.5) !important;
         }
+
         .image-select-container {
             display: flex;
             align-items: center;
         }
+
         .image-select-container select {
             margin-right: 10px;
         }
@@ -65,7 +71,7 @@
                                         <input type="text" class="form-control" id="name-product" name="name-product">
                                     </div>
                                     <div class="form-group col-md-6">
-                                        <label for="code-product">Mã sản phẩm</label>
+
                                         <input type="hidden" class="form-control" id="code-product" name="code-product">
                                     </div>
                                 </div>
@@ -115,8 +121,14 @@
                 </div>
             </div>
         </div>
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center" id="pagination">
+                <!-- Các liên kết phân trang sẽ được thêm vào đây -->
+            </ul>
+        </nav>
     </section>
-    <div class="modal fade" id="thanhToanModal" tabindex="-1" role="dialog" aria-labelledby="thanhToanModalLabel" aria-hidden="true">
+    <div class="modal fade" id="thanhToanModal" tabindex="-1" role="dialog" aria-labelledby="thanhToanModalLabel"
+         aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -125,6 +137,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
+                <input type="hidden" class="form-control" id="idspct">
                 <div class="modal-body">
                     <div class="container px-4 px-lg-5 mt-4">
                         <div class="container">
@@ -132,13 +145,14 @@
                                 <div class="form-row">
                                     <div class="form-group col-md-3">
                                         <label for="giaSanPham">Giá sản phẩm</label>
-                                        <input type="number" class="form-control" id="giaSanPham" name="giaSanPham" required>
+                                        <input type="number" class="form-control" id="giaSanPham" name="giaSanPham"
+                                               required>
                                     </div>
                                     <div class="form-group col-md-3">
                                         <label for="gioiTinh">Giới tính</label>
                                         <select class="form-control" id="gioiTinh" name="gioiTinh" required>
-                                            <option value="nam">Nam</option>
-                                            <option value="nu">Nữ</option>
+                                            <option value="1">Nam</option>
+                                            <option value="0">Nữ</option>
                                         </select>
                                     </div>
                                     <div class="form-group col-md-3">
@@ -147,52 +161,87 @@
                                     </div>
                                     <div class="form-group col-md-3">
                                         <label for="trongLuong">Trọng lượng</label>
-                                        <input type="number" class="form-control" id="trongLuong" name="trongLuong" required>
+                                        <input type="text" class="form-control" id="trongLuong" name="trongLuong"
+                                               required>
                                     </div>
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group col-md-3">
                                         <label for="danhMuc">Danh mục</label>
-                                        <select class="form-control" id="danhMuc" name="danhMuc" required></select>
+                                        <div class="input-group-append">
+                                            <button class="btn btn-primary" type="button">Thêm</button>
+                                        </div>
+                                        <div class="input-group">
+                                            <select class="form-control" id="danhMuc" name="danhMuc" required></select>
+
+                                        </div>
                                     </div>
                                     <div class="form-group col-md-3">
                                         <label for="hinhAnh">Hình Ảnh</label>
-                                        <div class="image-select-container">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-primary" type="button">Thêm</button>
+                                        </div>
+                                        <div class="input-group">
                                             <select class="form-control" id="hinhAnh" name="hinhAnh" required></select>
                                             <div id="imageContainer">
-                                                <img id="selectedImage" src="" alt="Hình ảnh đã chọn" style="width: 50px; height: 50px; display: none;">
+                                                <img id="selectedImage" src="" alt="Hình ảnh đã chọn"
+                                                     style="width: 50px; height: 50px; display: none;">
                                             </div>
                                         </div>
                                     </div>
                                     <div class="form-group col-md-3">
                                         <label for="kichCo">Kích cỡ</label>
-                                        <select class="form-control" id="kichCo" name="kichCo" required>
-                                            <!-- Options for Kích cỡ -->
-                                        </select>
+                                        <div class="input-group-append">
+                                            <button class="btn btn-primary" type="button">Thêm</button>
+                                        </div>
+                                        <div class="input-group">
+                                            <select class="form-control" id="kichCo" name="kichCo" required>
+                                                <!-- Options for Kích cỡ -->
+                                            </select>
+                                        </div>
                                     </div>
                                     <div class="form-group col-md-3">
                                         <label for="nsx">NSX</label>
-                                        <select class="form-control" id="nsx" name="nsx" required>
-                                            <!-- Options for NSX -->
-                                        </select>
+                                        <div class="input-group-append">
+                                            <button class="btn btn-primary" type="button">Thêm</button>
+                                        </div>
+                                        <div class="input-group">
+                                            <select class="form-control" id="nsx" name="nsx" required>
+                                                <!-- Options for NSX -->
+                                            </select>
+
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group col-md-3">
                                         <label for="mauSac">Màu sắc</label>
-                                        <select class="form-control" id="mauSac" name="mauSac" required>
-                                            <!-- Options for Màu sắc -->
-                                        </select>
+                                        <div class="input-group-append">
+                                            <button class="btn btn-primary" type="button">Thêm</button>
+                                        </div>
+                                        <div class="input-group">
+                                            <select class="form-control" id="mauSac" name="mauSac" required>
+                                                <!-- Options for Màu sắc -->
+                                            </select>
+
+                                        </div>
                                     </div>
                                     <div class="form-group col-md-3">
                                         <label for="chatLieu">Chất liệu</label>
-                                        <select class="form-control" id="chatLieu" name="chatLieu" required>
-                                            <!-- Options for Chất liệu -->
-                                        </select>
+                                        <div class="input-group-append">
+                                            <button class="btn btn-primary" type="button">Thêm</button>
+                                        </div>
+                                        <div class="input-group">
+                                            <select class="form-control" id="chatLieu" name="chatLieu" required>
+                                                <!-- Options for Chất liệu -->
+                                            </select>
+
+                                        </div>
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label for="moTa">Mô tả</label>
-                                        <textarea class="form-control" id="moTa" name="moTa" rows="3" required></textarea>
+                                        <textarea class="form-control" id="moTa" name="moTa" rows="3"
+                                                  required></textarea>
                                     </div>
                                 </div>
                             </form>
@@ -205,7 +254,10 @@
                                     <th style="width: 8%">Màu Sắc</th>
                                     <th style="width: 8%">Kích Cỡ</th>
                                     <th style="width: 8%">NSX</th>
+                                    <th style="width: 10%">Danh Mục</th>
+                                    <th style="width: 10%">Chất Liệu</th>
                                     <th style="width: 20%">Mô Tả</th>
+                                    <th style="width: 20%">Trọng Lượng</th>
                                     <th style="width: 20%">Hình ảnh</th>
                                     <th style="width: 10%">Chọn</th>
                                 </tr>
@@ -218,7 +270,9 @@
 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                        <button type="button" id="idXacNhan" class="btn btn-primary">Xác nhận</button>
+                        <button type="button" id="addButton" class="btn btn-success">Thêm</button>
+                        <button type="button" id="updateButton" class="btn btn-warning">Cập nhật</button>
+                        <button type="button" id="resetButton" class="btn btn-danger">Reset</button>
                     </div>
                 </div>
             </div>
@@ -238,36 +292,51 @@
 <th:block th:replace="jsImport.html :: layout_import_js"/>
 </body>
 <script>
-    $(document).ready(function() {
+
+    $(document).ready(function () {
+        $('#active-product').on('change', function () {
+            if (this.checked) {
+                $('#inactive-product').prop('checked', false);
+            }
+        });
+
+        $('#inactive-product').on('change', function () {
+            if (this.checked) {
+                $('#active-product').prop('checked', false);
+            }
+        });
+    });
+
+    $(document).ready(function () {
         // Gọi API để lấy danh mục
         $.ajax({
             url: '/api/danhmuc/getAll',
             method: 'GET',
-            success: function(data) {
+            success: function (data) {
                 // Xóa các tùy chọn hiện tại của select danh mục
                 $('#danhMuc').empty();
 
                 // Thêm các tùy chọn mới vào select danh mục
-                $.each(data, function(index, item) {
+                $.each(data, function (index, item) {
                     $('#danhMuc').append($('<option>', {
                         value: item.id, // Hoặc thuộc tính phù hợp từ danh mục
                         text: item.tenDanhMuc // Hoặc thuộc tính phù hợp từ danh mục
                     }));
                 });
             },
-            error: function(jqXHR, textStatus, errorThrown) {
+            error: function (jqXHR, textStatus, errorThrown) {
                 console.error('Lỗi khi gọi API: ', textStatus, errorThrown);
             }
         });
         $.ajax({
             url: '/api/mausac/getAll',
             method: 'GET',
-            success: function(data) {
+            success: function (data) {
                 // Xóa các tùy chọn hiện tại của select danh mục
                 $('#mauSac').empty();
 
                 // Thêm các tùy chọn mới vào select danh mục
-                $.each(data, function(index, item) {
+                $.each(data, function (index, item) {
                     $('#mauSac').append($('<option>', {
                         value: item.id, // Hoặc thuộc tính phù hợp từ danh mục
                         text: item.ten // Hoặc thuộc tính phù hợp từ danh mục
@@ -275,26 +344,94 @@
                 });
                 console.error('Lỗi khi gọi API: ', textStatus, errorThrown);
             },
-            error: function(jqXHR, textStatus, errorThrown) {
-           }
+            error: function (jqXHR, textStatus, errorThrown) {
+            }
+        });
+        $.ajax({
+            url: '/api/nsx/getAll',
+            method: 'GET',
+            success: function (data) {
+                // Xóa các tùy chọn hiện tại của select danh mục
+                $('#nsx').empty();
+
+                // Thêm các tùy chọn mới vào select danh mục
+                $.each(data, function (index, item) {
+                    $('#nsx').append($('<option>', {
+                        value: item.id, // Hoặc thuộc tính phù hợp từ danh mục
+                        text: item.ten // Hoặc thuộc tính phù hợp từ danh mục
+                    }));
+                });
+                console.error('Lỗi khi gọi API: ', textStatus, errorThrown);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+            }
         });
         $.ajax({
             url: '/api/hinhanh/getAll',
             method: 'GET',
-            success: function(data) {
+            success: function (data) {
                 // Xóa các tùy chọn hiện tại của select danh mục
                 $('#hinhAnh').empty();
 
                 // Thêm các tùy chọn mới vào select danh mục
-                $.each(data, function(index, item) {
+                $.each(data, function (index, item) {
                     $('#hinhAnh').append($('<option>', {
-                        value: item.duongDan, // Đường dẫn hình ảnh
-                        text: item.duongDan // Văn bản hiển thị
+                        value: item.id, // ID của hình ảnh
+                        text: item.duongDan, // Văn bản hiển thị
+                        'data-image': item.duongDan // Đường dẫn hình ảnh
+                    }));
+                });
+                // Thêm sự kiện thay đổi cho ô select
+                $('#hinhAnh').on('change', function () {
+                    var selectedImagePath = $(this).find(':selected').data('image');
+                    if (selectedImagePath) {
+                        $('#selectedImage').attr('src', selectedImagePath).show();
+                    } else {
+                        $('#selectedImage').hide();
+                    }
+                });
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.error('Lỗi khi gọi API: ', textStatus, errorThrown);
+            }
+        });
+
+        $.ajax({
+            url: '/api/kichco/getAll',
+            method: 'GET',
+            success: function (data) {
+                // Xóa các tùy chọn hiện tại của select danh mục
+                $('#kichCo').empty();
+
+                // Thêm các tùy chọn mới vào select danh mục
+                $.each(data, function (index, item) {
+                    $('#kichCo').append($('<option>', {
+                        value: item.id, // Đường dẫn hình ảnh
+                        text: item.tenKichCo // Văn bản hiển thị
+                    }));
+                });
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.error('Lỗi khi gọi API: ', textStatus, errorThrown);
+            }
+        });
+        $.ajax({
+            url: '/api/chatlieu/getAll',
+            method: 'GET',
+            success: function (data) {
+                // Xóa các tùy chọn hiện tại của select danh mục
+                $('#chatLieu').empty();
+
+                // Thêm các tùy chọn mới vào select danh mục
+                $.each(data, function (index, item) {
+                    $('#chatLieu').append($('<option>', {
+                        value: item.id, // Đường dẫn hình ảnh
+                        text: item.ten // Văn bản hiển thị
                     }));
                 });
 
                 // Thêm sự kiện thay đổi cho ô select
-                $('#hinhAnh').on('change', function() {
+                $('#hinhAnh').on('change', function () {
                     var selectedImagePath = $(this).val();
                     if (selectedImagePath) {
                         $('#selectedImage').attr('src', selectedImagePath).show();
@@ -303,22 +440,23 @@
                     }
                 });
             },
-            error: function(jqXHR, textStatus, errorThrown) {
+            error: function (jqXHR, textStatus, errorThrown) {
                 console.error('Lỗi khi gọi API: ', textStatus, errorThrown);
             }
         });
 
     });
     $(document).ready(function () {
-        loadProducts();
-        function loadProducts() {
+        let currentPage = 0;
+        let pageSize = 4;
+
+        loadProducts(currentPage);
+
+        function loadProducts(pageNo) {
             $.ajax({
-                url: '/api/sp',
+                url: `/api/sp?pageNo=${pageNo}&pageSize=${pageSize}`,
                 type: 'GET',
-                data: {
-                    pageNo: 0, // Số trang bắt đầu từ 0
-                    pageSize: 10 // Số lượng sản phẩm mỗi trang
-                },
+                dataType: 'json',
                 success: function (response) {
                     let products = response.content; // Giả sử API trả về dữ liệu theo dạng {content: [...]}
                     let productTable = $('#productTable');
@@ -326,13 +464,14 @@
                     $.each(products, function (index, product) {
                         let trangThai = product.trangThai === 1 ? "Đang kinh doanh" : "Ngừng kinh doanh";
                         let row = `<tr>
-                                <td>${product.tenSanPham}</td>
-                                <td>${product.createDate}</td>
-                                <td>${trangThai}</td>
-                                <td><input type="checkbox" class="product-checkbox" data-id="${product.id}" data-name="${product.tenSanPham}" data-status="${product.trangThai}"></td>
-                            </tr>`;
+                            <td>${product.tenSanPham}</td>
+                            <td>${product.createDate}</td>
+                            <td>${trangThai}</td>
+                            <td><input type="checkbox" class="product-checkbox" data-id="${product.id}" data-name="${product.tenSanPham}" data-status="${product.trangThai}"></td>
+                        </tr>`;
                         productTable.append(row);
                     });
+                    setupPagination(response);
                     // Thêm sự kiện click cho các ô checkbox
                     $('.product-checkbox').on('click', function () {
                         // Bỏ chọn tất cả các ô checkbox khác
@@ -359,6 +498,32 @@
                 error: function (error) {
                     console.log('Error:', error);
                 }
+            });
+        }
+
+        function setupPagination(response) {
+            let totalPages = response.totalPages;
+            let currentPage = response.number;
+            let pagination = $('#pagination');
+            pagination.empty();
+
+            if (totalPages > 1) {
+                if (currentPage > 0) {
+                    pagination.append(`<li class="page-item"><a class="page-link" href="#" data-page="${currentPage - 1}">Previous</a></li>`);
+                }
+                for (let i = 0; i < totalPages; i++) {
+                    let activeClass = (i === currentPage) ? 'active' : '';
+                    pagination.append(`<li class="page-item ${activeClass}"><a class="page-link" href="#" data-page="${i}">${i + 1}</a></li>`);
+                }
+                if (currentPage < totalPages - 1) {
+                    pagination.append(`<li class="page-item"><a class="page-link" href="#" data-page="${currentPage + 1}">Next</a></li>`);
+                }
+            }
+
+            $('.page-link').on('click', function (event) {
+                event.preventDefault();
+                let page = $(this).data('page');
+                loadProducts(page, pageSize);
             });
         }
 
@@ -407,13 +572,12 @@
             });
         });
 
-        $('#btn-view').on('click', function () {
-            let idSp = $('#code-product').val();
-
+        function loadProductCT(idSp) {
             if (!idSp) {
                 alert('Vui lòng chọn sản phẩm.');
                 return;
             }
+
             $.ajax({
                 url: '/api/SPCT/idSP',
                 type: 'GET',
@@ -428,26 +592,161 @@
                     cartTable.empty();
                     $.each(products, function (index, product) {
                         let row = `<tr>
-                            <td>${product.sanPham.tenSanPham}</td>
-                            <td>${product.giaSanPham}</td>
-                            <td>${product.soLuong}</td>
-                            <td>${product.mauSac.ten}</td>
-                            <td>${product.kichCo.tenKichCo}</td>
-                            <td>${product.nsx.ten}</td>
-                            <td>${product.moTa}
-                          <td><img src="${product.hinhAnh.duongDan}"
-                          alt="Hình ảnh sản phẩm" style="max-width: 100px; max-height: 100px;"></td>
-                             <td><input type="checkbox" class="product-checkbox"}"></td>
-                        </tr>`;
+                    <td>${product.sanPham.tenSanPham}</td>
+                    <td>${product.giaSanPham}</td>
+                    <td>${product.soLuong}</td>
+                    <td>${product.mauSac.ten}</td>
+                    <td>${product.kichCo.tenKichCo}</td>
+                    <td>${product.nsx.ten}</td>
+                    <td>${product.danhMuc.tenDanhMuc}</td>
+                    <td>${product.chatLieu.ten}</td>
+                    <td>${product.moTa}</td>
+                    <td>${product.trongLuong}</td>
+                    <td><img src="${product.hinhAnh.duongDan}"
+                    alt="Hình ảnh sản phẩm" style="max-width: 100px; max-height: 100px;"></td>
+                    <td><input type="checkbox" class="product2-checkbox" data-id="${product.id}"
+                     data-gia="${product.giaSanPham}" data-soLuong="${product.soLuong}"
+                      data-trongLuong="${product.trongLuong}" data-mauSac="${product.mauSac.id}"
+                      data-kichCo="${product.kichCo.id}" data-nsx="${product.nsx.id}"
+                      data-chatLieu="${product.chatLieu.id}" data-moTa="${product.moTa}"
+                      data-hinhAnh="${product.hinhAnh.duongDan}"></td>
+                </tr>`;
                         cartTable.append(row);
                     });
+
+                    $('.product2-checkbox').on('change', function () {
+                        if (this.checked) {
+                            $('.product2-checkbox').not(this).prop('checked', false);
+
+                            // Lấy dữ liệu từ các thuộc tính data-*
+                            let giaSanPham = $(this).data('gia');
+                            let soLuong = $(this).data('soluong');
+                            let trongLuong = $(this).data('trongluong');
+                            let mauSac = $(this).data('mausac');
+                            let kichCo = $(this).data('kichco');
+                            let nsx = $(this).data('nsx');
+                            let chatLieu = $(this).data('chatlieu');
+                            let moTa = $(this).data('mota');
+                            let hinhAnh = $(this).data('hinhanh');
+
+                            // Thiết lập giá trị cho các ô input/select
+                            $('#idspct').val($(this).data('id'));
+                            $('#giaSanPham').val(giaSanPham);
+                            $('#soLuong').val(soLuong);
+                            $('#trongLuong').val(trongLuong);
+                            setSelectValue('#mauSac', mauSac);
+                            setSelectValue('#kichCo', kichCo);
+                            setSelectValue('#nsx', nsx);
+                            setSelectValue('#chatLieu', chatLieu);
+                            $('#moTa').val(moTa);
+                            $('#selectedImage').attr('src', hinhAnh).show();
+                        }else {
+                            $('#giaSanPham').val('');
+                            $('#soLuong').val('');
+                            $('#moTa').val('');
+                        }
+                    });
+
+                    // Thêm sự kiện thay đổi cho các checkbox
+                    $('.product2-checkbox').on('change', function () {
+                        if (this.checked) {
+                            $('.product2-checkbox').not(this).prop('checked', false);
+                        }
+                    });
+
                     $('#thanhToanModal').modal('show');
                 },
                 error: function (error) {
                     console.log('Error:', error);
                 }
             });
+        }
+
+// Hàm để thiết lập giá trị cho select và thêm tùy chọn nếu cần thiết
+        function setSelectValue(selectSelector, value) {
+            let select = $(selectSelector);
+            if (select.find(`option[value="${value}"]`).length === 0) {
+                select.append(`<option value="${value}">${value}</option>`);
+            }
+            select.val(value);
+        }
+
+        $(document).ready(function () {
+            $('#btn-view').on('click', function () {
+                let idSp = $('#code-product').val();
+                loadProductCT(idSp);
+            });
         });
+        $(document).ready(function () {
+            $('#addButton').click(function () {
+                var sanPhamChiTiet = {
+                    giaSanPham: $('#giaSanPham').val(),
+                    gioiTinh: $('#gioiTinh').val(),
+                    sanPham: $('#code-product').val(),
+                    soLuong: $('#soLuong').val(),
+                    trongLuong: $('#trongLuong').val(),
+                    danhMuc: $('#danhMuc').val(),
+                    hinhAnh: $('#hinhAnh').val(),
+                    kichCo: $('#kichCo').val(),
+                    nsx: $('#nsx').val(),
+                    mauSac: $('#mauSac').val(),
+                    chatLieu: $('#chatLieu').val(),
+                    moTa: $('#moTa').val()
+                };
+
+                $.ajax({
+                    url: '/api/SPCT',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(sanPhamChiTiet),
+                    success: function (response) {
+                        alert('Sản phẩm chi tiết đã được thêm thành công!');
+                        loadProductCT($('#code-product').val());
+                    },
+                    error: function (xhr, status, error) {
+                        alert('Có lỗi xảy ra: ' + xhr.responseText);
+                        // Xử lý lỗi nếu cần
+                    }
+                });
+            });
+        });
+        $(document).ready(function () {
+            $('#updateButton').click(function () {
+                var sanPhamChiTiet = {
+                    id: $('#idspct').val(),
+                    giaSanPham: $('#giaSanPham').val(),
+                    gioiTinh: $('#gioiTinh').val(),
+                    sanPham: $('#code-product').val(),
+                    soLuong: $('#soLuong').val(),
+                    trongLuong: $('#trongLuong').val(),
+                    danhMuc: $('#danhMuc').val(),
+                    hinhAnh: $('#hinhAnh').val(),
+                    kichCo: $('#kichCo').val(),
+                    nsx: $('#nsx').val(),
+                    mauSac: $('#mauSac').val(),
+                    chatLieu: $('#chatLieu').val(),
+                    moTa: $('#moTa').val()
+                };
+
+                $.ajax({
+                    url: '/api/SPCT',
+                    type: 'PUT',
+                    contentType: 'application/json',
+                    data: JSON.stringify(sanPhamChiTiet),
+                    success: function (response) {
+                        alert('Cập Nhật Thành công');
+                        loadProductCT($('#code-product').val());
+                    },
+                    error: function (xhr, status, error) {
+                        alert('Có lỗi xảy ra: ' + xhr.responseText);
+                        // Xử lý lỗi nếu cần
+                    }
+                });
+            });
+        });
+
     });
+
+
 </script>
 </html>
