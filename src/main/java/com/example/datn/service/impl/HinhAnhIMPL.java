@@ -11,6 +11,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,5 +27,18 @@ private final ModelMapper modelMapper;
         return hinhAnhEntities.stream()
                 .map(entity -> modelMapper.map(entity, HinhAnhDTO.class))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public HinhAnhDTO addHinhAnh(HinhAnhDTO hinhAnhDTO) {
+        HinhAnhEntity hinhAnh = HinhAnhEntity.builder()
+                .duongDan(hinhAnhDTO.getDuongDan())
+                .build();
+        hinhAnh.setTen("Adidas");
+        hinhAnh.setCreateDate(LocalDate.now());
+        hinhAnh.setUpdateDate(LocalDateTime.now());
+        hinhAnh.setTrangThai(1);
+        hinhAnhRepository.save(hinhAnh);
+        return modelMapper.map(hinhAnh,HinhAnhDTO.class);
     }
 }

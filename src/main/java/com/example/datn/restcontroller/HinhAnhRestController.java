@@ -6,9 +6,7 @@ import com.example.datn.service.DanhMucService;
 import com.example.datn.service.HinhAnhService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -21,6 +19,11 @@ public class HinhAnhRestController {
     @GetMapping("/getAll")
     public List<HinhAnhDTO> getAllDanhMuc() {
         return hinhAnhService.getAllHinhAnh();
+    }
+
+    @PostMapping("/add")
+    public HinhAnhDTO addHinhANh (@RequestBody HinhAnhDTO hinhAnhDTO){
+        return hinhAnhService.addHinhAnh(hinhAnhDTO);
     }
 
 }

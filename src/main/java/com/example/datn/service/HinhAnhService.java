@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface HinhAnhService {
     List<HinhAnhDTO> getAllHinhAnh();
+    HinhAnhDTO addHinhAnh(HinhAnhDTO hinhAnhDTO);
 }
