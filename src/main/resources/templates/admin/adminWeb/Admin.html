@@ -10,6 +10,10 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
     <th:block th:replace="~{cssImport.html :: layout_import_css}"/>
     <style>
+        .modal-lg4 {
+            max-width: 40%;
+
+        }
         .modal-lg3 {
             max-width: 40%;
 
@@ -208,7 +212,7 @@
                                     <div class="form-group col-md-3">
                                         <label for="kichCo">Kích cỡ</label>
                                         <div class="input-group-append">
-                                            <button class="btn btn-primary" type="button">Thêm</button>
+                                            <button class="btn btn-primary" type="button" id="themKichCo">Thêm</button>
                                         </div>
                                         <div class="input-group">
                                             <select class="form-control" id="kichCo" name="kichCo" required>
@@ -233,7 +237,7 @@
                                     <div class="form-group col-md-3">
                                         <label for="mauSac">Màu sắc</label>
                                         <div class="input-group-append">
-                                            <button class="btn btn-primary" type="button">Thêm</button>
+                                            <button class="btn btn-primary" type="button" id="themMauSac">Thêm</button>
                                         </div>
                                         <div class="input-group">
                                             <select class="form-control" id="mauSac" name="mauSac" required>
@@ -245,7 +249,7 @@
                                     <div class="form-group col-md-3">
                                         <label for="chatLieu">Chất liệu</label>
                                         <div class="input-group-append">
-                                            <button class="btn btn-primary" type="button">Thêm</button>
+                                            <button class="btn btn-primary" type="button" id="themChatLieu">Thêm</button>
                                         </div>
                                         <div class="input-group">
                                             <select class="form-control" id="chatLieu" name="chatLieu" required>
@@ -394,6 +398,151 @@
         </div>
     </div>
 
+    <div class="modal fade" id="addMauSacModal" tabindex="-1" role="dialog" aria-labelledby="addMauSacModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-lg4" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addMauSacModalLabel">Thêm Mau Sac</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Form thêm hình ảnh -->
+                    <form id="add-MauSac-form">
+                        <div class="form-group">
+                            <label>Tên Danh Mục</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="MauSacSufix" name="MauSacSufix" required>
+                            </div>
+                        </div>
+                        <input type="hidden" class="form-control" id="MauSacId" name="MauSacId" required>
+                    </form>
+                    <!-- Table Hình Ảnh -->
+                    <table id="mauSacTable" class="table table-striped table-bordered">
+                        <thead>
+                        <tr>
+                            <th>STT</th>
+                            <th>Tên</th>
+                            <th>Ngày Tạo</th>
+                            <th>Chọn</th>
+
+
+
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-primary" id="addButtonMauSac">Thêm</button>
+                    <button type="button" class="btn btn-warning" id="updateButtonMauSac">Cập nhật</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="addChatLieuModal" tabindex="-1" role="dialog" aria-labelledby="addMauSacModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-lg4" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addChatLieuModalLabel">Thêm Mau Sac</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Form thêm hình ảnh -->
+                    <form id="add-ChatLieu-form">
+                        <div class="form-group">
+                            <label>Tên Chat Lieu </label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="ChatLieuSufix" name="ChatLieuSufix" required>
+                            </div>
+                        </div>
+                        <input type="hidden" class="form-control" id="ChatLieuId" name="ChatLieuId" required>
+                    </form>
+                    <!-- Table Hình Ảnh -->
+                    <table id="chatLieuTable" class="table table-striped table-bordered">
+                        <thead>
+                        <tr>
+                            <th>STT</th>
+                            <th>Tên</th>
+                            <th>Ngày Tạo</th>
+                            <th>Chọn</th>
+
+
+
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-primary" id="addButtonChatLieu">Thêm</button>
+                    <button type="button" class="btn btn-warning" id="updateButtonChatLieu">Cập nhật</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="addKichCoModal" tabindex="-1" role="dialog" aria-labelledby="addMauSacModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-lg5" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addKichCoModalLabel">Thêm Kích Cỡ</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Form thêm hình ảnh -->
+                    <form id="add-KichCo-form">
+                        <div class="form-group">
+                            <label>Tên Kich Cỡ </label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="KichCoSufix" name="KichCoSufix" required>
+                            </div>
+                        </div>
+                        <input type="hidden" class="form-control" id="KichCoId" name="KichCoId" required>
+                    </form>
+                    <!-- Table Hình Ảnh -->
+                    <table id="kichCoTable" class="table table-striped table-bordered">
+                        <thead>
+                        <tr>
+                            <th>STT</th>
+                            <th>Tên</th>
+                            <th>Ngày Tạo</th>
+                            <th>Chọn</th>
+
+
+
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-primary" id="addButtonKichCo">Thêm</button>
+                    <button type="button" class="btn btn-warning" id="updateButtonKichCo">Cập nhật</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- /Modal -->
 
     <!-- footer -->
@@ -478,6 +627,37 @@
                 }));
             });
         }
+        function updateSelectMauSac(data){
+            let mauSacSelect = $('#mauSac');
+            mauSacSelect.empty(); // Xóa các tùy chọn cũ trước khi thêm mới
+            $.each(data, function (index, item) {
+                mauSacSelect.append($('<option>', {
+                    value: item.id,
+                    text: item.ten
+                }));
+            });
+        }
+        function updateSelectChatLieu(data){
+        let chatLieuSelect = $('#chatLieu');
+            chatLieuSelect.empty();
+        $.each(data, function (index, item) {
+                $('#chatLieu').append($('<option>', {
+                    value: item.id,
+                    text: item.ten
+                }));
+            });
+        }
+        function updateSelectKichCo(data){
+            let kichCoSelect =$('#kichCo');
+            kichCoSelect.empty();
+
+            $.each(data, function (index, item) {
+                $('#kichCo').append($('<option>', {
+                    value: item.id,
+                    text: item.tenKichCo
+                }));
+            });
+        }
 
         function loadDanhMuc() {
             $.ajax({
@@ -527,6 +707,151 @@
             });
         }
 
+        function  loadMauSac() {
+            $.ajax({
+                url: '/api/mausac/getAll',
+                method: 'GET',
+                success: function (data) {
+                    console.log(data); // Kiểm tra dữ liệu trả về
+
+                    // Kiểm tra nếu data là một mảng
+                    if (Array.isArray(data)) {
+                        let mauSacTable = $('#mauSacTable tbody');
+                        mauSacTable.empty();
+
+                        // Duyệt qua từng phần tử trong mảng và tạo hàng bảng
+                        $.each(data, function (index, product) {
+                            let row = `<tr>
+                            <td>${index + 1}</td>
+                            <td>${product.ten}</td>
+                            <td>${product.createDate}</td>
+                            <td><input type="checkbox" class="mausac-checkbox"
+                             data-id="${product.id}" data-name="${product.ten}" data-status="${product.trangThai}"></td>
+                        </tr>`;
+                            mauSacTable.append(row);
+                        });
+
+                        // Thêm sự kiện thay đổi cho checkbox
+                        $('.mausac-checkbox').on('click', function () {
+                            $('.mausac-checkbox').not(this).prop('checked', false);
+                            if ($(this).is(':checked')) {
+                                $('#MauSacId').val($(this).data('id'));
+                                $('#MauSacSufix').val($(this).data('name'));
+                            } else {
+                                $('#MauSacId').val('');
+                                $('#MauSacSufix').val('');
+                            }
+                        });
+
+                        // Cập nhật ô select danh mục
+                        updateSelectMauSac(data);
+                    } else {
+                        console.error('Dữ liệu không phải là mảng:', data);
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.error('Lỗi khi gọi API: ', textStatus, errorThrown);
+                }
+            });
+        }
+        function  loadChatLieu() {
+            $.ajax({
+                url: '/api/chatlieu/getAll',
+                method: 'GET',
+                success: function (data) {
+                    console.log(data); // Kiểm tra dữ liệu trả về
+
+                    // Kiểm tra nếu data là một mảng
+                    if (Array.isArray(data)) {
+                        let chatLieuTable = $('#chatLieuTable tbody');
+                        chatLieuTable.empty();
+
+                        // Duyệt qua từng phần tử trong mảng và tạo hàng bảng
+                        $.each(data, function (index, product) {
+                            let row = `<tr>
+                            <td>${index + 1}</td>
+                            <td>${product.ten}</td>
+                            <td>${product.createDate}</td>
+                            <td><input type="checkbox" class="chatLieu-checkbox"
+                             data-id="${product.id}" data-name="${product.ten}" data-status="${product.trangThai}"></td>
+                        </tr>`;
+                            chatLieuTable.append(row);
+                        });
+
+                        // Thêm sự kiện thay đổi cho checkbox
+                        $('.chatLieu-checkbox').on('click', function () {
+                            $('.chatLieu-checkbox').not(this).prop('checked', false);
+                            if ($(this).is(':checked')) {
+                                $('#ChatLieuId').val($(this).data('id'));
+                                $('#ChatLieuSufix').val($(this).data('name'));
+                            } else {
+                                $('#ChatLieuId').val('');
+                                $('#ChatLieuSufix').val('');
+                            }
+                        });
+                        updateSelectChatLieu(data);
+
+                        // Cập nhật ô select danh mục
+                        // updateSelectMauSac(data);
+                    } else {
+                        console.error('Dữ liệu không phải là mảng:', data);
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.error('Lỗi khi gọi API: ', textStatus, errorThrown);
+                }
+            });
+        }
+        function  loadKichCo() {
+            $.ajax({
+                url: '/api/kichco/getAll',
+                method: 'GET',
+                success: function (data) {
+                    console.log(data); // Kiểm tra dữ liệu trả về
+
+                    // Kiểm tra nếu data là một mảng
+                    if (Array.isArray(data)) {
+                        let kichCoTable = $('#kichCoTable tbody');
+                        kichCoTable.empty();
+
+                        // Duyệt qua từng phần tử trong mảng và tạo hàng bảng
+                        $.each(data, function (index, product) {
+                            let row = `<tr>
+                            <td>${index + 1}</td>
+                            <td>${product.tenKichCo}</td>
+                            <td>${product.createDate}</td>
+                            <td><input type="checkbox" class="kichco-checkbox"
+                             data-id="${product.id}" data-name="${product.tenKichCo}" data-status="${product.trangThai}"></td>
+                        </tr>`;
+                            kichCoTable.append(row);
+                        });
+
+                        // Thêm sự kiện thay đổi cho checkbox
+                        $('.kichco-checkbox').on('click', function () {
+                            $('.kichco-checkbox').not(this).prop('checked', false);
+                            if ($(this).is(':checked')) {
+                                $('#KichCoId').val($(this).data('id'));
+                                $('#KichCoSufix').val($(this).data('name'));
+                            } else {
+                                $('#KichCoId').val('');
+                                $('#KichCoSufix').val('');
+                            }
+                        });
+
+                        // Cập nhật ô select danh mục
+                        updateSelectKichCo(data);
+                    } else {
+                        console.error('Dữ liệu không phải là mảng:', data);
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.error('Lỗi khi gọi API: ', textStatus, errorThrown);
+                }
+            });
+        }
+
+
+
         $('#addButtonDanhMuc').click(function () {
             let tenDanhMuc = $('#DanhMucSufix').val();
 
@@ -542,7 +867,7 @@
                 success: function (response) {
                     alert('Danh mục đã được thêm thành công!');
                     loadDanhMuc();
-                    $('#addDanhModal').modal('hide');
+
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     console.error('Lỗi khi gọi API: ', textStatus, errorThrown);
@@ -568,7 +893,7 @@
                 success: function (response) {
                     alert('Danh mục đã cập nhật thành công!');
                     loadDanhMuc();
-                    $('#addDanhModal').modal('hide');
+
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     console.error('Lỗi khi gọi API: ', textStatus, errorThrown);
@@ -576,9 +901,130 @@
                 }
             });
         });
+        $('#addButtonMauSac').click(function () {
+            let tenMauSac = $('#MauSacSufix').val();
 
+            let DanhMucDTO = {
+                ten: tenMauSac
+            };
+
+            $.ajax({
+                url: '/api/mausac/add',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(DanhMucDTO),
+                success: function (response) {
+                    alert('Màu Sắc đã được thêm thành công!');
+                    loadMauSac();
+
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.error('Lỗi khi gọi API: ', textStatus, errorThrown);
+                    alert('Đã xảy ra lỗi khi thêm màu sắc.');
+                }
+            });
+        });
+        $('#addButtonChatLieu').click(function () {
+            let tenChatLieu = $('#ChatLieuSufix').val();
+
+            let DanhMucDTO = {
+                ten: tenChatLieu
+
+            };
+
+            $.ajax({
+                url: '/api/chatlieu/add',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(DanhMucDTO),
+                success: function (response) {
+                    alert('Chất Liệu đã thêm Cập Nhật thành công!');
+                    loadChatLieu();
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.error('Lỗi khi gọi API: ', textStatus, errorThrown);
+                    alert('Đã xảy ra lỗi khi thêm mauSac.');
+                }
+            });
+        });
+        $('#updateButtonChatLieu').click(function () {
+            let tenChatLieu = $('#ChatLieuSufix').val();
+            let id =$('#ChatLieuId').val();
+
+            let DanhMucDTO = {
+                ten: tenChatLieu,
+                id:id
+
+            };
+
+            $.ajax({
+                url: '/api/chatlieu/update',
+                method: 'PUT',
+                contentType: 'application/json',
+                data: JSON.stringify(DanhMucDTO),
+                success: function (response) {
+                    alert('Chất Liệu đã thêm Cập Nhật thành công!');
+                    loadChatLieu();
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.error('Lỗi khi gọi API: ', textStatus, errorThrown);
+                    alert('Đã xảy ra lỗi khi thêm mauSac.');
+                }
+            });
+        });
+        $('#addButtonKichCo').click(function () {
+            let tenKichCo = $('#KichCoSufix').val();
+
+            let DanhMucDTO = {
+                tenKichCo: tenKichCo
+
+            };
+
+            $.ajax({
+                url: '/api/kichco/add',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(DanhMucDTO),
+                success: function (response) {
+                    alert('Kích cỡ đã thêm  thành công!');
+                    loadKichCo();
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.error('Lỗi khi gọi API: ', textStatus, errorThrown);
+                    alert('Đã xảy ra lỗi khi thêm mauSac.');
+                }
+            });
+        });
+        $('#updateButtonKichCo').click(function () {
+            let id =$('#KichCoId').val();
+            let tenKichCo = $('#KichCoSufix').val();
+
+            let DanhMucDTO = {
+                id:id,
+                tenKichCo: tenKichCo
+
+            };
+
+            $.ajax({
+                url: '/api/kichco/add',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(DanhMucDTO),
+                success: function (response) {
+                    alert('Kích cỡ đã cập nhật  thành công!');
+                    loadKichCo();
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.error('Lỗi khi gọi API: ', textStatus, errorThrown);
+                    alert('Đã xảy ra lỗi khi thêm kích cỡ.');
+                }
+            });
+        });
         loadAllImages();
         loadDanhMuc();
+        loadMauSac();
+        loadChatLieu();
+        loadKichCo();
 
         $('#addButtonHinhAnh').click(function () {
             let fileInput = $('#duongDanSuffix');
@@ -598,7 +1044,7 @@
                 success: function (response) {
                     alert('Hình ảnh đã được thêm thành công!');
                     loadAllImages();
-                    $('#addHinhAnhModal').modal('hide');
+
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     console.error('Lỗi khi gọi API: ', textStatus, errorThrown);
@@ -644,12 +1090,7 @@
             success: function (data) {
                 $('#mauSac').empty();
 
-                $.each(data, function (index, item) {
-                    $('#mauSac').append($('<option>', {
-                        value: item.id,
-                        text: item.ten
-                    }));
-                });
+            updateSelectMauSac(data);
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 console.error('Lỗi khi gọi API: ', textStatus, errorThrown);
@@ -682,12 +1123,6 @@
             success: function (data) {
                 $('#kichCo').empty();
 
-                $.each(data, function (index, item) {
-                    $('#kichCo').append($('<option>', {
-                        value: item.id,
-                        text: item.tenKichCo
-                    }));
-                });
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 console.error('Lỗi khi gọi API: ', textStatus, errorThrown);
@@ -701,12 +1136,7 @@
             success: function (data) {
                 $('#chatLieu').empty();
 
-                $.each(data, function (index, item) {
-                    $('#chatLieu').append($('<option>', {
-                        value: item.id,
-                        text: item.ten
-                    }));
-                });
+
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 console.error('Lỗi khi gọi API: ', textStatus, errorThrown);
@@ -949,7 +1379,16 @@
                     }
                 });
 
-                $('#thanhToanModal').modal('show');
+                $('#thanhToanModal').modal('show')
+                $('#themKichCo').on('click', function () {
+                    $('#addKichCoModal').modal('show');
+                });
+                $('#themMauSac').on('click', function () {
+                    $('#addMauSacModal').modal('show');
+                });
+                $('#themChatLieu').on('click', function () {
+                    $('#addChatLieuModal').modal('show');
+                });
                 $('#ThemHinhAnh').on('click', function () {
                     console.log('Hinh Ảnh Modal'); // Kiểm tra sự kiện click của nút thanh toán
                     $('#addHinhAnhModal').modal('show');
@@ -966,6 +1405,18 @@
                     $('body').css('overflow', 'auto');
                     $('#thanhToanModal').css('overflow-y', 'auto'); // Thiết lập lại cuộn cho modal chính
                 });
+                $('#addMauSacModal').on('hidden.bs.modal', function () {
+                    $('body').css('overflow', 'auto');
+                    $('#thanhToanModal').css('overflow-y', 'auto'); // Thiết lập lại cuộn cho modal chính
+                })
+                $('#addChatLieuModal').on('hidden.bs.modal', function () {
+                    $('body').css('overflow', 'auto');
+                    $('#thanhToanModal').css('overflow-y', 'auto'); // Thiết lập lại cuộn cho modal chính
+                })
+                $('#addKichCoModal').on('hidden.bs.modal', function () {
+                    $('body').css('overflow', 'auto');
+                    $('#thanhToanModal').css('overflow-y', 'auto'); // Thiết lập lại cuộn cho modal chính
+                })
             },
             error: function (error) {
                 console.log('Error:', error);

@@ -5,9 +5,7 @@ import com.example.datn.dto.MauSacDTO;
 import com.example.datn.service.KichCoService;
 import com.example.datn.service.MauSacService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -20,6 +18,15 @@ public class KichCoResController {
     @GetMapping("/getAll")
     public List<KichCoDTO> getAllMauSac() {
         return kichCoService.getAllKichCo();
+    }
+
+    @PostMapping("/add")
+    public KichCoDTO addKichCo(@RequestBody KichCoDTO dto){
+        return kichCoService.addKichCo(dto);
+    }
+    @PutMapping("/update")
+    public KichCoDTO updateKichCo(@RequestBody KichCoDTO dto){
+        return kichCoService.updateKichCo( dto);
     }
 
 }
