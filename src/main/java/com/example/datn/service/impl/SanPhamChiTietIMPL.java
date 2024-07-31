@@ -98,6 +98,7 @@ public class SanPhamChiTietIMPL implements SanPhamChiTietService {
                 .moTa(sanPhamChiTietCrud.getMoTa())
                 .gioiTinh(sanPhamChiTietCrud.getGioiTinh())
                 .trongLuong(sanPhamChiTietCrud.getTrongLuong())
+                .trangThai(sanPhamChiTietCrud.getTrangThai())
                 .build();
         sanPhamChiTiet.setCreateDate(LocalDate.now());
         sanPhamChiTiet.setUpdateDate(LocalDate.now().atStartOfDay());
@@ -127,6 +128,7 @@ public class SanPhamChiTietIMPL implements SanPhamChiTietService {
                 .moTa(sanPhamChiTietCrud.getMoTa())
                 .gioiTinh(sanPhamChiTietCrud.getGioiTinh())
                 .trongLuong(sanPhamChiTietCrud.getTrongLuong())
+                .trangThai(sanPhamChiTietCrud.getTrangThai())
                 .build();
         sanPhamChiTiet.setCreateDate(LocalDate.now());
         sanPhamChiTiet.setUpdateDate(LocalDate.now().atStartOfDay());

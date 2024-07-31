@@ -34,6 +34,7 @@ public class KichCoIMPL implements KichCoService {
     public KichCoDTO addKichCo(KichCoDTO kichCoDTO) {
         KichCoEntity kichCo = KichCoEntity.builder()
                 .tenKichCo(kichCoDTO.getTenKichCo())
+                .doDai(kichCoDTO.getDoDai())
                 .build();
         kichCo.setCreateDate(LocalDate.now());
         kichCo.setUpdateDate(LocalDateTime.now());
@@ -49,6 +50,7 @@ public class KichCoIMPL implements KichCoService {
         KichCoEntity kichCo1 = new KichCoEntity();
         kichCo1.setId(kichCo.get().getId());
         kichCo1.setTenKichCo(kichCoDTO.getTenKichCo());
+        kichCo1.setDoDai(kichCoDTO.getDoDai());
         kichCo1.setCreateDate(LocalDate.now());
         kichCo1.setUpdateDate(LocalDateTime.now());
         kichCoRepository.save(kichCo1);

@@ -36,4 +36,5 @@ public class SanPhamChiTietCrud extends SuperDTO {
     private UUID danhMuc;
 
     private UUID baoHanh;
+    private int trangThai;
 }

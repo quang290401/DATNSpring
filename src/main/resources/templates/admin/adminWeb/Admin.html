@@ -14,17 +14,20 @@
             max-width: 40%;
 
         }
+
         .modal-lg3 {
             max-width: 40%;
 
         }
+
         .modal-lg2 {
             max-width: 40%;
 
         }
 
         .modal-lg {
-            max-width: 90%;
+            max-width: 85%;
+
         }
 
         .modal-header,
@@ -249,7 +252,8 @@
                                     <div class="form-group col-md-3">
                                         <label for="chatLieu">Chất liệu</label>
                                         <div class="input-group-append">
-                                            <button class="btn btn-primary" type="button" id="themChatLieu">Thêm</button>
+                                            <button class="btn btn-primary" type="button" id="themChatLieu">Thêm
+                                            </button>
                                         </div>
                                         <div class="input-group">
                                             <select class="form-control" id="chatLieu" name="chatLieu" required>
@@ -264,6 +268,33 @@
                                                   required></textarea>
                                     </div>
                                 </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-4">
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="active-product2"
+                                                   name="active-product2">
+                                            <label class="form-check-label" for="active-product2">Đang kinh
+                                                doanh</label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="inactive-product2"
+                                                   name="inactive-product2">
+                                            <label class="form-check-label" for="inactive-product2">Ngừng kinh
+                                                doanh</label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <div class="input-group">
+                                            <select class="form-control" id="trangThai2" name="trangThai2" required>
+                                                <option value="1">Đang kinh doanh</option>
+                                                <option value="0">Ngừng kinh doanh</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
                             </form>
                             <table id="cart2" class="table table-hover table-condensed">
                                 <thead>
@@ -277,14 +308,20 @@
                                     <th style="width: 10%">Danh Mục</th>
                                     <th style="width: 10%">Chất Liệu</th>
                                     <th style="width: 20%">Mô Tả</th>
-                                    <th style="width: 20%">Trọng Lượng</th>
+                                    <th style="width: 10%">Trọng Lượng</th>
                                     <th style="width: 20%">Hình ảnh</th>
+                                    <th style="width: 10%">Trạng Thái</th>
                                     <th style="width: 10%">Chọn</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 </tbody>
                             </table>
+                            <nav aria-label="Page navigation example">
+                                <ul class="pagination justify-content-center" id="pagination2">
+                                    <!-- Các liên kết phân trang sẽ được thêm vào đây -->
+                                </ul>
+                            </nav>
                         </div>
                     </div>
 
@@ -380,7 +417,6 @@
                             <th>Chọn</th>
 
 
-
                         </tr>
                         </thead>
                         <tbody>
@@ -429,7 +465,6 @@
                             <th>Chọn</th>
 
 
-
                         </tr>
                         </thead>
                         <tbody>
@@ -462,7 +497,8 @@
                         <div class="form-group">
                             <label>Tên Chat Lieu </label>
                             <div class="input-group">
-                                <input type="text" class="form-control" id="ChatLieuSufix" name="ChatLieuSufix" required>
+                                <input type="text" class="form-control" id="ChatLieuSufix" name="ChatLieuSufix"
+                                       required>
                             </div>
                         </div>
                         <input type="hidden" class="form-control" id="ChatLieuId" name="ChatLieuId" required>
@@ -475,7 +511,6 @@
                             <th>Tên</th>
                             <th>Ngày Tạo</th>
                             <th>Chọn</th>
-
 
 
                         </tr>
@@ -513,6 +548,12 @@
                                 <input type="text" class="form-control" id="KichCoSufix" name="KichCoSufix" required>
                             </div>
                         </div>
+                        <div class="form-group">
+                            <label>Độ Dài </label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="DoDaiSufix" name="DoDaiSufix" required>
+                            </div>
+                        </div>
                         <input type="hidden" class="form-control" id="KichCoId" name="KichCoId" required>
                     </form>
                     <!-- Table Hình Ảnh -->
@@ -521,9 +562,9 @@
                         <tr>
                             <th>STT</th>
                             <th>Tên</th>
+                            <th>Độ Dài</th>
                             <th>Ngày Tạo</th>
                             <th>Chọn</th>
-
 
 
                         </tr>
@@ -627,7 +668,8 @@
                 }));
             });
         }
-        function updateSelectMauSac(data){
+
+        function updateSelectMauSac(data) {
             let mauSacSelect = $('#mauSac');
             mauSacSelect.empty(); // Xóa các tùy chọn cũ trước khi thêm mới
             $.each(data, function (index, item) {
@@ -637,18 +679,20 @@
                 }));
             });
         }
-        function updateSelectChatLieu(data){
-        let chatLieuSelect = $('#chatLieu');
+
+        function updateSelectChatLieu(data) {
+            let chatLieuSelect = $('#chatLieu');
             chatLieuSelect.empty();
-        $.each(data, function (index, item) {
+            $.each(data, function (index, item) {
                 $('#chatLieu').append($('<option>', {
                     value: item.id,
                     text: item.ten
                 }));
             });
         }
-        function updateSelectKichCo(data){
-            let kichCoSelect =$('#kichCo');
+
+        function updateSelectKichCo(data) {
+            let kichCoSelect = $('#kichCo');
             kichCoSelect.empty();
 
             $.each(data, function (index, item) {
@@ -707,7 +751,7 @@
             });
         }
 
-        function  loadMauSac() {
+        function loadMauSac() {
             $.ajax({
                 url: '/api/mausac/getAll',
                 method: 'GET',
@@ -754,7 +798,8 @@
                 }
             });
         }
-        function  loadChatLieu() {
+
+        function loadChatLieu() {
             $.ajax({
                 url: '/api/chatlieu/getAll',
                 method: 'GET',
@@ -802,7 +847,8 @@
                 }
             });
         }
-        function  loadKichCo() {
+
+        function loadKichCo() {
             $.ajax({
                 url: '/api/kichco/getAll',
                 method: 'GET',
@@ -819,9 +865,10 @@
                             let row = `<tr>
                             <td>${index + 1}</td>
                             <td>${product.tenKichCo}</td>
+                            <td>${product.doDai}</td>
                             <td>${product.createDate}</td>
                             <td><input type="checkbox" class="kichco-checkbox"
-                             data-id="${product.id}" data-name="${product.tenKichCo}" data-status="${product.trangThai}"></td>
+                             data-id="${product.id}" data-name="${product.tenKichCo}" data-status="${product.trangThai}" data-dodai="${product.doDai}"></td>
                         </tr>`;
                             kichCoTable.append(row);
                         });
@@ -832,9 +879,11 @@
                             if ($(this).is(':checked')) {
                                 $('#KichCoId').val($(this).data('id'));
                                 $('#KichCoSufix').val($(this).data('name'));
+                                $('#DoDaiSufix').val($(this).data('dodai'));
                             } else {
                                 $('#KichCoId').val('');
                                 $('#KichCoSufix').val('');
+                                $('#DoDaiSufix').val('');
                             }
                         });
 
@@ -849,7 +898,6 @@
                 }
             });
         }
-
 
 
         $('#addButtonDanhMuc').click(function () {
@@ -949,11 +997,11 @@
         });
         $('#updateButtonChatLieu').click(function () {
             let tenChatLieu = $('#ChatLieuSufix').val();
-            let id =$('#ChatLieuId').val();
+            let id = $('#ChatLieuId').val();
 
             let DanhMucDTO = {
                 ten: tenChatLieu,
-                id:id
+                id: id
 
             };
 
@@ -974,9 +1022,11 @@
         });
         $('#addButtonKichCo').click(function () {
             let tenKichCo = $('#KichCoSufix').val();
+            let doDai = $('#DoDaiSufix').val();
 
             let DanhMucDTO = {
-                tenKichCo: tenKichCo
+                tenKichCo: tenKichCo,
+                doDai: doDai
 
             };
 
@@ -996,18 +1046,20 @@
             });
         });
         $('#updateButtonKichCo').click(function () {
-            let id =$('#KichCoId').val();
+            let id = $('#KichCoId').val();
             let tenKichCo = $('#KichCoSufix').val();
+            let doDai = $('#DoDaiSufix').val();
 
             let DanhMucDTO = {
-                id:id,
-                tenKichCo: tenKichCo
+                id: id,
+                tenKichCo: tenKichCo,
+                doDai: doDai
 
             };
 
             $.ajax({
-                url: '/api/kichco/add',
-                method: 'POST',
+                url: '/api/kichco/update',
+                method: 'PUT',
                 contentType: 'application/json',
                 data: JSON.stringify(DanhMucDTO),
                 success: function (response) {
@@ -1055,105 +1107,115 @@
     });
 
 
+    // Cập nhật checkbox trạng thái sản phẩm
+    $('#active-product').on('change', function () {
+        if (this.checked) {
+            $('#inactive-product').prop('checked', false);
+        }
+    });
 
-        // Cập nhật checkbox trạng thái sản phẩm
-        $('#active-product').on('change', function () {
-            if (this.checked) {
-                $('#inactive-product').prop('checked', false);
-            }
-        });
+    $('#inactive-product').on('change', function () {
+        if (this.checked) {
+            $('#active-product').prop('checked', false);
+        }
+    });
+    $('#active-product2').on('change', function () {
+        if (this.checked) {
+            $('#inactive-product2').prop('checked', false);
+        }
+    });
 
-        $('#inactive-product').on('change', function () {
-            if (this.checked) {
-                $('#active-product').prop('checked', false);
-            }
-        });
+    $('#inactive-product2').on('change', function () {
+        if (this.checked) {
+            $('#active-product2').prop('checked', false);
+        }
+    });
 
-        // Gọi API để lấy danh mục và cập nhật ô select
-        $.ajax({
-            url: '/api/danhmuc/getAll',
-            method: 'GET',
-            success: function (data) {
-                $('#danhMuc').empty();
+    // Gọi API để lấy danh mục và cập nhật ô select
+    $.ajax({
+        url: '/api/danhmuc/getAll',
+        method: 'GET',
+        success: function (data) {
+            $('#danhMuc').empty();
 
-                updateSelectDanhMuc(data);
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                console.error('Lỗi khi gọi API: ', textStatus, errorThrown);
-            }
-        });
+            updateSelectDanhMuc(data);
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.error('Lỗi khi gọi API: ', textStatus, errorThrown);
+        }
+    });
 
-        // Gọi API để lấy màu sắc và cập nhật ô select
-        $.ajax({
-            url: '/api/mausac/getAll',
-            method: 'GET',
-            success: function (data) {
-                $('#mauSac').empty();
+    // Gọi API để lấy màu sắc và cập nhật ô select
+    $.ajax({
+        url: '/api/mausac/getAll',
+        method: 'GET',
+        success: function (data) {
+            $('#mauSac').empty();
 
             updateSelectMauSac(data);
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                console.error('Lỗi khi gọi API: ', textStatus, errorThrown);
-            }
-        });
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.error('Lỗi khi gọi API: ', textStatus, errorThrown);
+        }
+    });
 
-        // Gọi API để lấy NSX và cập nhật ô select
-        $.ajax({
-            url: '/api/nsx/getAll',
-            method: 'GET',
-            success: function (data) {
-                $('#nsx').empty();
+    // Gọi API để lấy NSX và cập nhật ô select
+    $.ajax({
+        url: '/api/nsx/getAll',
+        method: 'GET',
+        success: function (data) {
+            $('#nsx').empty();
 
-                $.each(data, function (index, item) {
-                    $('#nsx').append($('<option>', {
-                        value: item.id,
-                        text: item.ten
-                    }));
-                });
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                console.error('Lỗi khi gọi API: ', textStatus, errorThrown);
-            }
-        });
+            $.each(data, function (index, item) {
+                $('#nsx').append($('<option>', {
+                    value: item.id,
+                    text: item.ten
+                }));
+            });
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.error('Lỗi khi gọi API: ', textStatus, errorThrown);
+        }
+    });
 
-        // Gọi API để lấy kích cỡ và cập nhật ô select
-        $.ajax({
-            url: '/api/kichco/getAll',
-            method: 'GET',
-            success: function (data) {
-                $('#kichCo').empty();
+    // Gọi API để lấy kích cỡ và cập nhật ô select
+    $.ajax({
+        url: '/api/kichco/getAll',
+        method: 'GET',
+        success: function (data) {
+            $('#kichCo').empty();
 
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                console.error('Lỗi khi gọi API: ', textStatus, errorThrown);
-            }
-        });
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.error('Lỗi khi gọi API: ', textStatus, errorThrown);
+        }
+    });
 
-        // Gọi API để lấy chất liệu và cập nhật ô select
-        $.ajax({
-            url: '/api/chatlieu/getAll',
-            method: 'GET',
-            success: function (data) {
-                $('#chatLieu').empty();
+    // Gọi API để lấy chất liệu và cập nhật ô select
+    $.ajax({
+        url: '/api/chatlieu/getAll',
+        method: 'GET',
+        success: function (data) {
+            $('#chatLieu').empty();
 
 
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                console.error('Lỗi khi gọi API: ', textStatus, errorThrown);
-            }
-        });
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.error('Lỗi khi gọi API: ', textStatus, errorThrown);
+        }
+    });
 
-        // Gọi API để lấy hình ảnh và cập nhật ô select
-        $.ajax({
-            url: '/api/hinhanh/getAll',
-            method: 'GET',
-            success: function (data) {
-                updateSelectHinhAnh(data);
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                console.error('Lỗi khi gọi API: ', textStatus, errorThrown);
-            }
-        });
+    // Gọi API để lấy hình ảnh và cập nhật ô select
+    $.ajax({
+        url: '/api/hinhanh/getAll',
+        method: 'GET',
+        success: function (data) {
+            updateSelectHinhAnh(data);
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.error('Lỗi khi gọi API: ', textStatus, errorThrown);
+        }
+    });
 
     $(document).ready(function () {
         let currentPage = 0;
@@ -1221,6 +1283,10 @@
                 }
             });
         }
+
+        $('#thanhToanModal').on('hidden.bs.modal', function () {
+            loadProducts(currentPage);
+        });
 
         function setupPagination(response) {
             let totalPages = response.totalPages;
@@ -1297,25 +1363,51 @@
 
     });
 
+    let currentPage2 = 0;
+    const pageSize2 = 3;
+    let totalPages2 = 0;
+
+    // Hàm cập nhật giao diện phân trang
+    function updatePagination2(totalPages2) {
+        let pagination = $('#pagination2');
+        pagination.empty();
+
+        for (let i = 0; i < totalPages2; i++) {
+            let pageItem = `<li class="page-item ${i === currentPage2 ? 'active' : ''}">
+                            <a class="page-link" href="#" data-page="${i}">${i + 1}</a>
+                        </li>`;
+            pagination.append(pageItem);
+        }
+
+        // Thêm sự kiện thay đổi trang cho các nút phân trang
+        $('.page-link').on('click', function (e) {
+            e.preventDefault();
+            currentPage2 = $(this).data('page');
+            loadProductCT($('#code-product').val());
+        });
+    }
+
     function loadProductCT(idSp) {
+
         if (!idSp) {
             alert('Vui lòng chọn sản phẩm.');
             return;
         }
 
         $.ajax({
-            url: '/api/SPCT/idSP',
+            url: `/api/SPCT/idSP`,
             type: 'GET',
             data: {
                 idSP: idSp,
-                pageNo: 0,
-                pageSize: 10
+                pageNo: currentPage2,
+                pageSize: pageSize2
             },
             success: function (response) {
                 let products = response.content;
                 let cartTable = $('#cart2 tbody');
                 cartTable.empty();
                 $.each(products, function (index, product) {
+                    let trangThai = product.trangThai === 1 ? "Đang kinh doanh" : "Ngừng kinh doanh";
                     let row = `<tr>
                     <td>${product.sanPham.tenSanPham}</td>
                     <td>${product.giaSanPham}</td>
@@ -1327,23 +1419,24 @@
                     <td>${product.chatLieu.ten}</td>
                     <td>${product.moTa}</td>
                     <td>${product.trongLuong}</td>
-                    <td><img src="${product.hinhAnh.duongDan}"
-                    alt="Hình ảnh sản phẩm" style="max-width: 100px; max-height: 100px;"></td>
-                    <td><input type="checkbox" class="product2-checkbox" data-id="${product.id}"
-                     data-gia="${product.giaSanPham}" data-soLuong="${product.soLuong}"
-                      data-trongLuong="${product.trongLuong}" data-mauSac="${product.mauSac.id}"
-                      data-kichCo="${product.kichCo.id}" data-nsx="${product.nsx.id}"
-                      data-chatLieu="${product.chatLieu.id}" data-moTa="${product.moTa}"
-                      data-hinhAnh="${product.hinhAnh.duongDan}"></td>
+                    <td><img src="${product.hinhAnh.duongDan}" alt="Hình ảnh sản phẩm" style="max-width: 100px; max-height: 100px;"></td>
+                       <td>${trangThai}</td>
+                    <td><input type="checkbox" class="product2-checkbox" data-id="${product.id}" data-gia="${product.giaSanPham}" data-soLuong="${product.soLuong}"
+                    data-trongLuong="${product.trongLuong}" data-mauSac="${product.mauSac.id}"
+                     data-kichCo="${product.kichCo.id}" data-nsx="${product.nsx.id}" data-chatLieu="${product.chatLieu.id}"
+                     data-moTa="${product.moTa}" data-hinhAnh="${product.hinhAnh.duongDan}" data-trangthai="${product.trangThai}"></td>
                 </tr>`;
                     cartTable.append(row);
                 });
 
+                totalPages2 = response.totalPages;
+                updatePagination2(totalPages2);
+
+                // Thêm sự kiện thay đổi cho các checkbox
                 $('.product2-checkbox').on('change', function () {
                     if (this.checked) {
                         $('.product2-checkbox').not(this).prop('checked', false);
 
-                        // Lấy dữ liệu từ các thuộc tính data-*
                         let giaSanPham = $(this).data('gia');
                         let soLuong = $(this).data('soluong');
                         let trongLuong = $(this).data('trongluong');
@@ -1354,7 +1447,6 @@
                         let moTa = $(this).data('mota');
                         let hinhAnh = $(this).data('hinhanh');
 
-                        // Thiết lập giá trị cho các ô input/select
                         $('#idspct').val($(this).data('id'));
                         $('#giaSanPham').val(giaSanPham);
                         $('#soLuong').val(soLuong);
@@ -1365,17 +1457,19 @@
                         setSelectValue('#chatLieu', chatLieu);
                         $('#moTa').val(moTa);
                         $('#selectedImage').attr('src', hinhAnh).show();
+                        if ($(this).data('trangthai') === 1) {
+                            $('#active-product2').prop('checked', true);
+                            $('#inactive-product2').prop('checked', false);
+                        } else {
+                            $('#active-product2').prop('checked', false);
+                            $('#inactive-product2').prop('checked', true);
+                        }
                     } else {
                         $('#giaSanPham').val('');
                         $('#soLuong').val('');
                         $('#moTa').val('');
-                    }
-                });
-
-                // Thêm sự kiện thay đổi cho các checkbox
-                $('.product2-checkbox').on('change', function () {
-                    if (this.checked) {
-                        $('.product2-checkbox').not(this).prop('checked', false);
+                        $('#active-product2').prop('checked', false);
+                        $('#inactive-product2').prop('checked', false);
                     }
                 });
 
@@ -1453,7 +1547,8 @@
                 nsx: $('#nsx').val(),
                 mauSac: $('#mauSac').val(),
                 chatLieu: $('#chatLieu').val(),
-                moTa: $('#moTa').val()
+                moTa: $('#moTa').val(),
+                trangThai: $('#active-product2').is(':checked') ? 1 : 0
             };
 
             $.ajax({
@@ -1487,7 +1582,8 @@
                 nsx: $('#nsx').val(),
                 mauSac: $('#mauSac').val(),
                 chatLieu: $('#chatLieu').val(),
-                moTa: $('#moTa').val()
+                moTa: $('#moTa').val(),
+                trangThai: $('#active-product2').is(':checked') ? 1 : 0
             };
 
             $.ajax({
@@ -1504,6 +1600,10 @@
                     // Xử lý lỗi nếu cần
                 }
             });
+        });
+        $('#thanhToanModal').on('hidden.bs.modal', function () {
+            $('#code-product').val('');
+            $('#name-product').val('');
         });
     });
 

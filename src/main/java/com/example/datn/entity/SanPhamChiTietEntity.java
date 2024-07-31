@@ -55,6 +55,8 @@ public class SanPhamChiTietEntity extends SuperEntity{
     @ManyToOne
     @JoinColumn(name  = "baoHanh_id")
     private BaoHanhEntity baoHanh;
+    @Column(name = "trangThai", length = 10, nullable = true)
+    private int trangThai;
     @JsonIgnore
     @OneToMany(mappedBy = "sanPhamChiTiet")
     private List<GioHangChiTietEntity> gioHangChiTietEntities = new ArrayList<GioHangChiTietEntity>();
@@ -79,6 +81,7 @@ public class SanPhamChiTietEntity extends SuperEntity{
                 ", hinhAnh=" + hinhAnh +
                 ", danhMuc=" + danhMuc +
                 ", baoHanh=" + baoHanh +
+                ", trangThai=" + trangThai +
                 ", gioHangChiTietEntities=" + gioHangChiTietEntities +
                 ", hoaDonChiTiets=" + hoaDonChiTiets +
                 '}';
