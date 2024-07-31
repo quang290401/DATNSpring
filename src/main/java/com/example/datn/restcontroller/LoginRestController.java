@@ -26,7 +26,7 @@ public class LoginRestController {
             String role = String.valueOf(user.getVaiTro());  // Assuming getVaiTro returns the role name
             return ResponseEntity.ok(new LoginResponse("Logged in", role));
         } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Sai Tài Khoản hoặc mật khẩu ");
         }
     }
     @GetMapping("/logout")
