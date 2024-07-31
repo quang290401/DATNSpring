@@ -19,7 +19,7 @@ public interface SanPhamChiTietRepository extends JpaRepository<SanPhamChiTietEn
     @Query("SELECT spct FROM SanPhamChiTietEntity spct LEFT JOIN spct.sanPham sp WHERE sp.tenSanPham LIKE %:nameProduct% OR :nameProduct IS NULL")
     Page<SanPhamChiTietEntity> findByProductName(@Param("nameProduct") String nameProduct, Pageable pageable);
     ;
-    @Query("SELECT s FROM SanPhamChiTietEntity s ORDER BY s.createDate DESC")
+    @Query("SELECT s FROM SanPhamChiTietEntity s ORDER BY function('RAND')")
     List<SanPhamChiTietEntity> findTop4SanPhamChiTiet(Pageable pageable);
 
     @Modifying
