@@ -1,10 +1,7 @@
 package com.example.datn.restcontroller;
 
 import com.example.datn.common.Appcontants;
-import com.example.datn.dto.GioHangChiTietCrud;
-import com.example.datn.dto.SanPhamChiTietCrud;
-import com.example.datn.dto.SanPhamChiTietDTO;
-import com.example.datn.dto.SanPhamChiTietFiterDTO;
+import com.example.datn.dto.*;
 import com.example.datn.service.SanPhamChiTietService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -19,8 +16,17 @@ import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/SPCT")
+@RequestMapping("/api/spct")
 public class SanPhamChiTietRestController {
+    @GetMapping("/idSP")
+    public Page<SanPhamChiTietDTO> getAllProductsByidSP (
+            @RequestParam(value = "pageNo", defaultValue = Appcontants.DEFAULT_PAGE_NUMBER, required = false) int pageNo,
+            @RequestParam(value = "pageSize", defaultValue = Appcontants.DEFAULT_TOTAL_NUMBER, required = false) int pageSize,
+            @Valid UUID idSP,
+            @Valid SanPhamCtFiterDTO filterForm) {
+
+        return sanPhamChiTietService.getAllSanPhamChiTietBYidSP(idSP, pageNo, pageSize, filterForm);
+    }
     private final SanPhamChiTietService sanPhamChiTietService;
     @PostMapping()
     public ResponseEntity<?> addSanPhamChiTiet(@RequestBody SanPhamChiTietCrud sanPhamChiTietCrud) {
@@ -42,14 +48,6 @@ public class SanPhamChiTietRestController {
     , @Valid SanPhamChiTietFiterDTO filterForm) {
 
         return sanPhamChiTietService.getAllSanPhamChiTiet(pageNo, pageSize,filterForm);
-    }
-    @GetMapping("/idSP")
-    public Page<SanPhamChiTietDTO> getAllProductsByidSP (
-            @RequestParam(value = "pageNo", defaultValue = Appcontants.DEFAULT_PAGE_NUMBER, required = false) int pageNo,
-            @RequestParam(value = "pageSize", defaultValue = Appcontants.DEFAULT_TOTAL_NUMBER, required = false) int pageSize
-            , @Valid UUID idSP) {
-
-        return sanPhamChiTietService.getAllSanPhamChiTietBYidSP(idSP,pageNo, pageSize);
     }
     @GetMapping("/Detail/{id}")
     public  SanPhamChiTietDTO getById(@PathVariable UUID id){

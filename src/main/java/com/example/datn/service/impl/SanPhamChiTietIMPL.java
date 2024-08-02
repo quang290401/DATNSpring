@@ -1,10 +1,7 @@
 package com.example.datn.service.impl;
 
 import com.example.datn.Repository.*;
-import com.example.datn.dto.GioHangChiTietCrud;
-import com.example.datn.dto.SanPhamChiTietCrud;
-import com.example.datn.dto.SanPhamChiTietDTO;
-import com.example.datn.dto.SanPhamChiTietFiterDTO;
+import com.example.datn.dto.*;
 import com.example.datn.entity.*;
 
 import com.example.datn.service.SanPhamChiTietService;
@@ -65,10 +62,24 @@ public class SanPhamChiTietIMPL implements SanPhamChiTietService {
     }
 
     @Override
-    public Page<SanPhamChiTietDTO> getAllSanPhamChiTietBYidSP(UUID idSP, Integer totalPage, Integer totalItem) {
-        Pageable pageable = PageRequest.of(totalPage, totalItem);
-        Page<SanPhamChiTietEntity> entityPage = sanPhamChiTietRepository.findAllSpChiTietByIdSp(idSP, pageable);
+    public Page<SanPhamChiTietDTO> getAllSanPhamChiTietBYidSP(UUID idSP, Integer totalPage,
+                                                              Integer totalItem, SanPhamCtFiterDTO fiterDTO) {
+        // Tạo Specification để lọc theo idSP
+        Specification<SanPhamChiTietEntity> specByIdSP = (root, query, criteriaBuilder) ->
+                criteriaBuilder.equal(root.get("sanPham").get("id"), idSP);
 
+        // Tạo Specification từ fiterDTO
+        Specification<SanPhamChiTietEntity> specByFilter = SpectificationSpct.buildWhereCT(fiterDTO);
+
+        // Kết hợp các Specifications
+        Specification<SanPhamChiTietEntity> combinedSpec = Specification.where(specByIdSP).and(specByFilter);
+
+        Pageable pageable = PageRequest.of(totalPage, totalItem);
+
+        // Truy vấn với combined Specification và Pageable
+        Page<SanPhamChiTietEntity> entityPage = sanPhamChiTietRepository.findAll(combinedSpec, pageable);
+
+        // Chuyển đổi từ entity sang DTO
         List<SanPhamChiTietDTO> dtos = entityPage.getContent().stream()
                 .map(entity -> modelMapper.map(entity, SanPhamChiTietDTO.class))
                 .collect(Collectors.toList());
