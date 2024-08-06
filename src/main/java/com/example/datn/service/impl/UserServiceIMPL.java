@@ -4,8 +4,6 @@ import com.example.datn.Repository.DiaChiRepository;
 import com.example.datn.Repository.GioHangRepository;
 import com.example.datn.Repository.UsersRepository;
 import com.example.datn.Repository.VaiTroRepository;
-import com.example.datn.dto.DiaChiDTO;
-import com.example.datn.dto.HoaDonCHiTietCrud;
 import com.example.datn.dto.UserCrud;
 import com.example.datn.dto.UserDTO;
 import com.example.datn.entity.*;
@@ -13,22 +11,27 @@ import com.example.datn.entity.*;
 import com.example.datn.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class UserServiceIMPL implements UserService {
-    private final UsersRepository usersRepository;
+    private UsersRepository usersRepository;
     private final VaiTroRepository vaiTroRepository;
     private final GioHangRepository gioHangRepository;
     private final DiaChiRepository diaChiRepository;
     private final ModelMapper modelMapper;
+    @Autowired
+    public void CustomUserDetailsService(UsersRepository usersRepository) {
+        this.usersRepository = usersRepository;
+    }
     @Override
     public UserDTO findByTaiKhoan(String taiKhoan) {
         Optional<UserEntity> user = usersRepository.findByTaiKhoan(taiKhoan);
@@ -60,6 +63,7 @@ public class UserServiceIMPL implements UserService {
         diaChiEntity.setUpdateDate(LocalDateTime.now());
         diaChiRepository.save(diaChiEntity);
         VaiTroEntity vaiTroEntity = vaiTroRepository.findByTenVaiTroUser();
+//        PasswordEncoder passwordEncoder  = new BCryptPasswordEncoder(10);
         UserEntity userEntity = UserEntity.builder()
                 .diaChi(diaChiEntity)
                 .vaiTro(vaiTroEntity)

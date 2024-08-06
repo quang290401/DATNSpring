@@ -30,7 +30,7 @@ public class UserEntity extends SuperEntity{
     private String ho;
     @Column(name = "sdt", length = 50, nullable = true)
     private String sdt;
-    @Column(name = "matKhau", length = 30, nullable = true)
+    @Column(name = "matKhau", length = 60, nullable = true)
     private String matKhau;
     @Column(name = "ngaySinh", length = 30, nullable = true)
     private LocalDate ngaySinh;
@@ -38,7 +38,7 @@ public class UserEntity extends SuperEntity{
     private int gioiTinh;
         @Column(name = "trangThai", length = 10, nullable = true)
     private int trangThai;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name  = "vaiTro_id")
     private VaiTroEntity vaiTro;
     @ManyToOne

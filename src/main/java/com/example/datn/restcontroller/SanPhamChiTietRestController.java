@@ -16,7 +16,7 @@ import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/spct")
+@RequestMapping("/api/SPCT")
 public class SanPhamChiTietRestController {
     @GetMapping("/idSP")
     public Page<SanPhamChiTietDTO> getAllProductsByidSP (

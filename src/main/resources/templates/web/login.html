@@ -12,13 +12,16 @@
             justify-content: center;
             align-items: center;
         }
+
         .card {
             width: 100%;
             max-width: 400px;
         }
+
         .login_btn {
             width: 100%;
         }
+
         .social_icon {
             position: absolute;
             right: 20px;
@@ -30,7 +33,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css"
           integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
-    <link rel="stylesheet" th:href="@{/dist/login/login.css}" />
+    <link rel="stylesheet" th:href="@{/dist/login/login.css}"/>
 </head>
 <body>
 <div class="container">
@@ -49,13 +52,15 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fas fa-user"></i></span>
                     </div>
-                    <input type="text" class="form-control" id="username" name="username" placeholder="username" required>
+                    <input type="text" class="form-control" id="username" name="username" placeholder="username"
+                           required>
                 </div>
                 <div class="input-group form-group">
                     <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fas fa-key"></i></span>
                     </div>
-                    <input type="password" class="form-control" id="password" name="password" placeholder="password" required>
+                    <input type="password" class="form-control" id="password" name="password" placeholder="password"
+                           required>
                 </div>
                 <div class="row align-items-center remember">
                     <input type="checkbox">Remember Me
@@ -74,9 +79,10 @@
     </div>
 </div>
 
+
 <script>
-    $(document).ready(function() {
-        $('#formLogin').on('submit', function(e) {
+    $(document).ready(function () {
+        $('#formLogin').on('submit', function (e) {
             e.preventDefault();
 
             const username = $('#username').val();
@@ -86,17 +92,20 @@
                 url: '/api/users/login',
                 type: 'POST',
                 contentType: 'application/json',
-                data: JSON.stringify({ taiKhoan: username, matKhau: password }),
-                success: function(response) {
-                    if (response.role === 'VaiTroDTO(tenVaiTro=User)') {
-                        window.location.href = '/trang-chu';  // Đường dẫn tới trang chủ của user
-                    } else if (response.role === 'VaiTroDTO(tenVaiTro=admin)') {
-                        window.location.href = '/admin';  // Đường dẫn tới trang admin
+                data: JSON.stringify({taiKhoan: username, matKhau: password}),
+                success: function (response) {
+                    const role = response.role;
+                    console.log(role)
+
+                    if (role === 'USER') {
+                        window.location.href = '/trang-chu';
+                    } else if (role === 'ADMIN') {
+                        window.location.href = '/admin';
                     }
                 },
-                error: function(xhr) {
+                error: function (xhr) {
                     if (xhr.status === 401) {
-                        alert('Invalid credentials');
+                        alert('Thông tin tài khoản hoặc mật khẩu chưa chính xác');
                     } else {
                         alert('An error occurred. Please try again.');
                     }
@@ -104,6 +113,7 @@
             });
         });
     });
+
 </script>
 </body>
 </html>

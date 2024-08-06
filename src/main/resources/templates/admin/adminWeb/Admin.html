@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="vi">
 <head>
@@ -972,6 +973,31 @@
                 }
             });
         });
+        $('#updateButtonMauSac').click(function () {
+            let tenMauSac = $('#MauSacSufix').val();
+            let id = $('#MauSacId').val();
+
+            let DanhMucDTO = {
+                id:id,
+                ten: tenMauSac
+            };
+
+            $.ajax({
+                url: '/api/mausac/update',
+                method: 'PUT',
+                contentType: 'application/json',
+                data: JSON.stringify(DanhMucDTO),
+                success: function (response) {
+                    alert('Màu Sắc đã được Cập Nhật thành công!');
+                    loadMauSac();
+
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.error('Lỗi khi gọi API: ', textStatus, errorThrown);
+                    alert('Đã xảy ra lỗi khi thêm màu sắc.');
+                }
+            });
+        });
         $('#addButtonChatLieu').click(function () {
             let tenChatLieu = $('#ChatLieuSufix').val();
 
@@ -1395,7 +1421,7 @@
             return;
         }
 
-        let url2 = `/api/spct/idSP?idSP=${idSp}&pageNo=${currentPage2}&pageSize=${pageSize2}&trangThai=${keySearch}`;
+        let url2 = `/api/SPCT/idSP?idSP=${idSp}&pageNo=${currentPage2}&pageSize=${pageSize2}&trangThai=${keySearch}`;
         $.ajax({
             url: url2,
             type: 'GET',
@@ -1470,7 +1496,45 @@
                     }
                 });
 
-                $('#thanhToanModal').modal('show');
+
+                $('#thanhToanModal').modal('show')
+                $('#themKichCo').on('click', function () {
+                    $('#addKichCoModal').modal('show');
+                });
+                $('#themMauSac').on('click', function () {
+                    $('#addMauSacModal').modal('show');
+                });
+                $('#themChatLieu').on('click', function () {
+                    $('#addChatLieuModal').modal('show');
+                });
+                $('#ThemHinhAnh').on('click', function () {
+                    console.log('Hinh Ảnh Modal'); // Kiểm tra sự kiện click của nút thanh toán
+                    $('#addHinhAnhModal').modal('show');
+                });
+                $('#ThemDanhMuc').on('click', function () {
+                    console.log('Hinh Ảnh Modal'); // Kiểm tra sự kiện click của nút thanh toán
+                    $('#addDanhModal').modal('show');
+                });
+                $('#addHinhAnhModal').on('hidden.bs.modal', function () {
+                    $('body').css('overflow', 'auto');
+                    $('#thanhToanModal').css('overflow-y', 'auto'); // Thiết lập lại cuộn cho modal chính
+                });
+                $('#addDanhModal').on('hidden.bs.modal', function () {
+                    $('body').css('overflow', 'auto');
+                    $('#thanhToanModal').css('overflow-y', 'auto'); // Thiết lập lại cuộn cho modal chính
+                });
+                $('#addMauSacModal').on('hidden.bs.modal', function () {
+                    $('body').css('overflow', 'auto');
+                    $('#thanhToanModal').css('overflow-y', 'auto'); // Thiết lập lại cuộn cho modal chính
+                })
+                $('#addChatLieuModal').on('hidden.bs.modal', function () {
+                    $('body').css('overflow', 'auto');
+                    $('#thanhToanModal').css('overflow-y', 'auto'); // Thiết lập lại cuộn cho modal chính
+                })
+                $('#addKichCoModal').on('hidden.bs.modal', function () {
+                    $('body').css('overflow', 'auto');
+                    $('#thanhToanModal').css('overflow-y', 'auto'); // Thiết lập lại cuộn cho modal chính
+                })
             },
             error: function (error) {
                 console.log('Error:', error);
@@ -1517,7 +1581,7 @@
             };
 
             $.ajax({
-                url: '/api/spct',
+                url: '/api/SPCT',
                 type: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify(sanPhamChiTiet),
@@ -1550,7 +1614,7 @@
             };
 
             $.ajax({
-                url: '/api/spct',
+                url: '/api/SPCT',
                 type: 'PUT',
                 contentType: 'application/json',
                 data: JSON.stringify(sanPhamChiTiet),
@@ -1569,7 +1633,5 @@
             $('#name-product').val('');
         });
     });
-
-
 </script>
 </html>

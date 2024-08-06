@@ -68,7 +68,7 @@ public class SanPhamChiTietIMPL implements SanPhamChiTietService {
         Specification<SanPhamChiTietEntity> specByIdSP = (root, query, criteriaBuilder) ->
                 criteriaBuilder.equal(root.get("sanPham").get("id"), idSP);
 
-        // Tạo Specification từ fiterDTO
+
         Specification<SanPhamChiTietEntity> specByFilter = SpectificationSpct.buildWhereCT(fiterDTO);
 
         // Kết hợp các Specifications
