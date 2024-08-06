@@ -1,84 +1,212 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Biểu Đồ Thống Kê Doanh Số</title>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trang Quản Lý Thống Kê</title>
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f4f4f4;
+            padding-top: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+        }
+
+        .chart-container {
+            margin-top: 20px;
+        }
+
+        table {
+            margin-top: 20px;
+        }
+
+        img {
+            max-width: 100px;
+            height: auto;
+        }
+    </style>
 </head>
 <body>
-<!-- CSS Files -->
-<link rel="stylesheet" href="dist/admin.assets/css/bootstrap.min.css" />
-<link rel="stylesheet" href="dist/admin.assets/css/plugins.min.css" />
-<link rel="stylesheet" href="dist/admin.assets/css/kaiadmin.min.css" />
+<div class="container">
+    <h1 class="text-center">Trang Quản Lý Thống Kê</h1>
 
-<!-- CSS Just for demo purpose, don't include it in your project -->
-<link rel="stylesheet" href="../assets/css/demo.css" />
-<h1>Thống Kê Doanh Số Theo Tháng</h1>
-<canvas id="salesChart" width="400" height="200"></canvas>
+    <!-- Tìm kiếm hóa đơn -->
+    <div class="mb-4">
+        <h2>Tìm Kiếm Hóa Đơn</h2>
+        <form id="searchForm" class="form-inline">
+            <div class="form-group mb-2">
+                <label for="startDate" class="sr-only">Từ ngày</label>
+                <input type="date" id="startDate" class="form-control" placeholder="Từ ngày" required>
+            </div>
+            <div class="form-group mx-sm-3 mb-2">
+                <label for="endDate" class="sr-only">Đến ngày</label>
+                <input type="date" id="endDate" class="form-control" placeholder="Đến ngày" required>
+            </div>
+            <button type="submit" class="btn btn-primary mb-2">Tìm kiếm</button>
+        </form>
+    </div>
+
+    <!-- Thống kê hóa đơn -->
+    <div class="chart-container">
+        <h2>Thống Kê Doanh Số Theo Tháng</h2>
+        <canvas id="salesChart" width="400" height="200"></canvas>
+    </div>
+
+    <!-- Sản phẩm bán chạy -->
+    <div class="chart-container">
+        <h2>Sản Phẩm Bán Chạy Nhất</h2>
+        <canvas id="myChart" width="400" height="200"></canvas>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Ảnh Sản Phẩm</th>
+                <th>Tên Sản Phẩm</th>
+                <th>Số Lượng Đã Bán</th>
+            </tr>
+            </thead>
+            <tbody id="productTableBody">
+            <!-- Rows will be added here dynamically -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Thống kê sản phẩm theo ngày -->
+    <div class="chart-container">
+        <h2>Thống Kê Sản Phẩm Bán Theo Ngày</h2>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Tên Sản Phẩm</th>
+                <th>Kích Cỡ</th>
+                <th>Màu Sắc</th>
+                <th>Tổng Số Lượng</th>
+                <th>Ngày</th>
+            </tr>
+            </thead>
+            <tbody id="dailyProductTableBody">
+            <!-- Rows will be added here dynamically -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Include jQuery and Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.10/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<!-- Include Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-  document.addEventListener('DOMContentLoaded', function () {
-    fetch('/api/thongke/theothang')
-            .then(response => response.json())
-            .then(data => {
-              // Xử lý dữ liệu để phù hợp với Chart.js
-              const labels = data.map(item => item[0]);
-              const values = data.map(item => item[1]);
+    // Fetch and render sản phẩm bán chạy
+    fetch('/api/thongke/sanphambanchay')
+        .then(response => response.json())
+        .then(products => {
+            const labels = products.map(product => product[1]);
+            const data = products.map(product => product[2]);
+            const images = products.map(product => product[0]);
 
-              // Tạo một mảng màu cho các tháng
-              const backgroundColors = [
-                'rgba(75, 192, 192, 0.2)', // Tháng 1
-                'rgba(153, 102, 255, 0.2)', // Tháng 2
-                'rgba(255, 159, 64, 0.2)', // Tháng 3
-                'rgba(255, 99, 132, 0.2)', // Tháng 4
-                'rgba(54, 162, 235, 0.2)', // Tháng 5
-                'rgba(255, 206, 86, 0.2)', // Tháng 6
-                'rgba(75, 192, 192, 0.2)', // Tháng 7
-                'rgba(153, 102, 255, 0.2)', // Tháng 8
-                'rgba(255, 159, 64, 0.2)', // Tháng 9
-                'rgba(255, 99, 132, 0.2)', // Tháng 10
-                'rgba(54, 162, 235, 0.2)', // Tháng 11
-                'rgba(255, 206, 86, 0.2)'  // Tháng 12
-              ];
-
-              // Tạo một mảng màu cho các viền của các phần
-              const borderColors = [
-                'rgba(75, 192, 192, 1)', // Tháng 1
-                'rgba(153, 102, 255, 1)', // Tháng 2
-                'rgba(255, 159, 64, 1)', // Tháng 3
-                'rgba(255, 99, 132, 1)', // Tháng 4
-                'rgba(54, 162, 235, 1)', // Tháng 5
-                'rgba(255, 206, 86, 1)', // Tháng 6
-                'rgba(75, 192, 192, 1)', // Tháng 7
-                'rgba(153, 102, 255,1)', // Tháng 8
-                'rgba(255, 159, 64, 1)', // Tháng 9
-                'rgba(255, 99, 132, 1)', // Tháng 10
-                'rgba(54, 162, 235, 1)', // Tháng 11
-                'rgba(255, 206, 86, 1)'  // Tháng 12
-              ];
-
-              const ctx = document.getElementById('salesChart').getContext('2d');
-              new Chart(ctx, {
+            // Create the bar chart
+            const ctx = document.getElementById('myChart').getContext('2d');
+            new Chart(ctx, {
                 type: 'bar',
                 data: {
-                  labels: labels,
-                  datasets: [{
-                    label: 'Doanh Số',
-                    data: values,
-                    backgroundColor: backgroundColors.slice(0, labels.length), // Cắt mảng màu để phù hợp với số lượng tháng
-                    borderColor: borderColors.slice(0, labels.length), // Cắt mảng màu viền để phù hợp với số lượng tháng
-                    borderWidth: 1
-                  }]
+                    labels: labels,
+                    datasets: [{
+                        label: 'Số lượng đã bán',
+                        data: data,
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }]
                 },
                 options: {
-                  scales: {
-                    r: {
-                      beginAtZero: true
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
                     }
-                  }
                 }
-              });
+            });
+
+            // Update table with product data
+            const tableBody = document.getElementById('productTableBody');
+            products.forEach(product => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                <td><img src="${product[0]}" alt="${product[1]}"></td>
+                <td>${product[1]}</td>
+                <td>${product[2]}</td>
+              `;
+                tableBody.appendChild(row);
+            });
+        })
+        .catch(error => console.error('Error fetching data:', error));
+
+    // Fetch and render thống kê doanh số theo tháng
+    document.addEventListener('DOMContentLoaded', function () {
+        fetch('/api/thongke/theothang')
+            .then(response => response.json())
+            .then(data => {
+                const labels = data.map(item => item[0]);
+                const values = data.map(item => item[1]);
+
+                // Create the bar chart
+                const ctx = document.getElementById('salesChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Doanh Số',
+                            data: values,
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
             })
             .catch(error => console.error('Error fetching data:', error));
-  });
+    });
+
+    // Handle form submission for searching invoices
+    document.getElementById('searchForm').addEventListener('submit', function (event) {
+        event.preventDefault();
+        const startDate = document.getElementById('startDate').value;
+        const endDate = document.getElementById('endDate').value;
+
+        if (startDate && endDate) {
+            fetch(`/api/thongke/timkiem?startDate=${startDate}T00:00:00&endDate=${endDate}T23:59:59`)
+                .then(response => response.json())
+                .then(hoaDons => {
+                    let tableContent = "";
+                    hoaDons.forEach(hoaDon => {
+                        tableContent += `
+              <tr>
+                <td>${hoaDon.tenSanpham}</td>
+                <td>${hoaDon.tongSoLuong}</td>
+                <td>${hoaDon.ngay}</td>
+                <td>${hoaDon.kichCo.ten}</td>
+                    <td>${hoaDon.mauSac}</td>
+              </tr>
+            `;
+                    });
+                    document.getElementById('hoaDonTableBody').innerHTML = tableContent;
+                })
+                .catch(error => console.error('Error fetching data:', error));
+        }
+    });
 </script>
 </body>
 </html>

@@ -1,9 +1,6 @@
 package com.example.datn.dto;
 
 
-import com.example.datn.entity.KichCoEntity;
-import com.example.datn.entity.MauSacEntity;
-import com.example.datn.entity.SanPhamEntity;
 import lombok.*;
 
 import java.math.BigDecimal;
@@ -29,4 +26,6 @@ public class HoaDonChiTietDTO {
 
     private LocalDate updateDate;
 
+    public HoaDonChiTietDTO(UUID id, String tenSanPham, String ten, String tenKichCo, int soLuong, BigDecimal giaSanPham, BigDecimal thanhTien) {
+    }
 }

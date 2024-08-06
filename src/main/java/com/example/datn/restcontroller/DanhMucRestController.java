@@ -3,7 +3,9 @@ package com.example.datn.restcontroller;
 import com.example.datn.dto.DanhMucDTO;
 import com.example.datn.service.DanhMucService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -20,12 +22,4 @@ public class DanhMucRestController {
         return danhMucService.getAllDanhMuc();
     }
 
-    @PostMapping("/add")
-   public DanhMucDTO addDanhMuc(@RequestBody DanhMucDTO dto){
-        return danhMucService.addDanhMuc(dto);
-    }
-    @PutMapping("/update")
-    public DanhMucDTO updateDanhMuc(@RequestBody DanhMucDTO dto){
-        return danhMucService.upDateDanhMuc(dto);
-    }
 }

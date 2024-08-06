@@ -5,17 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="${_csrf.token}">
     <title>Invoice Generator</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-            crossorigin="anonymous"></script>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
+    <link href="https://cdn.datatables.net/1.10.24/css/dataTables.bootstrap4.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap4.min.js"></script>
+
     <link rel="stylesheet" href="/path/to/styles.css">
 </head>
 <body>
+<div th:replace="admin/common/header"></div>
 <div id="header">
     <h1>Invoice Generator</h1>
-    <form action="/hoaDon/create" method="post" th:action="@{/hoaDon/create}">
+    <form action="/create" method="post" th:action="@{/create}">
         <button type="submit" id="createInvoiceBtn" class="btn btn-success">Tạo hóa đơn</button>
     </form>
 </div>
@@ -23,6 +27,8 @@
     <span th:text="${errorMessage}"></span>
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
+
+
 <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
     <span th:text="${successMessage}"></span>
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -37,9 +43,8 @@
             <a class="nav-link" href="#" id="paidTab" onclick="showTab('paid')">Đã thanh toán</a>
         </li>
     </ul>
-
     <div id="unpaidInvoices" class="tab-content">
-        <table class="table table-bordered">
+        <table id="unpaidTable" class="table table-bordered">
             <thead class="thead-dark">
             <tr>
                 <th></th>
@@ -52,31 +57,29 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="hoaDon : ${danhSachHoaDon}">
+            <tr th:each="hoaDon : ${danhSachHoaDonChuaThanhToan}">
                 <td>
                     <button class="detailsButton btn btn-success" th:attr="data-hoaDonId=${hoaDon.id}">+</button>
                 </td>
                 <td th:text="${hoaDon.id}"></td>
                 <td th:text="${hoaDon.createDate}"></td>
                 <td th:text="${hoaDon.ngayThanhToan}"></td>
-<!--                <td th:text="${hoaDon.trangThai == 0 ? 'Chưa thanh toán' : 'Đã thanh toán'}"></td>-->
+                <td th:text="'Chưa thanh toán'"></td>
                 <td th:text="${hoaDon.tongTien}"></td>
-
                 <td>
-                    <form th:action="@{'/hoaDon/addToCart/' + ${hoaDon.id}}" method="get">
+                    <form th:action="@{'/addToCart/' + ${hoaDon.id}}" method="get">
                         <button type="submit" class="btn btn-success">Thêm vào hóa đơn</button>
                     </form>
-                    <form th:action="@{'/hoaDon/delete/' + ${hoaDon.id}}" method="post"
+                    <form th:action="@{'/delete/' + ${hoaDon.id}}" method="post"
                           onsubmit="return confirm('Bạn có chắc chắn muốn xóa hóa đơn này?');">
                         <button type="submit" class="btn btn-danger">Xóa</button>
                     </form>
-                    <form th:action="@{'/hoaDon/payment/'+ ${hoaDon.id}}" method="get">
+                    <form th:action="@{'/payment/'+ ${hoaDon.id}}" method="get">
                         <button type="submit" class="btn btn-primary">Thanh toán</button>
                     </form>
-
                 </td>
             </tr>
-            <tr th:each="hoaDon : ${danhSachHoaDon}" th:id="'details-' + ${hoaDon.id}"
+            <tr th:each="hoaDon : ${danhSachHoaDonChuaThanhToan}" th:id="'details-' + ${hoaDon.id}"
                 style="display:none;">
                 <td colspan="8">
                     <div>
@@ -104,7 +107,7 @@
     </div>
 
     <div id="paidInvoices" class="tab-content" style="display:none;">
-        <table class="table table-bordered">
+        <table id="paidTable" class="table table-bordered">
             <thead class="thead-dark">
             <tr>
                 <th></th>
@@ -117,30 +120,18 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="hoaDon : ${danhSachHoaDon}">
+            <tr th:each="hoaDon : ${danhSachHoaDonDaThanhToan}">
                 <td>
                     <button class="detailsButton btn btn-success" th:attr="data-hoaDonId=${hoaDon.id}">+</button>
                 </td>
                 <td th:text="${hoaDon.id}"></td>
                 <td th:text="${hoaDon.createDate}"></td>
                 <td th:text="${hoaDon.ngayThanhToan}"></td>
-<!--                <td th:text="${hoaDon.trangThai == 0 ? 'Chưa thanh toán' : 'Đã thanh toán'}"></td>-->
+                <td th:text="'Đã thanh toán'"></td>
                 <td th:text="${hoaDon.tongTien}"></td>
                 <td th:if="${hoaDon.user != null}" th:text="${hoaDon.user.ten + ' - ' + hoaDon.user.sdt}"></td>
-                <!--                <td>-->
-                <!--                    <form th:action="@{'/hoaDon/addToCart/' + ${hoaDon.id}}" method="get">-->
-                <!--                        <button type="submit" class="btn btn-success">Thêm vào hóa đơn</button>-->
-                <!--                    </form>-->
-<!--                <form th:action="@{'/hoaDon/delete/' + ${hoaDon.id}}" method="post"-->
-<!--                      onsubmit="return confirm('Bạn có chắc chắn muốn xóa hóa đơn này?');">-->
-<!--                    <button type="submit" class="btn btn-danger">Xóa</button>-->
-<!--                </form>-->
-                <!--                    <form th:action="@{'/hoaDon/payment/'+ ${hoaDon.id}}" method="get">-->
-                <!--                        <button type="submit" class="btn btn-primary">Thanh toán</button>-->
-                <!--                    </form>-->
-                <!--                </td>-->
             </tr>
-            <tr th:each="hoaDon : ${danhSachHoaDon}" th:id="'details-' + ${hoaDon.id}"
+            <tr th:each="hoaDon : ${danhSachHoaDonDaThanhToan}" th:id="'details-' + ${hoaDon.id}"
                 style="display:none;">
                 <td colspan="8">
                     <div>
@@ -167,12 +158,42 @@
         </table>
     </div>
 </div>
+<div id="updateProductDetailForm" style="display:none;">
+    <h3>Sửa sản phẩm chi tiết</h3>
+    <form id="updateProductForm" method="post" th:action="@{/updateProductDetail}">
+        <input type="hidden" name="hoaDonId" id="updateHoaDonId"/>
+        <input type="hidden" name="sanPhamChiTietId" id="updateSanPhamChiTietId"/>
 
-<!--<div id="createInvoiceForm" style="display: none;">-->
-<!--&lt;!&ndash;    <form id="invoiceForm" action="/hoaDon/create" method="post" th:action="@{/hoaDon/create}">&ndash;&gt;-->
-<!--&lt;!&ndash;        <button type="submit" class="btn btn-primary">Lưu hóa đơn</button>&ndash;&gt;-->
-<!--&lt;!&ndash;    </form>&ndash;&gt;-->
-<!--</div>-->
+        <div class="form-group">
+            <label for="tenSanPham">Tên:</label>
+            <input type="text" class="form-control" id="tenSanPham" name="tenSanPham" readonly/>
+        </div>
+
+        <div class="form-group">
+            <label for="updateKichCo">Kích cỡ:</label>
+<!--            <select class="form-control" id="updateKichCo" name="kichCo">-->
+<!--                <option value="">Chọn kích cỡ</option>-->
+<!--            </select>-->
+            <input type="text" class="form-control" id="updateKichCo" name="kichCo" readonly/>
+        </div>
+
+        <div class="form-group">
+            <label for="updateMauSac">Màu sắc:</label>
+            <input type="text" class="form-control" id="updateMauSac" name="mauSac" readonly/>
+<!--            <select class="form-control" id="updateMauSac" name="mauSac">-->
+<!--                <option value="">Chọn màu sắc</option>-->
+<!--            </select>-->
+        </div>
+
+        <div class="form-group">
+            <label for="updateSoLuong">Số lượng:</label>
+            <input type="number" class="form-control" id="updateSoLuong" name="soLuong" min="1" readonly/>
+        </div>
+
+        <button type="submit" class="btn btn-success">Cập nhật</button>
+        <button type="button" class="btn btn-secondary" onclick="hideUpdateProductForm()">Hủy</button>
+    </form>
+</div>
 
 <script th:inline="javascript">
     document.addEventListener('DOMContentLoaded', function () {
@@ -193,33 +214,11 @@
         });
 
     });
-    function layHoaDonTheoId(hoaDonId) {
-        fetch(`http://localhost:8080/hoaDon/trangThai/${hoaDonId}`)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                console.log('Invoice status:', data);
-                if (data === 1) {
-                    document.getElementById(`deleteButton-${hoaDonId}`).style.display = 'none';
-                } else {
-                    document.getElementById(`deleteButton-${hoaDonId}`).style.display = 'block';
-                }
-            })
-            .catch(error => {
-                console.error('Error fetching invoice status:', error);
-            });
-
-    }
-
 
     function handleFormSubmit(event, hoaDonId, button) {
         event.preventDefault();
 
-        const url = `/hoaDon/getDetails/${hoaDonId}`;
+        const url = `/getDetails/${hoaDonId}`;
         console.log(`Fetching details for invoice ID: ${hoaDonId}`);
         console.log('URL: ' + url);
 
@@ -240,6 +239,37 @@
             });
     }
 
+    function layHoaDonTheoId(hoaDonId) {
+        fetch(`http://localhost:8080/trangThai/${hoaDonId}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json(); // Xử lý JSON
+            })
+            .then(data => {
+                console.log('Invoice status:', data);
+                const trangThai = data.trangThai;
+
+                // Tìm tất cả các nút xóa liên quan đến hóa đơn này
+                const deleteButtons = document.querySelectorAll(`#productListBody-${hoaDonId} .btn-danger`);
+
+                deleteButtons.forEach(deleteButton => {
+                    if (trangThai === 'Đã Thanh Toán') {
+                        deleteButton.style.display = 'none'; // Ẩn nút nếu đã thanh toán
+                    } else if (trangThai === 'Chưa Thanh Toán') {
+                        deleteButton.style.display = 'block'; // Hiển thị nút nếu chưa thanh toán
+                    } else {
+                        console.error(`Unexpected status value: ${trangThai}`);
+                    }
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching invoice status:', error);
+            });
+    }
+
+
     function showDetails(hoaDonId, data, button) {
         const productListBody = document.getElementById(`productListBody-${hoaDonId}`);
         if (productListBody) {
@@ -247,59 +277,137 @@
             data.forEach(product => {
                 const newRow = document.createElement('tr');
                 newRow.innerHTML = `
-                    <td>${product.sanPham}</td>
-                    <td>${product.mauSac}</td>
-                    <td>${product.kichCo}</td>
-                    <td>${product.soLuong}</td>
-                    <td>${product.giaBan}</td>
-                    <td>${product.thanhTien}</td>
-                    <td>
-    <button type="button" id="deleteButton-${hoaDonId}" class="btn btn-danger" onclick="xoaChiTiet(event, '${hoaDonId}', '${product.sanPhamId}')">Xóa</button>
-</td>
-   <td>
-    <button type="button" id="updateSP-${hoaDonId}" class="btn btn-success" onclick="layThongTinSanPham(event, '${hoaDonId}', '${product.sanPhamId}')">Xóa</button>
-</td>
-  `;
+                <td>${product.sanPham}</td>
+                <td>${product.mauSac}</td>
+                <td>${product.kichCo}</td>
+                <td>${product.soLuong}</td>
+                <td>${product.giaBan}</td>
+                <td>${product.thanhTien}</td>
+                <td>
+                    <button type="button" id="deleteButton-${hoaDonId}-${product.sanPhamId}" class="btn btn-danger" onclick="xoaChiTiet(event, '${hoaDonId}', '${product.sanPhamId}')">Xóa</button>
+                </td>
+                <td>
+                    <button type="button" id="updateSP-${hoaDonId}-${product.sanPhamId}" class="btn btn-success" onclick="layThongTinSanPham(event, '${hoaDonId}', '${product.sanPhamId}')">Sửa</button>
+                </td>
+            `;
                 productListBody.appendChild(newRow);
             });
+            layHoaDonTheoId(hoaDonId);
+
             const detailsRow = document.getElementById(`details-${hoaDonId}`);
             if (detailsRow) {
                 detailsRow.style.display = 'table-row';
             }
             button.textContent = '-';
-            layHoaDonTheoId(hoaDonId);
         } else {
             console.error(`Không tìm thấy phần tử có id 'productListBody-${hoaDonId}'.`);
         }
     }
+    // function layThongTinSanPham(event, hoaDonId, sanPhamChiTietId) {
+    //     event.preventDefault();
+    //
+    //     const url = `/getProductDetail/${hoaDonId}/${sanPhamChiTietId}`;
+    //     console.log('Fetching product detail with URL:', url);
+    //
+    //     fetch(url)
+    //         .then(response => {
+    //             if (!response.ok) {
+    //                 throw new Error('Network response was not ok');
+    //             }
+    //             return response.json();
+    //         })
+    //         .then(data => {
+    //             console.log('Product detail:', data);
+    //             return fetch(`/getColorByShoeName/${encodeURIComponent(data.tenSanPham)}`)
+    //                 .then(response => {
+    //                     if (!response.ok) {
+    //                         throw new Error('Network response was not ok');
+    //                     }
+    //                     return response.json();
+    //                 })
+    //                 .then(colorData => {
+    //                     console.log('Color data:', colorData);
+    //                     const colorSelect = document.getElementById('updateMauSac');
+    //                     colorSelect.innerHTML = '<option value="">Chọn màu sắc</option>'; // Reset
+    //                     colorData.forEach(color => {
+    //                         const option = document.createElement('option');
+    //                         option.value = color;
+    //                         option.text = color;
+    //                         colorSelect.add(option);
+    //                     });
+    //                     colorSelect.value = data.mauSac;
+    //
+    //                     return fetch(`/getSizesByColor/${encodeURIComponent(data.mauSac)}/${encodeURIComponent(data.tenSanPham)}`)
+    //                         .then(response => {
+    //                             if (!response.ok) {
+    //                                 throw new Error('Network response was not ok');
+    //                             }
+    //                             return response.json();
+    //                         })
+    //                         .then(sizeData => {
+    //                             console.log('Size data:', sizeData);
+    //
+    //                             // Populate size select element
+    //                             const sizeSelect = document.getElementById('updateKichCo');
+    //                             sizeSelect.innerHTML = '<option value="">Chọn kích cỡ</option>';
+    //                             sizeData.forEach(size => {
+    //                                 const option = document.createElement('option');
+    //                                 option.value = size;
+    //                                 option.text = size;
+    //                                 sizeSelect.add(option);
+    //                             });
+    //                             sizeSelect.value = data.kichCo;
+    //
+    //                             // Populate other fields
+    //                             document.getElementById('updateSoLuong').value = data.soLuong || 0;
+    //                             document.getElementById('updateHoaDonId').value = hoaDonId;
+    //                             document.getElementById('updateSanPhamChiTietId').value = sanPhamChiTietId;
+    //                             document.getElementById('tenSanPham').value = data.tenSanPham;
+    //
+    //                             // Show the update form
+    //                             document.getElementById('updateProductDetailForm').style.display = 'block';
+    //                         });
+    //                 });
+    //         })
+    //         .catch(error => {
+    //             console.error('Error:', error);
+    //             alert('Đã xảy ra lỗi khi lấy thông tin sản phẩm.');
+    //         });
+    // }
+    function layThongTinSanPham(event, hoaDonId, sanPhamChiTietId) {
+        event.preventDefault();
 
-    function layThongTinSanPham(sanPhamId) {
-        const url = `http://localhost:8080/hoaDon/update/${hoaDonId}/${sanPhamId}`;
-        console.log('URL truyền vào:', url); // Log ra URL truyền vào
+        const url = `/getProductDetail/${hoaDonId}/${sanPhamChiTietId}`;
+        console.log('Fetching product detail with URL:', url);
 
-        fetch(url, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        })
+        fetch(url)
             .then(response => {
                 if (!response.ok) {
-                    throw new Error('Lấy thông tin sản phẩm không thành công');
+                    throw new Error('Network response was not ok');
                 }
                 return response.json();
             })
-            .then(sanPham => {
-                // Đã nhận được thông tin sản phẩm, bạn có thể sử dụng dữ liệu này để hiển thị form sửa sản phẩm hoặc thực hiện các xử lý khác
-                console.log('Thông tin sản phẩm mới:', sanPham);
-                // Hiển thị form sửa sản phẩm hoặc thực hiện các xử lý khác
+            .then(data => {
+                console.log('Product detail:', data);
+                document.getElementById('tenSanPham').value = data.tenSanPham || 'N/A';
+                document.getElementById('updateMauSac').value = data.mauSac || 'N/A';
+                document.getElementById('updateKichCo').value = data.kichCo || 'N/A';
+                document.getElementById('updateSoLuong').value = data.soLuong || 0;
+                document.getElementById('updateHoaDonId').value = hoaDonId;
+                document.getElementById('updateSanPhamChiTietId').value = sanPhamChiTietId;
+
+                // Show the update form
+                document.getElementById('updateProductDetailForm').style.display = 'block';
             })
             .catch(error => {
-                console.error('Lỗi:', error);
-                alert('Đã xảy ra lỗi khi lấy thông tin sản phẩm');
+                console.error('Error:', error);
+                alert('Đã xảy ra lỗi khi lấy thông tin sản phẩm.');
             });
     }
 
+    function hideUpdateProductForm() {
+        document.getElementById('updateProductDetailForm').style.display = 'none';
+    }
 
     function hideDetails(hoaDonId, button) {
         const detailsRow = document.getElementById(`details-${hoaDonId}`);
@@ -308,33 +416,12 @@
         }
         button.textContent = '+';
     }
-    // function layThongTinSanPham(tenSanPham) {
-    //     fetch(`//getThongTinSanPham?tenSanPham=${tenSanPham}`)
-    //         .then(response => {
-    //             if (!response.ok) {
-    //                 throw new Error('Network response was not ok');
-    //             }
-    //             return response.json();
-    //         })
-    //         .then(data => {
-    //             // Xử lý dữ liệu trả về và điền vào form sửa đổi thông tin sản phẩm
-    //             const mauSac = data.mauSac; // Giả sử mã màu sắc lấy từ database
-    //             const kichCo = data.kichCo; // Giả sử mã kích cỡ lấy từ database
-    //
-    //             // Điền giá trị vào các trường của form
-    //             document.getElementById('mauSac').value = mauSac;
-    //             document.getElementById('kichCo').value = kichCo;
-    //         })
-    //         .catch(error => {
-    //             console.error('Error fetching product information:', error);
-    //         });
-    // }
 
     async function xoaChiTiet(event, hoaDonId, sanPhamId) {
         event.preventDefault();
         const confirmation = confirm('Bạn có chắc chắn muốn xóa sản phẩm này khỏi hóa đơn chi tiết?');
         if (confirmation) {
-            const url = `/hoaDon/sanphamct/delete/${hoaDonId}/${sanPhamId}`;
+            const url = `/sanphamct/delete/${hoaDonId}/${sanPhamId}`;
             console.log(url);
             try {
                 const response = await fetch(url, {
@@ -388,7 +475,12 @@
         }
     }
 
-
+    var table = $('#data-table').DataTable({
+        pageLength: 5
+    });
+    $('#searchInput').on('keyup', function () {
+        table.search(this.value).draw();
+    });
 </script>
 <style>
     #header {

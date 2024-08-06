@@ -14,17 +14,20 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Entity
 @Table(name = "HoaDonChiTiet")
-@IdClass(HoaDonChiTietId.class)
 public class HoaDonChiTietEntity implements Serializable {
+    @EmbeddedId
+    private HoaDonChiTietPK id;
 
-    @Id
-    @ManyToOne
-    @JoinColumn(name = "hoaDon_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @MapsId("hoaDonId")
+    @JoinColumn(name = "hoa_don_id", referencedColumnName = "id")
     private HoaDonEntity hoaDon;
-    @Id
-    @ManyToOne
-    @JoinColumn(name = "sanPhamChitiet_id")
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @MapsId("sanPhamChiTietId")
+    @JoinColumn(name = "san_pham_chitiet_id", referencedColumnName = "id")
     private SanPhamChiTietEntity sanPhamChiTiet;
+
     @ManyToOne
     @JoinColumn(name  = "user_id")
     private UserEntity user;

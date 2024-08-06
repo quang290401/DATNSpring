@@ -22,7 +22,6 @@ public class TrangThaiHDEntity extends SuperEntity {
     private String ten;
     @Column(name = "trangThai", length = 120, nullable = false)
     private String trangThai;
-
     @JsonIgnore
     @OneToMany(mappedBy = "trangThaiHD")
     private List<HoaDonEntity> hoaDons = new ArrayList<HoaDonEntity>();

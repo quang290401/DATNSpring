@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Thống kê Hóa đơn</title>
+</head>
+<body>
+<h1>Thống kê Hóa đơn</h1>
+<form action="/hoadon/timkiem" method="get">
+  <label for="startDate">Từ ngày:</label>
+  <input type="date" id="startDate" name="startDate" required>
+  <label for="endDate">Đến ngày:</label>
+  <input type="date" id="endDate" name="endDate" required>
+  <button type="submit">Tìm kiếm</button>
+</form>
+</body>
+</html>

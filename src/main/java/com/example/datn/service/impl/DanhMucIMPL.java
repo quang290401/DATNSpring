@@ -8,10 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,29 +23,5 @@ public class DanhMucIMPL implements DanhMucService {
         return danhMucEntities.stream()
                 .map(entity -> modelMapper.map(entity, DanhMucDTO.class))
                 .collect(Collectors.toList());
-    }
-
-    @Override
-    public DanhMucDTO addDanhMuc(DanhMucDTO dto) {
-        DanhMucEntity danhMuc = DanhMucEntity.builder()
-                .tenDanhMuc(dto.getTenDanhMuc())
-                .build();
-        danhMuc.setCreateDate(LocalDate.now());
-        danhMuc.setUpdateDate(LocalDateTime.now());
-        danhMucRepository.save(danhMuc);
-
-        return modelMapper.map(danhMuc,DanhMucDTO.class);
-    }
-
-    @Override
-    public DanhMucDTO upDateDanhMuc(DanhMucDTO dto) {
-        Optional<DanhMucEntity> danhMuc = danhMucRepository.findById(dto.getId());
-        DanhMucEntity danhMuc1 = new DanhMucEntity();
-        danhMuc1.setId(danhMuc.get().getId());
-        danhMuc1.setTenDanhMuc(dto.getTenDanhMuc());
-        danhMuc1.setCreateDate(LocalDate.now());
-        danhMuc1.setUpdateDate(LocalDateTime.now());
-        danhMucRepository.save(danhMuc1);
-        return modelMapper.map(danhMuc1,DanhMucDTO.class);
     }
 }

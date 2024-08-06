@@ -4,7 +4,6 @@ import com.example.datn.entity.SanPhamChiTietEntity;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
@@ -20,16 +19,14 @@ public interface SanPhamChiTietRepository extends JpaRepository<SanPhamChiTietEn
     @Query("SELECT spct FROM SanPhamChiTietEntity spct LEFT JOIN spct.sanPham sp WHERE sp.tenSanPham LIKE %:nameProduct% OR :nameProduct IS NULL")
     Page<SanPhamChiTietEntity> findByProductName(@Param("nameProduct") String nameProduct, Pageable pageable);
     ;
-    @Query("SELECT s FROM SanPhamChiTietEntity s ORDER BY function('RAND')")
+    @Query("SELECT s FROM SanPhamChiTietEntity s ORDER BY s.createDate DESC")
     List<SanPhamChiTietEntity> findTop4SanPhamChiTiet(Pageable pageable);
-
     @Modifying
     @Transactional
     @Query("UPDATE SanPhamChiTietEntity sp SET sp.soLuong = sp.soLuong - :soLuong WHERE sp.id = :id")
     void updateSoLuong(UUID id, int soLuong);
-    @Query("SELECT spct FROM SanPhamChiTietEntity spct LEFT JOIN spct.sanPham sp WHERE sp.id = :idSp AND spct.trangThai = :trangThai")
-    Page<SanPhamChiTietEntity> findAllSpChiTietById(@Param("idSp") UUID idSp, @Param("trangThai") Integer trangThai, Pageable pageable);
-
+    @Query("SELECT spct FROM SanPhamChiTietEntity spct LEFT JOIN spct.sanPham sp WHERE sp.id = :idSp")
+    Page<SanPhamChiTietEntity> findAllSpChiTietByIdSp(@Param("idSp") UUID idSp, Pageable pageable);
 
 
 }

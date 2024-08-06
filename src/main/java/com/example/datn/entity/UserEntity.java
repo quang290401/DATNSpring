@@ -35,9 +35,9 @@ public class UserEntity extends SuperEntity{
     @Column(name = "ngaySinh", length = 30, nullable = true)
     private LocalDate ngaySinh;
     @Column(name = "gioiTinh", length = 10, nullable = true)
-    private int gioiTinh;
+    private Integer gioiTinh;
         @Column(name = "trangThai", length = 10, nullable = true)
-    private int trangThai;
+    private Integer trangThai;
     @ManyToOne
     @JoinColumn(name  = "vaiTro_id")
     private VaiTroEntity vaiTro;

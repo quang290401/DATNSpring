@@ -25,9 +25,5 @@ public class SuperDTO {
     protected void onUpdate() {
         this.modifyDate = LocalDate.now();
     }
-    @PreUpdate
-    protected void CreateUpdate() {
-        this.createDate = LocalDate.now();
-    }
 
 }

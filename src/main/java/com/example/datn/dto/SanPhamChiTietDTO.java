@@ -32,7 +32,6 @@ public class SanPhamChiTietDTO extends SuperDTO {
 
     private MauSacDTO mauSac;
 
-
     private KichCoDTO kichCo;
 
     private NSXDTO nsx;
@@ -44,7 +43,6 @@ public class SanPhamChiTietDTO extends SuperDTO {
     private DanhMucDTO danhMuc;
 
     private BaoHanhDTO baoHanh;
-    private int trangThai;
 
 
 }

@@ -5,6 +5,7 @@ import com.example.datn.entity.SanPhamChiTietPK;
 import com.example.datn.entity.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -29,4 +30,21 @@ public interface ChiTietSPRepository extends JpaRepository<SanPhamChiTietEntity,
             "JOIN KichCoEntity k ON s.kichCo.id = k.id " +
             "WHERE s.id = :sanPhamChiTietId")
     Map<String, Object> findByNameSP(@PathVariable("sanPhamId") UUID sanPhamChiTietId);
+
+    @Query("SELECT DISTINCT m.ten FROM SanPhamChiTietEntity sp " +
+            "JOIN sp.mauSac m " +
+            "WHERE sp.sanPham.tenSanPham = :tenSanPham")
+    List<String> findColorByShoeName(@Param("tenSanPham") String tenSanPham);
+
+    @Query("SELECT DISTINCT k.tenKichCo FROM SanPhamChiTietEntity spct " +
+            "JOIN spct.sanPham sp " +
+            "JOIN spct.kichCo k " +
+            "WHERE spct.sanPham.id = :sanPhamId " +
+            "AND spct.mauSac.id = :mauSacId")
+    List<String> findSizeByTenVaMauSac(@Param("sanPhamId") String sanPhamId, @Param("mauSacId") String mauSacId);
+
+    @Query("SELECT sp.soLuong FROM SanPhamChiTietEntity sp " +
+            "WHERE sp.kichCo.tenKichCo = :kichCo")
+    List<Integer> findQuantityBySize(@Param("kichCo") String kichCo);
+
 }

@@ -29,11 +29,7 @@ public class SuperEntity {
 
         @PreUpdate
         protected void onUpdate() {
-                this.updateDate = LocalDate.now().atStartOfDay();
-        }
-
-        protected void Createdate() {
-                this.createDate = LocalDate.now();
+            this.updateDate = LocalDateTime.now();
         }
 
     }

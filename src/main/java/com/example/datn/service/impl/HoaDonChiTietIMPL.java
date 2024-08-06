@@ -43,7 +43,7 @@ public class HoaDonChiTietIMPL implements HoaDonChiTietService {
         hoaDonEntity.setId(idHD);
         hoaDonEntity.setUser(user.get());
         hoaDonEntity.setVouCher(vouCher.get());
-        hoaDonEntity.setNgayThanhToan(LocalDate.from(LocalDateTime.now()));
+        hoaDonEntity.setNgayThanhToan(LocalDateTime.now());
         hoaDonEntity.setCreateDate(LocalDate.from(LocalDateTime.now()));
         hoaDonEntity.setTongTien(BigDecimal.valueOf(0));
         hoaDonEntity.setTrangThaiHD(hdEntity.get());

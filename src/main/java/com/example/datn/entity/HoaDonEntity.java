@@ -27,8 +27,8 @@ public class HoaDonEntity extends SuperEntity {
     private TrangThaiHDEntity trangThaiHD;
     @Column(name = "thanhTien", length = 20, nullable = false)
     private BigDecimal tongTien;
-    @Column(name = "ngayThanhToan", length = 120, nullable = false)
-    private LocalDate ngayThanhToan;
+    @Column(name = "ngayThanhToan", length = 120, nullable = true)
+    private LocalDateTime ngayThanhToan;
     @ManyToOne
     @JoinColumn(name  = "vouCher_id")
     private VouCherEntity vouCher;

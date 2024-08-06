@@ -5,7 +5,9 @@ import com.example.datn.dto.MauSacDTO;
 import com.example.datn.service.DanhMucService;
 import com.example.datn.service.MauSacService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -19,12 +21,5 @@ public class MauSacResController {
     public List<MauSacDTO> getAllMauSac() {
         return mauSacService.getAllMauSac();
     }
-    @PostMapping("/add")
-    public MauSacDTO addDanhMuc(@RequestBody MauSacDTO dto){
-        return mauSacService.addMauSac(dto);
-    }
-    @PutMapping("/update")
-    public MauSacDTO updateDanhMuc(@RequestBody MauSacDTO dto){
-        return mauSacService.updateMauSac(dto);
-    }
+
 }
