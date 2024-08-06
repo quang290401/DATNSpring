@@ -38,6 +38,8 @@ public class SanPhamChiTietEntity extends SuperEntity{
     private int gioiTinh;
     @Column(name = "moTa", length = 150, nullable = false)
     private String moTa;
+    @Column(name = "trangThai", length = 150, nullable = false)
+    private String trangThai;
 
     @ManyToOne
     @JoinColumn(name  = "sanpham_id")

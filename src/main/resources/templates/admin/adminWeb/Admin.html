@@ -23,6 +23,12 @@
             ace.settings.check('main-container', 'fixed')
         } catch (e) {
         }
+        const myModal = document.getElementById('myModal')
+        const myInput = document.getElementById('myInput')
+
+        myModal.addEventListener('shown.bs.modal', () => {
+            myInput.focus()
+        })
     </script>
     <!-- header -->
     <!-- Thay thế các đoạn mã này bằng thymeleaf block -->
@@ -166,6 +172,7 @@
                         <th scope="col">Hình Ảnh</th>
                         <th scope="col">Kích Cỡ</th>
                         <th scope="col">Nhà Sản Xuất</th>
+                        <th scope="col">Trạng Thái</th>
                         <th scope="col">Actions</th>
                     </tr>
                     </thead>
@@ -185,8 +192,9 @@
                             <td th:text="${sanPham.getHinhAnh().getTen().length() > 10 ? #strings.substring(sanPham.getHinhAnh().getTen(), 0, 10) : sanPham.getHinhAnh().getTen()}"></td>
                             <td th:text="${sanPham.getKichCo().getTenKichCo()}"></td>
                             <td th:text="${sanPham.getNsx().getTen()}"></td>
+                            <td th:text="${sanPham.getTrangThai() == true ? 'Còn hàng' : 'Hết hàng'}"></td>
                             <td>
-                                <a th:href="@{/chatlieu/detail/{id}(id=${chatLieu.id})}" class="btn btn-primary">Detail</a>
+<!--                                <a th:href="@{/admin/detail/{id}(id=${chiTiet.id})}" class="btn btn-primary">Detail</a>-->
                                 <form th:action="@{/admin/delete/{id}(id=${sanPham.id})}" method="post">
                                     <button type="submit" class="btn btn-danger">Delete</button>
                                 </form>
