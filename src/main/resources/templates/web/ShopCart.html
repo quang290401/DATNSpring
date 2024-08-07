@@ -170,6 +170,23 @@
        th:value="${session.user.ho + ' ' + session.user.tenDem + ' ' + session.user.ten}"/>
 
 <script>
+    function updateTotalAmount() {
+
+        // Lấy giá trị hiện tại từ các phần tử HTML
+        var totalAmount = parseFloat($('#totalAmount2').text().replace(/,/g, '')); // Loại bỏ dấu phẩy nếu có
+        var shippingCost = parseFloat($('#phiShipID').text().replace(/,/g, '')); // Loại bỏ dấu phẩy nếu có
+        var voucher = parseFloat($('#voucherID').text().replace(/,/g, '')) || 0; // Nếu không có voucher, mặc định là 0
+
+        // Tính toán tổng tiền mới
+        var updatedTotalAmount = totalAmount + shippingCost - voucher;
+
+        // Cập nhật tổng tiền trong bảng
+        $('#totalAmount3').text(updatedTotalAmount.toLocaleString('en').replace(/,/g, '')); // Định dạng số với dấu phân cách hàng nghìn
+    }
+
+    // Gọi hàm này sau khi cập nhật giá trị của phí ship hoặc voucher
+    updateTotalAmount();
+
     function showAlert() {
         var province = $('#displayAddress2').text();
         console.log('SS'+province)
@@ -187,15 +204,17 @@
                var  tongTienMoi = parseFloat($('#totalAmount2').text());
                 var updatedTotalAmount = tongTienMoi + shippingCost;
                 if ($('#shipCode').is(':checked')==false) {
-                    updatedTotalAmount = tongTienMoi - shippingCost;
+                    shippingCost ='0';
                 }
 
                 console.log('Phí vận chuyển: ' + shippingCost);
                 console.log('Tổng tiền thanh toán mới: ' + updatedTotalAmount);
 
                 // Cập nhật tổng tiền thanh toán với phí ship
-                $('#totalAmount2').text(updatedTotalAmount);
-                $('#totalAmountHidden').val(updatedTotalAmount); // Nếu cần lưu giá trị tổng tiền mới ở nơi nào đó
+                // $('#totalAmount2').text(updatedTotalAmount);
+                $('#phiShipID').text(Math.round(shippingCost)); // Làm tròn số
+                $('#totalAmountHidden').val(tongTienMoi); // Nếu cần lưu giá trị tổng tiền mới ở nơi nào đó
+                updateTotalAmount();
             },
             error: function(xhr) {
                 alert('Đã xảy ra lỗi trong quá trình tính toán phí vận chuyển. Vui lòng thử lại.');
@@ -333,15 +352,28 @@
                     // Thêm dòng hiển thị tổng tiền
                     $('#cart tbody').append(`
                         <tr>
-                            <td colspan="3" class="text-right"><strong>Tổng tiền:</strong></td>
+                            <td colspan="3" class="text-right"><strong>Tiền Giày:</strong></td>
                               <td colspan="2" class="text-center"><strong id="totalAmount">${totalAmount}</strong></td>
                         </tr>
+
                     `);
 
                     $('#cart2 tbody').append(`
                         <tr>
-                            <td colspan="3" class="text-right"><strong>Tổng tiền:</strong></td>
+                            <td colspan="3" class="text-right"><strong>Tiền Giày:</strong></td>
                                 <td colspan="2" class="text-center"><strong id="totalAmount2">${totalAmount}</strong></td>
+                        </tr>
+                         <tr>
+                            <td colspan="3" class="text-right"><strong>Phí Ship:</strong></td>
+                             <td colspan="2" class="text-center"><strong id="phiShipID"></strong></td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" class="text-right"><strong>Voucher:</strong></td>
+                              <td colspan="2" class="text-center"><strong id="voucherID"></strong></td>
+                        </tr>
+                         <tr>
+                            <td colspan="3" class="text-right"><strong>Tổng Tiền:</strong></td>
+                              <td colspan="2" class="text-center"><strong id="totalAmount3">${totalAmount}</strong></td>
                         </tr>
                     `);
 
@@ -390,7 +422,6 @@
 
         loadCart(); // Gọi hàm để tải giỏ hàng khi trang được tải
 
-        // Gọi API để lấy danh sách voucher
 
         $.ajax({
             url: '/api/voucher',
@@ -412,16 +443,19 @@
             var originalTotalAmount = parseFloat($('#cart2 tbody').find('strong').last().text().replace(/,/g, '')); // Lưu giá tiền gốc ban đầu
             var formattedOriginalTotalAmount = originalTotalAmount.toLocaleString('en'); // Định dạng giá trị ban đầu
             if (selectedOption === "") {
+                $('#shipCode').prop('checked', false);
                 loadCart();
+
             } else {
                 var selectedDiscount = $(this).find('option:selected').data('discount');
                 var newTotalAmount = originalTotalAmount - (originalTotalAmount * (selectedDiscount / 100));
                 var formattedAmount = parseFloat(newTotalAmount).toLocaleString('en');
-
+                $('#voucherID').text(originalTotalAmount * (selectedDiscount / 100));
                 formattedAmount = formattedAmount.replace(/,/g, '.').replace(/\./g, '');
 
-                $('#totalAmount').text(formattedAmount);
-                $('#totalAmount2').text(formattedAmount);// Cập nhật tổng tiền trong modal
+                // $('#totalAmount').text(formattedAmount);
+                // $('#totalAmount2').text(formattedAmount);// Cập nhật tổng tiền trong modal
+                updateTotalAmount();
             }
         });
         $('#updateAddressButton').click(function () {
@@ -448,6 +482,7 @@
                 success: function (response) {
                     alert('Địa chỉ cập nhật: ' + response.diaChi + ', ' + response.xa + ', ' + response.huyen + ', ' + response.tinh);
                     $('#displayAddress').text('Địa Chỉ: ' + response.tinh + ', ' + response.huyen + ', ' + response.xa + ', ' + response.diaChi);
+                   window.location.href='/cart/'+userId
                 },
                 error: function (xhr) {
                     alert('An error occurred while updating the address. Please try again.');
