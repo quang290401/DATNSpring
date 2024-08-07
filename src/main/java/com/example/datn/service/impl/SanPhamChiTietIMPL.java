@@ -54,7 +54,22 @@ public class SanPhamChiTietIMPL implements SanPhamChiTietService {
     }
 
     @Override
+<<<<<<< HEAD
     public Page<SanPhamChiTietDTO> getAllSanPhamChiTietBYidSP(UUID idSP, Integer totalPage, Integer totalItem) {
+=======
+    public Page<SanPhamChiTietDTO> getAllSanPhamChiTietBYidSP(UUID idSP, Integer totalPage,
+                                                              Integer totalItem, SanPhamCtFiterDTO fiterDTO) {
+        // Tạo Specification để lọc theo idSP
+        Specification<SanPhamChiTietEntity> specByIdSP = (root, query, criteriaBuilder) ->
+                criteriaBuilder.equal(root.get("sanPham").get("id"), idSP);
+
+
+        Specification<SanPhamChiTietEntity> specByFilter = SpectificationSpct.buildWhereCT(fiterDTO);
+
+        // Kết hợp các Specifications
+        Specification<SanPhamChiTietEntity> combinedSpec = Specification.where(specByIdSP).and(specByFilter);
+
+>>>>>>> 959c93d8fa64d01d9fd932c1da217db222cb3485
         Pageable pageable = PageRequest.of(totalPage, totalItem);
         Page<SanPhamChiTietEntity> entityPage = sanPhamChiTietRepository.findAllSpChiTietByIdSp(idSP, pageable);
 

@@ -30,15 +30,20 @@ public class UserEntity extends SuperEntity{
     private String ho;
     @Column(name = "sdt", length = 50, nullable = true)
     private String sdt;
-    @Column(name = "matKhau", length = 30, nullable = true)
+    @Column(name = "matKhau", length = 60, nullable = true)
     private String matKhau;
     @Column(name = "ngaySinh", length = 30, nullable = true)
     private LocalDate ngaySinh;
     @Column(name = "gioiTinh", length = 10, nullable = true)
     private Integer gioiTinh;
         @Column(name = "trangThai", length = 10, nullable = true)
+<<<<<<< HEAD
     private Integer trangThai;
     @ManyToOne
+=======
+    private int trangThai;
+    @ManyToOne(fetch = FetchType.LAZY)
+>>>>>>> 959c93d8fa64d01d9fd932c1da217db222cb3485
     @JoinColumn(name  = "vaiTro_id")
     private VaiTroEntity vaiTro;
     @ManyToOne

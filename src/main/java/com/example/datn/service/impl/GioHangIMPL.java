@@ -1,23 +1,22 @@
 package com.example.datn.service.impl;
 
 
-import com.example.datn.Repository.GioHangChiTietRepository;
+
 import com.example.datn.Repository.GioHangRepository;
 import com.example.datn.Repository.UsersRepository;
 import com.example.datn.dto.GioHangDTO;
-import com.example.datn.dto.SanPhamChiTietDTO;
+
 import com.example.datn.entity.GioHangEntity;
-import com.example.datn.entity.SanPhamChiTietEntity;
+
 import com.example.datn.entity.UserEntity;
 import com.example.datn.service.GioHangService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
+
 
 @Service
 @RequiredArgsConstructor
