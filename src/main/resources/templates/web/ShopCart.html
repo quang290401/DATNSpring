@@ -174,7 +174,7 @@
 
         // Lấy giá trị hiện tại từ các phần tử HTML
         var totalAmount = parseFloat($('#totalAmount2').text().replace(/,/g, '')); // Loại bỏ dấu phẩy nếu có
-        var shippingCost = parseFloat($('#phiShipID').text().replace(/,/g, '')); // Loại bỏ dấu phẩy nếu có
+        var shippingCost = parseFloat($('#phiShipID').text().replace(/,/g, ''))|| 0; // Loại bỏ dấu phẩy nếu có
         var voucher = parseFloat($('#voucherID').text().replace(/,/g, '')) || 0; // Nếu không có voucher, mặc định là 0
 
         // Tính toán tổng tiền mới
@@ -492,6 +492,8 @@
 
         $('#onlinePayment').change(function () {
             if ($(this).is(':checked')) {
+              $('#phiShipID').text('0')
+                updateTotalAmount();
                 $('#shipCode').prop('checked', false);
             }
         });
@@ -507,8 +509,8 @@
             var selectedVoucher = $('#voucherSelect').val();
             var paymentMethod = $('input[name="paymentMethod"]:checked').val();
             var customerName = $('#nameKhach').val();
-            var totalAmount = $('#totalAmount2').text(); // Sử dụng .text() thay vì .val()
-            console.log('Tiền mới :' + $('#totalAmount2').text())
+            var totalAmount = $('#totalAmount3').text(); // Sử dụng .text() thay vì .val()
+            console.log('Tiền mới :' + $('#totalAmount3').text())
 
             if (!selectedVoucher) {
                 alert('Vui lòng chọn một voucher.');

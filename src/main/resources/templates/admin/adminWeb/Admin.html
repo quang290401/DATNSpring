@@ -903,7 +903,10 @@
 
         $('#addButtonDanhMuc').click(function () {
             let tenDanhMuc = $('#DanhMucSufix').val();
-
+          if(tenDanhMuc ===''){
+              alert("bạn không để trống tên danh mục")
+              return;
+          }
             let DanhMucDTO = {
                 tenDanhMuc: tenDanhMuc
             };
@@ -928,6 +931,10 @@
         $('#updateButtonDanhMuc').click(function () {
             let tenDanhMuc = $('#DanhMucSufix').val();
             let idDM = $('#danhMucId').val();
+            if(tenDanhMuc ===''||idDM ===''){
+                alert("bạn không để trống tên danh mục")
+                return;
+            }
 
             let DanhMucDTO = {
                 id: idDM,
@@ -952,7 +959,10 @@
         });
         $('#addButtonMauSac').click(function () {
             let tenMauSac = $('#MauSacSufix').val();
-
+            if(tenMauSac ===''){
+                alert("bạn không để trống  màu sắc")
+                return;
+            }
             let DanhMucDTO = {
                 ten: tenMauSac
             };
@@ -974,9 +984,13 @@
             });
         });
         $('#updateButtonMauSac').click(function () {
+
             let tenMauSac = $('#MauSacSufix').val();
             let id = $('#MauSacId').val();
-
+            if(tenMauSac ===''||id ===''){
+                alert("bạn không để trống tên mau sắc")
+                return;
+            }
             let DanhMucDTO = {
                 id:id,
                 ten: tenMauSac
@@ -1000,7 +1014,10 @@
         });
         $('#addButtonChatLieu').click(function () {
             let tenChatLieu = $('#ChatLieuSufix').val();
-
+            if(tenChatLieu===''){
+                alert("Bạn không được để trống");
+                return
+            }
             let DanhMucDTO = {
                 ten: tenChatLieu
 
@@ -1024,7 +1041,10 @@
         $('#updateButtonChatLieu').click(function () {
             let tenChatLieu = $('#ChatLieuSufix').val();
             let id = $('#ChatLieuId').val();
-
+            if(tenChatLieu===''||id ===''){
+                alert("Bạn không được để trống");
+                return
+            }
             let DanhMucDTO = {
                 ten: tenChatLieu,
                 id: id
@@ -1049,7 +1069,10 @@
         $('#addButtonKichCo').click(function () {
             let tenKichCo = $('#KichCoSufix').val();
             let doDai = $('#DoDaiSufix').val();
-
+    if(tenKichCo ===''||doDai===''){
+        alert("Bạn không được để trống");
+        return
+    }
             let DanhMucDTO = {
                 tenKichCo: tenKichCo,
                 doDai: doDai
@@ -1075,7 +1098,10 @@
             let id = $('#KichCoId').val();
             let tenKichCo = $('#KichCoSufix').val();
             let doDai = $('#DoDaiSufix').val();
-
+            if(tenKichCo ===''||doDai===''|| id ===''){
+                alert("Bạn không được để trống");
+                return
+            }
             let DanhMucDTO = {
                 id: id,
                 tenKichCo: tenKichCo,
