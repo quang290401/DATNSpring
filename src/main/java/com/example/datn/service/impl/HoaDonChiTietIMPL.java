@@ -34,40 +34,57 @@ public class HoaDonChiTietIMPL implements HoaDonChiTietService {
 
     @Override
     @Transactional
-    public HoaDonCHiTietCrud addHoaDonCT(UUID idUser, UUID idVoucher, UUID idTrangThaiHD,BigDecimal tongtien) {
-        Optional<VouCherEntity> vouCher = vouCherRepository.findById(idVoucher);
-        Optional<UserEntity> user = usersRepository.findById(idUser);
-        Optional<TrangThaiHDEntity> hdEntity = trangThaiHDRepository.findById(idTrangThaiHD);
-        UUID idHD = UUID.randomUUID();
-        HoaDonEntity hoaDonEntity = new HoaDonEntity();
-        hoaDonEntity.setId(idHD);
-        hoaDonEntity.setUser(user.get());
-        hoaDonEntity.setVouCher(vouCher.get());
-        hoaDonEntity.setNgayThanhToan(LocalDate.from(LocalDateTime.now()));
-        hoaDonEntity.setCreateDate(LocalDate.from(LocalDateTime.now()));
-        hoaDonEntity.setTongTien(BigDecimal.valueOf(0));
-        hoaDonEntity.setTrangThaiHD(hdEntity.get());
-        hoaDonEntity = hoaDonRepository.save(hoaDonEntity);
-        GioHangEntity gioHangEntity = gioHangRepository.findByUserId(idUser);
-        List<GioHangChiTietEntity> gioHangChiTietEntities = gioHangChiTietRepository.findByGioHangId(gioHangEntity.getId());
-        hoaDonEntity.setTongTien(tongtien);
-        hoaDonEntity = hoaDonRepository.save(hoaDonEntity);
+    public HoaDonCHiTietCrud addHoaDonCT(UUID idUser, UUID idVoucher, UUID idTrangThaiHD, BigDecimal tongtien) {
+        try {
+            Optional<VouCherEntity> vouCher = vouCherRepository.findById(idVoucher);
+            Optional<UserEntity> user = usersRepository.findById(idUser);
+            Optional<TrangThaiHDEntity> hdEntity = trangThaiHDRepository.findById(idTrangThaiHD);
 
-        // Lưu chi tiết hóa đơn
-        for (GioHangChiTietEntity gioHang : gioHangChiTietEntities) {
-            HoaDonChiTietEntity hoaDonChiTietEntity = new HoaDonChiTietEntity();
-            hoaDonChiTietEntity.setSanPhamChiTiet(gioHang.getSanPhamChiTiet());
-            hoaDonChiTietEntity.setHoaDon(hoaDonEntity);
-            hoaDonChiTietEntity.setSoLuong(gioHang.getSoLuong());
-            BigDecimal thanhTien = gioHang.getSanPhamChiTiet().getGiaSanPham().multiply(BigDecimal.valueOf(gioHang.getSoLuong()));
-            hoaDonChiTietEntity.setThanhTien(thanhTien);
-            hoaDonChiTietEntity.setUser(user.get());
-            hoaDonChiTietRepository.save(hoaDonChiTietEntity);
-            gioHangChiTietRepository.deleteByIdGH(gioHangEntity.getId());
-            sanPhamChiTietRepository.updateSoLuong(gioHang.getSanPhamChiTiet().getId(), gioHang.getSoLuong());
+            if (!vouCher.isPresent() || !user.isPresent() || !hdEntity.isPresent()) {
+                throw new IllegalArgumentException("Voucher, User hoặc Trạng thái Hóa đơn không hợp lệ.");
+            }
+
+            UUID idHD = UUID.randomUUID();
+            HoaDonEntity hoaDonEntity = new HoaDonEntity();
+            hoaDonEntity.setId(idHD);
+            hoaDonEntity.setUser(user.get());
+            hoaDonEntity.setVouCher(vouCher.get());
+            hoaDonEntity.setNgayThanhToan(LocalDate.from(LocalDateTime.now()));
+            hoaDonEntity.setCreateDate(LocalDate.from(LocalDateTime.now()));
+            hoaDonEntity.setTongTien(BigDecimal.valueOf(0));
+            hoaDonEntity.setTrangThaiHD(hdEntity.get());
+            hoaDonEntity = hoaDonRepository.save(hoaDonEntity);
+            GioHangEntity gioHangEntity = gioHangRepository.findByUserId(idUser);
+            List<GioHangChiTietEntity> gioHangChiTietEntities = gioHangChiTietRepository.findByGioHangId(gioHangEntity.getId());
+            hoaDonEntity.setTongTien(tongtien);
+            hoaDonEntity = hoaDonRepository.save(hoaDonEntity);
+
+            // Lưu chi tiết hóa đơn
+            for (GioHangChiTietEntity gioHang : gioHangChiTietEntities) {
+                HoaDonChiTietEntity hoaDonChiTietEntity = new HoaDonChiTietEntity();
+                hoaDonChiTietEntity.setSanPhamChiTiet(gioHang.getSanPhamChiTiet());
+                hoaDonChiTietEntity.setHoaDon(hoaDonEntity);
+                hoaDonChiTietEntity.setSoLuong(gioHang.getSoLuong());
+                BigDecimal thanhTien = gioHang.getSanPhamChiTiet().getGiaSanPham().multiply(BigDecimal.valueOf(gioHang.getSoLuong()));
+                hoaDonChiTietEntity.setThanhTien(thanhTien);
+                hoaDonChiTietEntity.setUser(user.get());
+                hoaDonChiTietRepository.save(hoaDonChiTietEntity);
+                gioHangChiTietRepository.deleteByIdGH(gioHangEntity.getId());
+                sanPhamChiTietRepository.updateSoLuong(gioHang.getSanPhamChiTiet().getId(), gioHang.getSoLuong());
+            }
+
+            return modelMapper.map(hoaDonEntity, HoaDonCHiTietCrud.class);
+
+        } catch (IllegalArgumentException e) {
+            System.err.println("Dữ liệu đầu vào không hợp lệ: " + e.getMessage());
+            return null;
+        } catch (Exception e) {
+            System.err.println("Đã xảy ra lỗi trong quá trình xử lý hóa đơn: " + e.getMessage());
+            e.printStackTrace();
+            return null;
         }
-        return modelMapper.map(hoaDonEntity, HoaDonCHiTietCrud.class);
     }
+
 
 
     @Override

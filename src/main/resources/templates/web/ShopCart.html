@@ -123,7 +123,7 @@
                 </div>
                 <button type="button" id="updateAddressButton" class="btn btn-success mt-3">Cập nhật</button>
                 <h6 id="displayAddress">Địa Chỉ: </h6>
-                <input type="hidden" id="displayAddress2" >
+                <input type="hidden" id="displayAddress2">
             </div>
 
             <div class="modal-body">
@@ -149,11 +149,12 @@
                         <option value="">Chọn Voucher</option>
                     </select>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" onclick="showAlert()" id="shipCode" name="paymentMethod">
+                        <input class="form-check-input" type="checkbox" onclick="showAlert()" id="shipCode"
+                               name="paymentMethod">
                         <label class="form-check-label" for="shipCode">Ship Cod</label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox"  id="onlinePayment" name="paymentMethod" >
+                        <input class="form-check-input" type="checkbox" id="onlinePayment" name="paymentMethod">
                         <label class="form-check-label" for="onlinePayment">Thanh Toán Online</label>
                     </div>
                 </div>
@@ -174,7 +175,7 @@
 
         // Lấy giá trị hiện tại từ các phần tử HTML
         var totalAmount = parseFloat($('#totalAmount2').text().replace(/,/g, '')); // Loại bỏ dấu phẩy nếu có
-        var shippingCost = parseFloat($('#phiShipID').text().replace(/,/g, ''))|| 0; // Loại bỏ dấu phẩy nếu có
+        var shippingCost = parseFloat($('#phiShipID').text().replace(/,/g, '')) || 0; // Loại bỏ dấu phẩy nếu có
         var voucher = parseFloat($('#voucherID').text().replace(/,/g, '')) || 0; // Nếu không có voucher, mặc định là 0
 
         // Tính toán tổng tiền mới
@@ -189,7 +190,7 @@
 
     function showAlert() {
         var province = $('#displayAddress2').text();
-        console.log('SS'+province)
+        console.log('SS' + province)
 
 
         $.ajax({
@@ -199,12 +200,12 @@
                 province: province,
 
             },
-            success: function(response) {
+            success: function (response) {
                 var shippingCost = response.shippingCost;
-               var  tongTienMoi = parseFloat($('#totalAmount2').text());
+                var tongTienMoi = parseFloat($('#totalAmount2').text());
                 var updatedTotalAmount = tongTienMoi + shippingCost;
-                if ($('#shipCode').is(':checked')==false) {
-                    shippingCost ='0';
+                if ($('#shipCode').is(':checked') == false) {
+                    shippingCost = '0';
                 }
 
                 console.log('Phí vận chuyển: ' + shippingCost);
@@ -216,11 +217,12 @@
                 $('#totalAmountHidden').val(tongTienMoi); // Nếu cần lưu giá trị tổng tiền mới ở nơi nào đó
                 updateTotalAmount();
             },
-            error: function(xhr) {
+            error: function (xhr) {
                 alert('Đã xảy ra lỗi trong quá trình tính toán phí vận chuyển. Vui lòng thử lại.');
             }
         });
     }
+
     $(document).ready(function () {
         var userId = $('#userId').val();
 
@@ -482,7 +484,7 @@
                 success: function (response) {
                     alert('Địa chỉ cập nhật: ' + response.diaChi + ', ' + response.xa + ', ' + response.huyen + ', ' + response.tinh);
                     $('#displayAddress').text('Địa Chỉ: ' + response.tinh + ', ' + response.huyen + ', ' + response.xa + ', ' + response.diaChi);
-                   window.location.href='/cart/'+userId
+                    window.location.href = '/cart/' + userId
                 },
                 error: function (xhr) {
                     alert('An error occurred while updating the address. Please try again.');
@@ -492,7 +494,7 @@
 
         $('#onlinePayment').change(function () {
             if ($(this).is(':checked')) {
-              $('#phiShipID').text('0')
+                $('#phiShipID').text('0')
                 updateTotalAmount();
                 $('#shipCode').prop('checked', false);
             }
@@ -521,10 +523,16 @@
                 alert('Vui lòng chọn phương thức thanh toán.');
                 return;
             }
+            if (totalAmount === 0) {
+                alert('Vui lòng mua thêm sản phẩm vào giỏ hàng.');
+                return;
+            }
+
+
 
             if ($('#shipCode').is(':checked')) {
                 $.ajax({
-                    url: `/api/HDCT/` + userId + '/' + selectedVoucher + '/' + paymentMethod +'/'+totalAmount,
+                    url: `/api/HDCT/` + userId + '/' + selectedVoucher + '/' + paymentMethod + '/' + totalAmount,
                     type: 'POST',
                     data: {
                         paymentMethod: paymentMethod,
@@ -545,7 +553,7 @@
             if ($('#onlinePayment').is(':checked')) {
                 console.log('Online Payment selected');
                 $.ajax({
-                    url: `/api/HDCT/` + userId + '/' + selectedVoucher + '/' + paymentMethod+'/'+totalAmount,
+                    url: `/api/HDCT/` + userId + '/' + selectedVoucher + '/' + paymentMethod + '/' + totalAmount,
                     type: 'POST',
                     data: {
                         paymentMethod: paymentMethod,

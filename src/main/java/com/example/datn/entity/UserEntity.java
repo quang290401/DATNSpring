@@ -56,4 +56,5 @@ public class UserEntity extends SuperEntity{
 
     public void setDiaChi(String s) {
     }
+
 }
