@@ -513,6 +513,10 @@
             var customerName = $('#nameKhach').val();
             var totalAmount = $('#totalAmount3').text(); // Sử dụng .text() thay vì .val()
             console.log('Tiền mới :' + $('#totalAmount3').text())
+            if (totalAmount == 0) {
+                alert('Vui lòng mua thêm sản phẩm vào giỏ hàng.');
+                return;
+            }
 
             if (!selectedVoucher) {
                 alert('Vui lòng chọn một voucher.');
@@ -521,10 +525,6 @@
 
             if (!paymentMethod) {
                 alert('Vui lòng chọn phương thức thanh toán.');
-                return;
-            }
-            if (totalAmount === 0) {
-                alert('Vui lòng mua thêm sản phẩm vào giỏ hàng.');
                 return;
             }
 
@@ -539,6 +539,7 @@
                         totalAmount: totalAmount // Gửi tổng tiền thanh toán
 
                     },
+
                     success: function (response) {
                         console.log('Tiền mới lưu :' + totalAmount)
                         alert('Thanh toán thành công!');
@@ -551,6 +552,7 @@
             }
 
             if ($('#onlinePayment').is(':checked')) {
+
                 console.log('Online Payment selected');
                 $.ajax({
                     url: `/api/HDCT/` + userId + '/' + selectedVoucher + '/' + paymentMethod + '/' + totalAmount,
