@@ -10,7 +10,7 @@
 <body>
 
 <div th:replace="admin/common/Header.html"></div>
-<button type="button" class="btn btn-success" onclick="window.location.href = 'http://localhost:8080/hoaDon/getAll';">Danh sách hóa đơn </button>
+<button type="button" class="btn btn-success" onclick="window.location.href = 'http://localhost:8080/getAll';">Danh sách hóa đơn </button>
 <div class="container mt-2"></div>
 <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
     <span th:text="${errorMessage}"></span>
@@ -46,12 +46,12 @@
             <td th:text="${SanPham.soLuong}"></td>
             <td th:text="${SanPham.giaSanPham}"></td>
             <td>
-                <form th:action="@{'/hoaDon/addToCart/' + ${hoaDonId}}" method="post">
+                <form th:action="@{'/addToCart/'+ ${hoaDonId}}" method="post">
                     <input type="hidden" name="sanPhamChiTietId" th:value="${SanPham.id}">
                     <input type="number" name="quantity" id="quantity_${SanPham.id}" value="1" min="1" required>
-                </form>
                 <span id="quantity-error_${SanPham.id}" style="color: red; display: none;">Vui lòng nhập số lượng</span>
                     <button type="submit" class="btn btn-success">Thêm vào hóa đơn</button>
+                </form>
             </td>
         </tr>
         </tbody>

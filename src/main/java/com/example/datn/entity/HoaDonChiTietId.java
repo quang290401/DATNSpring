@@ -16,7 +16,7 @@ public class HoaDonChiTietId implements Serializable {
     private UUID hoaDon;
     private UUID sanPhamChiTiet;
 
-    // Override equals và hashCode để so sánh đối tượng GioHangChiTietId
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -23,4 +23,12 @@ public class VaiTroEntity extends SuperEntity {
     @JsonIgnore
     @OneToMany(mappedBy = "vaiTro")
     private List<UserEntity> users = new ArrayList<UserEntity>();
+
+    @Override
+    public String toString() {
+        return "VaiTroEntity{" +
+                "tenVaiTro='" + tenVaiTro + '\'' +
+                ", users=" + users +
+                '}';
+    }
 }

@@ -56,4 +56,23 @@ public class UserEntity extends SuperEntity{
 
     public void setDiaChi(String s) {
     }
+    @Override
+    public String toString() {
+        return "UserEntity{" +
+                "taiKhoan='" + taiKhoan + '\'' +
+                ", ten='" + ten + '\'' +
+                ", tenDem='" + tenDem + '\'' +
+                ", ho='" + ho + '\'' +
+                ", sdt='" + sdt + '\'' +
+                ", matKhau='" + matKhau + '\'' +
+                ", ngaySinh=" + ngaySinh +
+                ", gioiTinh=" + gioiTinh +
+                ", trangThai=" + trangThai +
+                ", vaiTro=" + vaiTro +
+                ", diaChi=" + diaChi +
+                ", gioHangs=" + gioHangs +
+                ", hoaDons=" + hoaDons +
+                ", hoaDonEntities=" + hoaDonEntities +
+                '}';
+    }
 }

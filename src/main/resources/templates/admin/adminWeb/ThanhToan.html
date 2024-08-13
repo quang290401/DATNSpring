@@ -4,10 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Checkout Form</title>
-  <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
         integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-  <!-- Custom CSS -->
   <style>
     body {
       padding: 20px;
@@ -60,6 +58,14 @@
     #qrCodeContainer {
       display: none;
     }
+
+    .form-control.error input {
+      border-color: red;
+    }
+
+    .form-control.success input {
+      border-color: green;
+    }
   </style>
 </head>
 <body>
@@ -76,24 +82,24 @@
     <div class="col-md-6">
       <!-- Display HoaDonEntity details -->
       <div class="invoice-details">
-        <p><strong>Hóa đơn ID:</strong> <span id="hoaDonIdSpan" th:text="${hoaDon.id}"></span></p>
+        <!--        <p><strong>Hóa đơn ID:</strong> <span id="hoaDonIdSpan" th:text="${hoaDon.id}"></span></p>-->
         <p><strong>Ngày Tạo:</strong> <span th:text="${hoaDon.createDate}"></span></p>
       </div>
-
-      <!-- Thông tin khách hàng -->
-      <form th:action="@{'/hoaDon/payment/'+ ${hoaDon.id}}" method="post" id="checkoutForm">
-        <!-- CSRF Token for Spring Security (if applicable) -->
+      <form th:action="@{'/payment/'+ ${hoaDon.id}}" method="post" id="checkoutForm">
         <input type="hidden" name="hoaDonId" th:value="${hoaDon.id}" />
 
-        <td>
+        <div class="form-group">
+          <label for="tenKhachHang"><strong>Tên khách hàng:</strong></label>
           <input type="text" class="form-control" id="tenKhachHang" name="tenKhachHang"
                  th:value="${hoaDon.user != null ? hoaDon.user.ten : ''}" placeholder="Tên khách hàng"/>
-        </td>
-        <td>
+          <small class="error-message"></small>
+        </div>
+        <div class="form-group">
+          <label for="sdt"><strong>Số điện thoại:</strong></label>
           <input type="text" class="form-control" id="sdt" name="sdt"
                  th:value="${hoaDon.user != null ? hoaDon.user.sdt : ''}" placeholder="Số điện thoại"/>
-        </td>
-
+          <small class="error-message"></small>
+        </div>
 
         <!-- Chi tiết sản phẩm -->
         <div class="table-responsive">
@@ -142,9 +148,7 @@
           <div id="qrCode"></div>
           <button type="button" class="btn btn-secondary" id="generateQrCodeBtn">Tạo Mã QR</button>
         </div>
-
-        <!-- Button submit -->
-        <button type="submit" class="btn btn-primary btn-submit">Thanh toán</button>
+        <button type="submit" class="btn btn-primary btn-submit" disabled>Thanh toán</button>
       </form>
 
       <!-- Error and success messages -->
@@ -163,14 +167,73 @@
         integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8sh+EWlE/hb3EhsR/pAITtcQj6eGwYXpG2QNIq"
         crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<!--<script>-->
+<!--  function checkValidate() {-->
+<!--    let tenKhachHang = document.getElementById('tenKhachHang');-->
+<!--    let sdt = document.getElementById('sdt');-->
+
+<!--    let usernameValue = tenKhachHang.value.trim();-->
+<!--    let phoneValue = sdt.value.trim();-->
+
+<!--    let isCheck = true;-->
+
+<!--    // Kiểm tra trường tên khách hàng nếu có giá trị-->
+<!--    if (usernameValue !== '') {-->
+<!--      if (!isNaN(usernameValue) || usernameValue.includes(' ')) {-->
+<!--        // Kiểm tra xem tên có phải là số hoặc có khoảng cách-->
+<!--        setError(tenKhachHang, 'Tên khách hàng không được là số và không chứa khoảng cách');-->
+<!--        isCheck = false;-->
+<!--      } else {-->
+<!--        setSuccess(tenKhachHang);-->
+<!--      }-->
+<!--    }-->
+
+<!--    // Kiểm tra trường số điện thoại nếu có giá trị-->
+<!--    if (phoneValue !== '') {-->
+<!--      if (!isPhone(phoneValue)) {-->
+<!--        setError(sdt, 'Số điện thoại không đúng định dạng');-->
+<!--        isCheck = false;-->
+<!--      } else {-->
+<!--        setSuccess(sdt);-->
+<!--      }-->
+<!--    }-->
+
+<!--    return isCheck;-->
+<!--  }-->
+<!--  function isPhone(phone) {-->
+<!--    const phonePattern = /^\d{10,15}$/;-->
+<!--    return phonePattern.test(phone);-->
+<!--  }-->
+
+<!--  // Hàm thiết lập thông báo lỗi-->
+<!--  function setError(element, message) {-->
+<!--    let errorMessage = element.nextElementSibling;-->
+<!--    errorMessage.textContent = message;-->
+<!--    element.classList.add('is-invalid');-->
+<!--  }-->
+
+<!--  // Hàm thiết lập thông báo thành công-->
+<!--  function setSuccess(element) {-->
+<!--    let errorMessage = element.nextElementSibling;-->
+<!--    errorMessage.textContent = '';-->
+<!--    element.classList.remove('is-invalid');-->
+<!--  }-->
+
+<!--</script>-->
+
 <script>
+  let isQrGenerated = false;
   $(document).ready(function() {
+    let isQrGenerated = false;
     var tongTien = parseInt($('#tongTienSpan').text());
     var hoaDonId = $('#hoaDonIdSpan').text().trim();
 
-    $('#tienKhachDua').on('input', function() {
-      var tienKhachDua = parseInt($(this).val());
+    function updateMoneyReturn() {
+      var tienKhachDuaStr = $('#tienKhachDua').val().replace(/\./g, '');
+      var tienKhachDua = parseInt(tienKhachDuaStr);
+
       var moneyReturnHelp = $('#moneyReturnHelp');
+      var submitButton = $('.btn-submit');
 
       if (!isNaN(tienKhachDua)) {
         var tienTraLai = tienKhachDua - tongTien;
@@ -178,15 +241,25 @@
         if (tienTraLai >= 0) {
           moneyReturnHelp.text('Tiền trả lại: ' + tienTraLai.toLocaleString('vi-VN') + ' VND');
           moneyReturnHelp.removeClass('money-return-red');
+          submitButton.removeAttr('disabled'); // Kích hoạt nút thanh toán khi tiền đủ
         } else {
           moneyReturnHelp.text('Khách chưa đưa đủ tiền.');
           moneyReturnHelp.addClass('money-return-red');
+          submitButton.attr('disabled', true); // Vô hiệu hóa nút thanh toán khi tiền không đủ
         }
+      } else {
+        moneyReturnHelp.text('');
+        submitButton.attr('disabled', true); // Vô hiệu hóa nút thanh toán nếu không có giá trị nhập
       }
+    }
+
+    $('#tienKhachDua').on('input', function() {
+      updateMoneyReturn();
     });
 
     $('#tienKhachDua').on('blur', function() {
-      var tienKhachDua = parseInt($(this).val().replace(/\./g, ''));
+      var tienKhachDuaStr = $(this).val().replace(/\./g, '');
+      var tienKhachDua = parseInt(tienKhachDuaStr);
       if (!isNaN(tienKhachDua)) {
         $(this).val(tienKhachDua.toLocaleString('vi-VN'));
       }
@@ -198,10 +271,14 @@
         $('#moneyPayment').show();
         $('#tienKhachDua').attr('required', true);
         $('#qrCodeContainer').hide();
+        isQrGenerated = true; // No QR code needed for cash payment
+        $('.btn-submit').removeAttr('disabled');
       } else if (selectedMethod === 'chuyenKhoan') {
         $('#moneyPayment').hide();
         $('#tienKhachDua').removeAttr('required');
         $('#qrCodeContainer').show();
+        isQrGenerated = false; // Require QR code generation for bank transfer
+        $('.btn-submit').attr('disabled', true);
       }
     });
 
@@ -217,7 +294,6 @@
           "addInfo": "Thanh toan " + hoaDonId,
           "template": "compact"
         };
-        console.log(requestData);
 
         $.ajax({
           url: 'https://api.vietqr.io/v2/generate',
@@ -232,6 +308,8 @@
             if (response && response.data.qrDataURL) {
               $('#qrCode').html('<img src="' + response.data.qrDataURL + '" alt="QR Code" />');
               $('#qrCodeContainer').show();
+              isQrGenerated = true;
+              $('.btn-submit').removeAttr('disabled');
             } else {
               console.error('Error: No QR Code received.');
             }
@@ -245,9 +323,18 @@
       }
     });
 
+    $('#checkoutForm').on('submit', function(event) {
+      var selectedMethod = $('input[name="paymentMethod"]:checked').val();
+      if (selectedMethod === 'chuyenKhoan' && !isQrGenerated) {
+        alert('Vui lòng tạo mã QR trước khi thanh toán.');
+        event.preventDefault(); // Ngăn chặn form submit nếu chưa tạo mã QR
+      }
+    });
+
     // Trigger change event to set initial state
     $('input[name="paymentMethod"]:checked').trigger('change');
   });
 </script>
+
 </body>
 </html>

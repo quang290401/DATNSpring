@@ -75,7 +75,7 @@ public class DanhMucController {
             return "admin/adminWeb/DanhMucDetail"; //
         } else {
             model.addAttribute("errorMessage", "Material not found.");
-            return "admin/adminWeb/DanhMuc";// Hoặc trả về trang danh sách nếu không tìm thấy đối tượng
+            return "admin/adminWeb/DanhMuc";
         }
     }
     @PostMapping("/danhmuc/update/{id}")

@@ -96,7 +96,6 @@ public class KichCoController {
             if (existingkichCo == null) {
                 return "redirect:/kichco/getAll";
             }
-
             // Cập nhật thông tin chất liệu
             existingkichCo.setTenKichCo(updateKichCo.getTenKichCo());
             existingkichCo.setDoDai(updateKichCo.getDoDai());
