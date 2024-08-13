@@ -56,6 +56,7 @@ public class UserEntity extends SuperEntity{
 
     public void setDiaChi(String s) {
     }
+<<<<<<< HEAD
     @Override
     public String toString() {
         return "UserEntity{" +
@@ -75,4 +76,7 @@ public class UserEntity extends SuperEntity{
                 ", hoaDonEntities=" + hoaDonEntities +
                 '}';
     }
+=======
+
+>>>>>>> adeb39e60f40216200ef9c385ae7b9c3582265e1
 }
