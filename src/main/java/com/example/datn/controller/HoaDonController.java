@@ -838,6 +838,7 @@ public String createHoaDon(@ModelAttribute("hoaDon") HoaDonEntity hoaDon, Redire
                     userEntity.setTaiKhoan("");
                     userEntity.setHo("");
                     userEntity.setTenDem("");
+                    userEntity.setNgaySinh(LocalDate.parse("2024-01-01"));
                     userEntity.setTen(tenKhachHang);
                     userEntity.setSdt(sdt);
                     userEntity.setGioiTinh(1);
