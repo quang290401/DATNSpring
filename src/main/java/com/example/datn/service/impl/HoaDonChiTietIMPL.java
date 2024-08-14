@@ -104,5 +104,23 @@ public class HoaDonChiTietIMPL implements HoaDonChiTietService {
                 .map(entity -> modelMapper.map(entity, HoaDonDTO.class))
                 .collect( Collectors.toList());
     }
+    @Override
+    public List<HoaDonDTO> getAllHoaDonByIdUserHuy(UUID idUser) {
+        Optional<UserEntity> user =  usersRepository.findById(idUser);
+        List<HoaDonEntity> entityList = hoaDonRepository.findByHoaByIdUserHuy(user.get().getId());
+        return entityList.stream()
+                .map(entity -> modelMapper.map(entity, HoaDonDTO.class))
+                .collect( Collectors.toList());
+    }
+
+    @Override
+    @Transactional
+    public void updateTrangThaiHD(UUID idTrangThaiHD) {
+        List<HoaDonChiTietEntity> hoaDonChiTietEntity =  hoaDonChiTietRepository.findByHoaDonChiTietByIdHoaDon(idTrangThaiHD);
+         hoaDonRepository.updateTrangThaiHd(idTrangThaiHD);
+         for (HoaDonChiTietEntity hd :hoaDonChiTietEntity){
+            sanPhamChiTietRepository.updateSoLuongCong(hd.getSanPhamChiTiet().getId(),hd.getSoLuong());
+         }
+    }
 
 }

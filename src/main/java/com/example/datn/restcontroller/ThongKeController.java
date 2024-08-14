@@ -16,10 +16,10 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-    @RequestMapping("/api/thongke")
-    public class ThongKeController {
-        @Autowired
-        private SanPhamRepository sanPhamRepository;
+@RequestMapping("/api/thongke")
+public class ThongKeController {
+    @Autowired
+    private SanPhamRepository sanPhamRepository;
 
     @GetMapping("/theothang")
     public List<Object[]> thongKeTheoThang() {

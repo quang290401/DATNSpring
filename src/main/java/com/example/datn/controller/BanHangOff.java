@@ -6,6 +6,10 @@ import com.example.datn.entity.ChatLieuEntity;
 import com.example.datn.entity.HoaDonEntity;
 import com.example.datn.entity.SanPhamChiTietEntity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -24,12 +28,16 @@ public class BanHangOff {
     private HoaDonRepository hoaDonRepository;
 
     @GetMapping("/BanHangOff")
-    public String DSSanPham(Model model) {
-        List<SanPhamChiTietEntity> sanPhamChiTiet = chiTietSPRepository.findAll();
-        model.addAttribute("sanPhamChiTiet", sanPhamChiTiet);
-        model.addAttribute("SanPham", new SanPhamChiTietEntity());
-        List<HoaDonEntity> danhSachHoaDon = hoaDonRepository.findAll();
-        model.addAttribute("danhSachHoaDon", danhSachHoaDon);
+    public String DSSanPham(@RequestParam(value = "page", defaultValue = "0") int page,
+                            @RequestParam(value = "size", defaultValue = "6") int size,
+                            Model model) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<SanPhamChiTietEntity> sanPhamChiTietPage = chiTietSPRepository.findAll(pageable);
+
+        model.addAttribute("sanPhamChiTiet", sanPhamChiTietPage.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", sanPhamChiTietPage.getTotalPages());
+
         return "/admin/adminWeb/BanHangOff";
     }
     @GetMapping("/thongke")

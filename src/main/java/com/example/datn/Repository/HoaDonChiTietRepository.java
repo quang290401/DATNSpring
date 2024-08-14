@@ -15,5 +15,8 @@ import java.util.UUID;
 @Repository
 public interface HoaDonChiTietRepository extends JpaRepository<HoaDonChiTietEntity, SanPhamChiTietEntity> {
     @Query("SELECT g FROM HoaDonChiTietEntity g WHERE g.hoaDon.id = :idHoaDon")
-    List<HoaDonChiTietEntity> findByHoaDonChiTietByIdHoaDon(@Param("idHoaDon") UUID idHoaDon);
+    List<HoaDonChiTietEntity>  findByHoaDonChiTietByIdHoaDon(@Param("idHoaDon") UUID idHoaDon);
+
+
+
 }
