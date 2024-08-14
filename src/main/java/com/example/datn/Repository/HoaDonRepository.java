@@ -13,8 +13,11 @@ import java.util.Map;
 import java.util.UUID;
 @Repository
 public interface HoaDonRepository extends JpaRepository<HoaDonEntity, UUID> {
-    @Query("SELECT g FROM HoaDonEntity g WHERE g.user.id = :userId ORDER BY g.createDate DESC")
+    @Query("SELECT g FROM HoaDonEntity g WHERE g.user.id = :userId AND g.trangThaiHD.trangThai IN ('1','2','3') ORDER BY g.createDate DESC")
     List<HoaDonEntity> findByHoaByIdUser(@Param("userId") UUID userId);
+    @Query("SELECT g FROM HoaDonEntity g WHERE g.user.id = :userId AND g.trangThaiHD.trangThai IN ('4') ORDER BY g.createDate DESC")
+    List<HoaDonEntity> findByHoaByIdUserHuy(@Param("userId") UUID userId);
+
     @Query("SELECT new com.example.datn.dto.TrangThaiHoaDonDTO(hd.id, tt.trangThai) " +
             "FROM HoaDonEntity hd " +
             "JOIN hd.trangThaiHD tt " +

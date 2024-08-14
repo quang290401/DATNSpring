@@ -1,6 +1,5 @@
 package com.example.datn.restcontroller;
 
-import com.example.datn.dto.GioHangChiTietDTO;
 import com.example.datn.dto.HoaDonCHiTietCrud;
 import com.example.datn.dto.HoaDonChiTietDTO;
 import com.example.datn.dto.HoaDonDTO;
@@ -31,4 +30,10 @@ public class HoaDonChiTietRestController {
     public List<HoaDonChiTietDTO> getALLHoaDonByIdHoaDon (@PathVariable UUID idHoaDon) {
         return hoaDonChiTietService.getALlHoaDonCTByIdHoaDon(idHoaDon);
     }
+    @GetMapping("/huy/{idHoaDon}")
+    public List<HoaDonDTO> getALLHoaDonByIdHoaDonHuy(@PathVariable UUID idHoaDon) {
+        return hoaDonChiTietService.getAllHoaDonByIdUserHuy(idHoaDon);
+    }
+
+
 }

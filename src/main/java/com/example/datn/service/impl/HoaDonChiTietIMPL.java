@@ -104,6 +104,14 @@ public class HoaDonChiTietIMPL implements HoaDonChiTietService {
                 .map(entity -> modelMapper.map(entity, HoaDonDTO.class))
                 .collect( Collectors.toList());
     }
+    @Override
+    public List<HoaDonDTO> getAllHoaDonByIdUserHuy(UUID idUser) {
+        Optional<UserEntity> user =  usersRepository.findById(idUser);
+        List<HoaDonEntity> entityList = hoaDonRepository.findByHoaByIdUserHuy(user.get().getId());
+        return entityList.stream()
+                .map(entity -> modelMapper.map(entity, HoaDonDTO.class))
+                .collect( Collectors.toList());
+    }
 
     @Override
     @Transactional

@@ -13,5 +13,6 @@ public interface HoaDonChiTietService {
    HoaDonCHiTietCrud addHoaDonCT(UUID idUser, UUID idVoucher, UUID idTrangThaiHD, BigDecimal tongTien);
    List<HoaDonChiTietDTO> getALlHoaDonCTByIdHoaDon(UUID hoaDon);
    List<HoaDonDTO> getAllHoaDonByIdUser(UUID idUser);
+   List<HoaDonDTO> getAllHoaDonByIdUserHuy(UUID idUser);
    void updateTrangThaiHD(UUID idTrangThaiHD);
 }
