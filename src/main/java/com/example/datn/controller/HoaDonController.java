@@ -836,9 +836,10 @@ public String createHoaDon(@ModelAttribute("hoaDon") HoaDonEntity hoaDon, Redire
                 if (userEntity == null) {
                     userEntity = new UserEntity();
                     userEntity.setTaiKhoan("");
-                    userEntity.setHo("");
-                    userEntity.setTenDem("");
+                    userEntity.setHo("/");
+                    userEntity.setTenDem("/");
                     userEntity.setTen(tenKhachHang);
+                    userEntity.setNgaySinh(LocalDate.now());
                     userEntity.setSdt(sdt);
                     userEntity.setGioiTinh(1);
                     userEntity.setTrangThai(1);

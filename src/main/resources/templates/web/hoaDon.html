@@ -99,6 +99,7 @@
                     <th>Trạng Thái</th>
                     <th>Tổng Tiền</th>
                     <th>Chọn</th>
+                    <th>Action</th>
                 </tr>
                 </thead>
                 <tbody id="invoice-list">
@@ -131,25 +132,25 @@
 </div>
 <div th:replace="web/common/foodter.html"></div>
 <script>
-    $(document).ready(function() {
+    $(document).ready(function () {
         var userId = $('#userId').val();  // Thay thế bằng userId thực tế của bạn
         $.ajax({
             type: 'GET',
             url: '/api/user/' + userId,
-            success: function(response) {
+            success: function (response) {
                 var user = response;
                 $('#userName').text(user.ho + ' ' + user.tenDem + ' ' + user.ten);
                 $('#userAddress').text(user.diaChi.tinh + ' ' + user.diaChi.huyen + ' ' + user.diaChi.xa + ' ' + user.diaChi.diaChi);
                 $('#userPhone').text(user.sdt);
             },
-            error: function(error) {
+            error: function (error) {
                 console.error('Error fetching user data:', error);
                 alert('Failed to fetch user data.');
             }
         });
     });
 
-    $(document).ready(function() {
+    $(document).ready(function () {
         var id = $('#user').val();
         console.log("User ID: " + id); // Kiểm tra giá trị của id
 
@@ -157,22 +158,50 @@
         $.ajax({
             url: '/api/HDCT/' + id,
             method: 'GET',
-            success: function(data) {
+            success: function (data) {
                 var invoiceList = $('#invoice-list');
                 invoiceList.empty();
 
-                data.forEach(function(item, index) {
+                data.forEach(function (item, index) {
                     var row = $('<tr></tr>');
                     row.append('<td>' + (index + 1) + '</td>');
                     row.append('<td>' + item.createDate + '</td>');
                     row.append('<td>' + item.trangThaiHD.ten + '</td>');
                     row.append('<td>' + item.tongTien + '</td>');
                     row.append('<td><input type="checkbox" class="invoice-checkbox" value="' + item.id + '"></td>');
+
+                    // Chỉ thêm nút hủy nếu trạng thái là 2 hoặc 3
+                    if (item.trangThaiHD.trangThai == 2 || item.trangThaiHD.trangThai == 3) {
+                        var cancelButton = $('<button class="btn btn-danger cancel-button" data-id="' + item.id + '">Hủy</button>');
+
+                        // Thêm sự kiện click cho nút hủy
+                        cancelButton.click(function () {
+                            var invoiceId = $(this).data('id');
+                            $.ajax({
+                                url: '/api/hd/' + invoiceId,
+                                method: 'PUT',
+                                success: function () {
+                                    alert('Hóa đơn đã được hủy thành công.');
+                                    // Làm mới lại danh sách hóa đơn sau khi hủy
+                                    location.reload();
+                                },
+                                error: function (error) {
+                                    console.error('Lỗi khi hủy hóa đơn', error);
+                                    alert('Có lỗi xảy ra khi hủy hóa đơn.');
+                                }
+                            });
+                        });
+
+                        row.append($('<td></td>').append(cancelButton));
+                    } else {
+                        row.append('<td></td>'); // Thêm ô trống nếu không có nút hủy
+                    }
+
                     invoiceList.append(row); // Thêm hàng vào invoiceList
                 });
 
                 // Thêm sự kiện thay đổi cho các checkbox
-                $('.invoice-checkbox').change(function() {
+                $('.invoice-checkbox').change(function () {
                     // Bỏ chọn tất cả các checkbox khác
                     $('.invoice-checkbox').not(this).prop('checked', false);
                     // Gọi API để lấy danh sách sản phẩm cho hóa đơn đã chọn
@@ -180,20 +209,22 @@
                     loadProducts(invoiceId);
                 });
             },
-            error: function(error) {
+            error: function (error) {
                 console.error('Lỗi khi gọi API', error);
             }
         });
+    });
 
-        function loadProducts(invoiceId) {
+
+    function loadProducts(invoiceId) {
             $.ajax({
                 url: '/api/HDCT/GetALL/' + invoiceId,
                 method: 'GET',
-                success: function(data) {
+                success: function (data) {
                     var productList = $('#product-list');
                     productList.empty();
 
-                    data.forEach(function(item) {
+                    data.forEach(function (item) {
                         var row = $('<tr></tr>');
                         row.append('<td><img src="' + item.sanPhamChiTiet.hinhAnh.duongDan + '" alt="Ảnh sản phẩm" style="width: 50px; height: 50px;"></td>');
                         row.append('<td>' + item.sanPhamChiTiet.sanPham.tenSanPham + '</td>');
@@ -203,12 +234,12 @@
                         productList.append(row); // Thêm hàng vào productList
                     });
                 },
-                error: function(error) {
+                error: function (error) {
                     console.error('Lỗi khi gọi API sản phẩm', error);
                 }
             });
         }
-    });
+
 </script>
 </body>
 </html>

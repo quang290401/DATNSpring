@@ -105,4 +105,14 @@ public class HoaDonChiTietIMPL implements HoaDonChiTietService {
                 .collect( Collectors.toList());
     }
 
+    @Override
+    @Transactional
+    public void updateTrangThaiHD(UUID idTrangThaiHD) {
+        List<HoaDonChiTietEntity> hoaDonChiTietEntity =  hoaDonChiTietRepository.findByHoaDonChiTietByIdHoaDon(idTrangThaiHD);
+         hoaDonRepository.updateTrangThaiHd(idTrangThaiHD);
+         for (HoaDonChiTietEntity hd :hoaDonChiTietEntity){
+            sanPhamChiTietRepository.updateSoLuongCong(hd.getSanPhamChiTiet().getId(),hd.getSoLuong());
+         }
+    }
+
 }

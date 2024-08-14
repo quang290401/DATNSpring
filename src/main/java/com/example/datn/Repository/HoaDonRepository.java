@@ -3,6 +3,7 @@ package com.example.datn.Repository;
 import com.example.datn.dto.TrangThaiHoaDonDTO;
 import com.example.datn.entity.HoaDonEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -23,6 +24,10 @@ public interface HoaDonRepository extends JpaRepository<HoaDonEntity, UUID> {
     List<HoaDonEntity> findHoaDonsByTrangThai();
     @Query("SELECT h FROM HoaDonEntity h JOIN h.trangThaiHD t WHERE t.trangThai =('4')")
     List<HoaDonEntity> findTTByHoaDon();
+    @Modifying
+    @Query("UPDATE HoaDonEntity h SET h.trangThaiHD = (SELECT t FROM TrangThaiHDEntity t WHERE t.trangThai = '4') WHERE h.id = :idHoaDon")
+    void updateTrangThaiHd(@Param("idHoaDon") UUID idHoaDon);
+
 
 
 //        @Query("SELECT hd.trangThaiHD.ten FROM HoaDonEntity hd WHERE hd.id = :hoaDonId")
