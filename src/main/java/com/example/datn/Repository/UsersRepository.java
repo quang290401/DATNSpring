@@ -8,5 +8,7 @@ import java.util.UUID;
 @Repository
 public interface UsersRepository extends JpaRepository<UserEntity, UUID> {
     Optional<UserEntity> findByTaiKhoan(String taiKhoan);
+    Optional<UserEntity> findBySdt(String sdt);
+
 
 }

@@ -50,6 +50,7 @@ public class GioHangChiTietIMPL implements GioHangChiTietService {
         }
         if (!checkStockAvailability(gioHangChiTietDTO.getSanPhamChiTiet(), gioHangChiTietDTO.getSoLuong())) {
             throw new IllegalArgumentException("Số lượng sản phẩm yêu cầu vượt quá số lượng tồn kho");
+
         }
         GioHangChiTietEntity gioHangChiTietEntity = GioHangChiTietEntity.builder()
                 .gioHang(gioHang.get())

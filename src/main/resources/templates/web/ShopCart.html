@@ -513,6 +513,11 @@
             var customerName = $('#nameKhach').val();
             var totalAmount = $('#totalAmount3').text(); // Sử dụng .text() thay vì .val()
             console.log('Tiền mới :' + $('#totalAmount3').text())
+            var province = $('#displayAddress2').text().trim();
+            if (province == '0' || province == '') {
+                alert('Vui lòng nhập địa chỉ trước khi thanh toán.');
+                return; // Ngăn việc mở modal thanh toán
+            }
             if (totalAmount == 0) {
                 alert('Vui lòng mua thêm sản phẩm vào giỏ hàng.');
                 return;
@@ -527,6 +532,10 @@
                 alert('Vui lòng chọn phương thức thanh toán.');
                 return;
             }
+
+
+            // Kiểm tra nếu địa chỉ chưa được cập nhật
+
 
 
 
@@ -546,7 +555,7 @@
                         loadCart();
                     },
                     error: function (xhr) {
-                        alert('Đã xảy ra lỗi trong quá trình thanh toán. Vui lòng thử lại.');
+                        alert('Đã xảy ra lỗi trong quá trình thanh toán. Sản Phẩm Đã Hết.');
                     }
                 });
             }
@@ -568,7 +577,7 @@
                         loadCart();
                     },
                     error: function (xhr) {
-                        alert('Đã xảy ra lỗi trong quá trình thanh toán. Vui lòng thử lại.');
+                        alert('Đã xảy ra lỗi trong quá trình thanh toán. Sản Phẩm Đã Hết.');
                     }
                 });
                 $.ajax({

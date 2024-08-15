@@ -13,7 +13,9 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -50,6 +52,16 @@ public class UserServiceIMPL implements UserService {
 
     @Override
     public UserCrud addUser(UserCrud userCrud) {
+        if (usersRepository.findByTaiKhoan(userCrud.getTaiKhoan()).isPresent()) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Tài khoản hoặc số điện thoại đã tồn tại");
+
+        }
+
+        // Kiểm tra số điện thoại đã tồn tại hay chưa
+        if (usersRepository.findBySdt(userCrud.getSdt()).isPresent()) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Tài khoản hoặc số điện thoại đã tồn tại");
+
+        }
         UUID idDiaChi =UUID.randomUUID();
         UUID idGioHang =UUID.randomUUID();
         DiaChiEntity diaChiEntity = new DiaChiEntity();
