@@ -1517,6 +1517,7 @@
                         $('#giaSanPham').val('');
                         $('#soLuong').val('');
                         $('#moTa').val('');
+                        $('#trongLuong').val('');
                         $('#active-product2').prop('checked', false);
                         $('#inactive-product2').prop('checked', false);
                     }
@@ -1614,6 +1615,12 @@
                 success: function (response) {
                     alert('Sản phẩm chi tiết đã được thêm thành công!');
                     loadProductCT($('#code-product').val());
+                    $('#giaSanPham').val('');
+                    $('#soLuong').val('');
+                    $('#moTa').val('');
+                    $('#trongLuong').val('');
+                    $('#active-product2').prop('checked', false);
+                    $('#inactive-product2').prop('checked', false);
                 },
                 error: function (xhr, status, error) {
                     alert('Có lỗi xảy ra: ' + xhr.responseText);
@@ -1647,6 +1654,12 @@
                 success: function (response) {
                     alert('Cập Nhật Thành công');
                     loadProductCT($('#code-product').val());
+                    $('#giaSanPham').val('');
+                    $('#soLuong').val('');
+                    $('#moTa').val('');
+                    $('#trongLuong').val('');
+                    $('#active-product2').prop('checked', false);
+                    $('#inactive-product2').prop('checked', false);
                 },
                 error: function (xhr, status, error) {
                     alert('Có lỗi xảy ra: ' + xhr.responseText);
