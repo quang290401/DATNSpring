@@ -6,6 +6,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class UsersController {
     @GetMapping("/quanly-user")
     public String home(){
-        return "admin/adminWeb/Users .html";
+        return "admin/adminWeb/Users";
     }
 }

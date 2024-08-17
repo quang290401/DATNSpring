@@ -4,8 +4,10 @@ import com.example.datn.Repository.DiaChiRepository;
 import com.example.datn.Repository.GioHangRepository;
 import com.example.datn.Repository.UsersRepository;
 import com.example.datn.Repository.VaiTroRepository;
+import com.example.datn.dto.SanPhamChiTietDTO;
 import com.example.datn.dto.UserCrud;
 import com.example.datn.dto.UserDTO;
+import com.example.datn.dto.UsersFiterDTO;
 import com.example.datn.entity.*;
 
 import com.example.datn.service.UserService;
@@ -13,14 +15,22 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -85,6 +95,7 @@ public class UserServiceIMPL implements UserService {
                 .tenDem(userCrud.getTenDem())
                 .ten(userCrud.getTen())
                 .sdt(userCrud.getSdt())
+                .trangThai(1)
                 .ngaySinh(userCrud.getNgaySinh())
                 .build();
         usersRepository.save(userEntity);
@@ -95,5 +106,23 @@ public class UserServiceIMPL implements UserService {
         gioHangEntity.setUser(userEntity);
         gioHangRepository.save(gioHangEntity);
         return  modelMapper.map(userEntity, UserCrud.class);
+    }
+
+    @Override
+    public Page<UserDTO> findAll(Integer totalPage, Integer totalItem, UsersFiterDTO form) {
+        Pageable pageable = PageRequest.of(totalPage, totalItem);
+        Specification<UserEntity> specification = SpectifileCationUser.buildWhereCT(form);
+        if (specification == null) {
+            List<UserDTO> emptyList = Collections.emptyList();
+            return new PageImpl<>(emptyList, pageable, 0);
+        }
+        // Sử dụng Specification trong phương thức findByProductName
+        Page<UserEntity> entityPage = usersRepository.findAll(specification, pageable);
+
+        List<UserDTO> dtos = entityPage.getContent().stream()
+                .map(entity -> modelMapper.map(entity, UserDTO.class))
+                .collect(Collectors.toList());
+
+        return new PageImpl<>(dtos, pageable, entityPage.getTotalElements());
     }
 }
