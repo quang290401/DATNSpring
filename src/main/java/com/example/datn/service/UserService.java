@@ -14,5 +14,7 @@ public interface UserService {
      UserDTO findByTaiKhoan(String taiKhoan);
      UserDTO findById(UUID id);
      UserCrud addUser(UserCrud userCrud);
+     void updateUserKhoa(UUID idUser);
+     void updateUserMo(UUID idUser);
     Page<UserDTO> findAll(Integer totalPage, Integer totalItem, UsersFiterDTO form);
 }

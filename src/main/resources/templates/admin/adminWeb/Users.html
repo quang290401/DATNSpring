@@ -74,6 +74,7 @@
         let currentPage = 0;
         let pageSize = 4;
         let keySearch = 1;
+
         $('#trangThai').on('change', function () {
             currentPage = 0;
             keySearch = $(this).val();
@@ -81,10 +82,10 @@
         });
 
         loadUsers(currentPage);
-        function loadUsers(pageNo){
+
+        function loadUsers(pageNo) {
             let url2 = `/api/user/all?pageNo=${pageNo}&pageSize=${pageSize}`;
             if (keySearch) {
-
                 url2 += `&trangThai=${keySearch}`;
             }
             $.ajax({
@@ -97,23 +98,63 @@
                     productTable.empty(); // Xóa các hàng hiện tại
                     $.each(products, function (index, product) {
                         let taiKhoan = product.taiKhoan == '' ? "Vãng Lai" : product.taiKhoan;
-                        let buttonHtml = taiKhoan !== "Vãng Lai" ? `<button class="btn btn-danger product-button" data-id="${product.id}">Khóa</button>` : '';
+                        let trangThai = product.trangThai == '1' ? "Đang Hoạt Động" : "Dừng Hoạt Động";
+                        let buttonHtml = taiKhoan !== "Vãng Lai"
+                            ? `<button class="btn btn-danger product-button-khoa" data-id="${product.id}">Khóa</button>
+                           <button class="btn btn-success product-button-mo" data-id="${product.id}">Mở</button>`
+                            : '';
                         let row = `<tr>
-                <td>${taiKhoan}</td>
-                <td>${product.sdt}</td>
-                <td>${product.createDate}</td>
-                <td>${buttonHtml}</td>
-            </tr>`;
+                        <td>${taiKhoan}</td>
+                        <td>${product.sdt}</td>
+                        <td>${product.createDate}</td>
+                        <td>${trangThai}</td>
+                        <td>${buttonHtml}</td>
+                    </tr>`;
                         productTable.append(row);
                     });
+
+                    // Gọi hàm thêm sự kiện click vào nút "Mở" và "Khóa"
+                    setupButtons();
                     setupPagination(response);
                 },
                 error: function (error) {
                     console.log('Error:', error);
                 }
             });
-
         }
+
+        function setupButtons() {
+            // Xử lý sự kiện click cho nút "Khóa"
+            $('.product-button-khoa').on('click', function () {
+                let idUser = $(this).data('id');
+                $.ajax({
+                    url: `/api/user/khoa/${idUser}`,
+                    type: 'PUT',
+                    success: function () {
+                        loadUsers(currentPage); // Tải lại danh sách sau khi cập nhật
+                    },
+                    error: function (error) {
+                        console.log('Error:', error);
+                    }
+                });
+            });
+
+            // Xử lý sự kiện click cho nút "Mở"
+            $('.product-button-mo').on('click', function () {
+                let idUser = $(this).data('id');
+                $.ajax({
+                    url: `/api/user/mo/${idUser}`,
+                    type: 'PUT',
+                    success: function () {
+                        loadUsers(currentPage); // Tải lại danh sách sau khi cập nhật
+                    },
+                    error: function (error) {
+                        console.log('Error:', error);
+                    }
+                });
+            });
+        }
+
         function setupPagination(response) {
             let totalPages = response.totalPages;
             let currentPage = response.number;
@@ -139,6 +180,6 @@
                 loadUsers(page);
             });
         }
-    })
+    });
 </script>
 </html>

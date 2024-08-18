@@ -11,6 +11,7 @@ import com.example.datn.dto.UsersFiterDTO;
 import com.example.datn.entity.*;
 
 import com.example.datn.service.UserService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,10 +41,12 @@ public class UserServiceIMPL implements UserService {
     private final GioHangRepository gioHangRepository;
     private final DiaChiRepository diaChiRepository;
     private final ModelMapper modelMapper;
+
     @Autowired
     public void CustomUserDetailsService(UsersRepository usersRepository) {
         this.usersRepository = usersRepository;
     }
+
     @Override
     public UserDTO findByTaiKhoan(String taiKhoan) {
         Optional<UserEntity> user = usersRepository.findByTaiKhoan(taiKhoan);
@@ -72,8 +75,8 @@ public class UserServiceIMPL implements UserService {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Tài khoản hoặc số điện thoại đã tồn tại");
 
         }
-        UUID idDiaChi =UUID.randomUUID();
-        UUID idGioHang =UUID.randomUUID();
+        UUID idDiaChi = UUID.randomUUID();
+        UUID idGioHang = UUID.randomUUID();
         DiaChiEntity diaChiEntity = new DiaChiEntity();
         diaChiEntity.setId(idDiaChi);
         diaChiEntity.setTinh("0");
@@ -105,7 +108,20 @@ public class UserServiceIMPL implements UserService {
         gioHangEntity.setUpdateDate(LocalDateTime.now());
         gioHangEntity.setUser(userEntity);
         gioHangRepository.save(gioHangEntity);
-        return  modelMapper.map(userEntity, UserCrud.class);
+        return modelMapper.map(userEntity, UserCrud.class);
+    }
+
+    @Override
+    @Transactional
+    public void updateUserKhoa(UUID idUser) {
+        usersRepository.updateUserKhoa(idUser);
+
+    }
+
+    @Override
+    @Transactional
+    public void updateUserMo(UUID idUser) {
+        usersRepository.updateUserMo(idUser);
     }
 
     @Override

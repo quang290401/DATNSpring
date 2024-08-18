@@ -32,4 +32,14 @@ public class UserRestController  {
 
         return userService.findAll(pageNo, pageSize,filterForm);
     }
+    @PutMapping("/mo/{idUser}")
+    public void UpdateUsermo(@PathVariable UUID idUser){
+        userService.updateUserMo(idUser);
+
+    }
+    @PutMapping("/khoa/{idUser}")
+    public void UpdateUserKhoa(@PathVariable UUID idUser){
+        userService.updateUserKhoa(idUser);
+
+    }
 }
