@@ -127,12 +127,22 @@ public class UserServiceIMPL implements UserService {
     @Override
     public Page<UserDTO> findAll(Integer totalPage, Integer totalItem, UsersFiterDTO form) {
         Pageable pageable = PageRequest.of(totalPage, totalItem);
+
+        // Xây dựng Specification với điều kiện từ form
         Specification<UserEntity> specification = SpectifileCationUser.buildWhereCT(form);
+
+        // Thêm điều kiện vai trò vào Specification nếu cần
         if (specification == null) {
-            List<UserDTO> emptyList = Collections.emptyList();
-            return new PageImpl<>(emptyList, pageable, 0);
+            specification = Specification.where((root, query, criteriaBuilder) ->
+                    criteriaBuilder.equal(root.get("vaiTro"), "User")
+            );
+        } else {
+            specification = specification.and((root, query, criteriaBuilder) ->
+                    criteriaBuilder.equal(root.get("vaiTro").get("tenVaiTro"), "USER")
+            );
         }
-        // Sử dụng Specification trong phương thức findByProductName
+
+        // Sử dụng Specification trong phương thức findAll
         Page<UserEntity> entityPage = usersRepository.findAll(specification, pageable);
 
         List<UserDTO> dtos = entityPage.getContent().stream()
@@ -141,4 +151,5 @@ public class UserServiceIMPL implements UserService {
 
         return new PageImpl<>(dtos, pageable, entityPage.getTotalElements());
     }
+
 }

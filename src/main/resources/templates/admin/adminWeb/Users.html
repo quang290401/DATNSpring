@@ -132,6 +132,7 @@
                     type: 'PUT',
                     success: function () {
                         loadUsers(currentPage); // Tải lại danh sách sau khi cập nhật
+                        alert(" Khóa Thành Công")
                     },
                     error: function (error) {
                         console.log('Error:', error);
@@ -147,6 +148,7 @@
                     type: 'PUT',
                     success: function () {
                         loadUsers(currentPage); // Tải lại danh sách sau khi cập nhật
+                        alert("Mờ Khóa Thành Công")
                     },
                     error: function (error) {
                         console.log('Error:', error);

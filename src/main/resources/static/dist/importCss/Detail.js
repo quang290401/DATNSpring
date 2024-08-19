@@ -96,7 +96,7 @@ $(document).ready(function () {
     // Kiểm tra giá trị của userId
     if (userId === null || userId === "" || userId === "null" || userId === undefined) {
         console.log('UserId is null, empty, undefined, or "null" string, redirecting to login page');
-        window.location.href = "http://localhost:8080/dang-nhap";
+        // window.location.href = "http://localhost:8080/dang-nhap";
         return;
     }
     // Tiếp tục nếu userId hợp lệ
