@@ -38,7 +38,7 @@ public class UserEntity extends SuperEntity{
     private int gioiTinh;
         @Column(name = "trangThai", length = 10, nullable = true)
     private int trangThai;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name  = "vaiTro_id")
     private VaiTroEntity vaiTro;
     @ManyToOne

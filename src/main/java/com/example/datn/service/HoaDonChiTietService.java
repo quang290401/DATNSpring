@@ -15,4 +15,5 @@ public interface HoaDonChiTietService {
    List<HoaDonDTO> getAllHoaDonByIdUser(UUID idUser);
    List<HoaDonDTO> getAllHoaDonByIdUserHuy(UUID idUser);
    void updateTrangThaiHD(UUID idTrangThaiHD);
+   boolean checkStockAvailability(UUID sanPhamChiTietId, int soLuongYeuCau);
 }

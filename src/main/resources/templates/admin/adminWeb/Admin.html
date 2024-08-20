@@ -594,7 +594,7 @@
         <i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
     </a>
 </div>
-<th:block th:replace="jsImport.html :: layout_import_js"/>
+
 </body>
 <script>
     $(document).ready(function () {
@@ -1517,6 +1517,7 @@
                         $('#giaSanPham').val('');
                         $('#soLuong').val('');
                         $('#moTa').val('');
+                        $('#trongLuong').val('');
                         $('#active-product2').prop('checked', false);
                         $('#inactive-product2').prop('checked', false);
                     }
@@ -1605,20 +1606,32 @@
                 moTa: $('#moTa').val(),
                 trangThai: $('#active-product2').is(':checked') ? 1 : 0
             };
+            if (!sanPhamChiTiet.giaSanPham || !sanPhamChiTiet.soLuong ||!sanPhamChiTiet.trongLuong
+                ||!sanPhamChiTiet.moTa) {
+                alert("Vui lòng điền đầy đủ thông tin Giá sản phẩm và Số lượng.");
+            }else {
+                $.ajax({
+                    url: '/api/SPCT',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(sanPhamChiTiet),
+                    success: function (response) {
+                        alert('Sản phẩm chi tiết đã được thêm thành công!');
+                        loadProductCT($('#code-product').val());
+                        $('#giaSanPham').val('');
+                        $('#soLuong').val('');
+                        $('#moTa').val('');
+                        $('#trongLuong').val('');
+                        $('#active-product2').prop('checked', false);
+                        $('#inactive-product2').prop('checked', false);
+                    },
+                    error: function (xhr, status, error) {
+                        alert('Có lỗi xảy ra: ' + xhr.responseText);
+                    }
+                });
+            }
 
-            $.ajax({
-                url: '/api/SPCT',
-                type: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify(sanPhamChiTiet),
-                success: function (response) {
-                    alert('Sản phẩm chi tiết đã được thêm thành công!');
-                    loadProductCT($('#code-product').val());
-                },
-                error: function (xhr, status, error) {
-                    alert('Có lỗi xảy ra: ' + xhr.responseText);
-                }
-            });
+
         });
 
         $('#updateButton').click(function () {
@@ -1638,20 +1651,32 @@
                 moTa: $('#moTa').val(),
                 trangThai: $('#active-product2').is(':checked') ? 1 : 0
             };
+            if (!sanPhamChiTiet.giaSanPham || !sanPhamChiTiet.soLuong ||!sanPhamChiTiet.trongLuong||!sanPhamChiTiet.id
+            ||!sanPhamChiTiet.moTa) {
+                alert("Vui lòng điền đầy đủ thông tin Giá sản phẩm và Số lượng.");
+            } else {
+                $.ajax({
+                    url: '/api/SPCT',
+                    type: 'PUT',
+                    contentType: 'application/json',
+                    data: JSON.stringify(sanPhamChiTiet),
+                    success: function (response) {
+                        alert('Cập Nhật Thành công');
+                        loadProductCT($('#code-product').val());
+                        $('#giaSanPham').val('');
+                        $('#soLuong').val('');
+                        $('#moTa').val('');
+                        $('#trongLuong').val('');
+                        $('#active-product2').prop('checked', false);
+                        $('#inactive-product2').prop('checked', false);
+                    },
+                    error: function (xhr, status, error) {
+                        alert('Có lỗi xảy ra: ' + xhr.responseText);
+                    }
+                });
+            }
 
-            $.ajax({
-                url: '/api/SPCT',
-                type: 'PUT',
-                contentType: 'application/json',
-                data: JSON.stringify(sanPhamChiTiet),
-                success: function (response) {
-                    alert('Cập Nhật Thành công');
-                    loadProductCT($('#code-product').val());
-                },
-                error: function (xhr, status, error) {
-                    alert('Có lỗi xảy ra: ' + xhr.responseText);
-                }
-            });
+
         });
 
         $('#thanhToanModal').on('hidden.bs.modal', function () {

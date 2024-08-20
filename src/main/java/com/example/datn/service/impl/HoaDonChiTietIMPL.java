@@ -4,6 +4,7 @@ import com.example.datn.Repository.*;
 import com.example.datn.dto.*;
 import com.example.datn.entity.*;
 import com.example.datn.service.HoaDonChiTietService;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -36,6 +37,7 @@ public class HoaDonChiTietIMPL implements HoaDonChiTietService {
     @Transactional
     public HoaDonCHiTietCrud addHoaDonCT(UUID idUser, UUID idVoucher, UUID idTrangThaiHD, BigDecimal tongtien) {
         try {
+            // Kiểm tra và lấy thông tin từ các repository
             Optional<VouCherEntity> vouCher = vouCherRepository.findById(idVoucher);
             Optional<UserEntity> user = usersRepository.findById(idUser);
             Optional<TrangThaiHDEntity> hdEntity = trangThaiHDRepository.findById(idTrangThaiHD);
@@ -44,6 +46,17 @@ public class HoaDonChiTietIMPL implements HoaDonChiTietService {
                 throw new IllegalArgumentException("Voucher, User hoặc Trạng thái Hóa đơn không hợp lệ.");
             }
 
+            GioHangEntity gioHangEntity = gioHangRepository.findByUserId(idUser);
+            List<GioHangChiTietEntity> gioHangChiTietEntities = gioHangChiTietRepository.findByGioHangId(gioHangEntity.getId());
+
+            // Kiểm tra trước xem có sản phẩm nào trong giỏ hàng vượt quá số lượng tồn kho không
+            for (GioHangChiTietEntity gioHang : gioHangChiTietEntities) {
+                if (!checkStockAvailability(gioHang.getSanPhamChiTiet().getId(), gioHang.getSoLuong())) {
+                    throw new IllegalArgumentException("Số lượng sản phẩm yêu cầu vượt quá số lượng tồn kho: ");
+                }
+            }
+
+            // Nếu tất cả sản phẩm đều đủ tồn kho, tiến hành tạo hóa đơn
             UUID idHD = UUID.randomUUID();
             HoaDonEntity hoaDonEntity = new HoaDonEntity();
             hoaDonEntity.setId(idHD);
@@ -51,15 +64,13 @@ public class HoaDonChiTietIMPL implements HoaDonChiTietService {
             hoaDonEntity.setVouCher(vouCher.get());
             hoaDonEntity.setNgayThanhToan(LocalDate.from(LocalDateTime.now()));
             hoaDonEntity.setCreateDate(LocalDate.from(LocalDateTime.now()));
-            hoaDonEntity.setTongTien(BigDecimal.valueOf(0));
+            hoaDonEntity.setTongTien(BigDecimal.valueOf(0));  // Ban đầu để tổng tiền là 0
             hoaDonEntity.setTrangThaiHD(hdEntity.get());
-            hoaDonEntity = hoaDonRepository.save(hoaDonEntity);
-            GioHangEntity gioHangEntity = gioHangRepository.findByUserId(idUser);
-            List<GioHangChiTietEntity> gioHangChiTietEntities = gioHangChiTietRepository.findByGioHangId(gioHangEntity.getId());
-            hoaDonEntity.setTongTien(tongtien);
+
+            // Lưu hóa đơn vào cơ sở dữ liệu
             hoaDonEntity = hoaDonRepository.save(hoaDonEntity);
 
-            // Lưu chi tiết hóa đơn
+            // Lưu chi tiết hóa đơn và cập nhật số lượng tồn kho
             for (GioHangChiTietEntity gioHang : gioHangChiTietEntities) {
                 HoaDonChiTietEntity hoaDonChiTietEntity = new HoaDonChiTietEntity();
                 hoaDonChiTietEntity.setSanPhamChiTiet(gioHang.getSanPhamChiTiet());
@@ -68,20 +79,31 @@ public class HoaDonChiTietIMPL implements HoaDonChiTietService {
                 BigDecimal thanhTien = gioHang.getSanPhamChiTiet().getGiaSanPham().multiply(BigDecimal.valueOf(gioHang.getSoLuong()));
                 hoaDonChiTietEntity.setThanhTien(thanhTien);
                 hoaDonChiTietEntity.setUser(user.get());
+
+                // Lưu chi tiết hóa đơn
                 hoaDonChiTietRepository.save(hoaDonChiTietEntity);
-                gioHangChiTietRepository.deleteByIdGH(gioHangEntity.getId());
+
+                // Cập nhật số lượng tồn kho sau khi lưu chi tiết hóa đơn
                 sanPhamChiTietRepository.updateSoLuong(gioHang.getSanPhamChiTiet().getId(), gioHang.getSoLuong());
+
+                // Xóa chi tiết giỏ hàng đã được xử lý
+                gioHangChiTietRepository.deleteByIdGH(gioHangEntity.getId());
             }
+
+            // Cập nhật tổng tiền cho hóa đơn sau khi đã thêm các chi tiết
+            hoaDonEntity.setTongTien(tongtien);
+            hoaDonEntity = hoaDonRepository.save(hoaDonEntity);
 
             return modelMapper.map(hoaDonEntity, HoaDonCHiTietCrud.class);
 
         } catch (IllegalArgumentException e) {
             System.err.println("Dữ liệu đầu vào không hợp lệ: " + e.getMessage());
-            return null;
+            throw e;
+
         } catch (Exception e) {
             System.err.println("Đã xảy ra lỗi trong quá trình xử lý hóa đơn: " + e.getMessage());
             e.printStackTrace();
-            return null;
+            throw e;
         }
     }
 
@@ -121,6 +143,15 @@ public class HoaDonChiTietIMPL implements HoaDonChiTietService {
          for (HoaDonChiTietEntity hd :hoaDonChiTietEntity){
             sanPhamChiTietRepository.updateSoLuongCong(hd.getSanPhamChiTiet().getId(),hd.getSoLuong());
          }
+    }
+
+    @Override
+    public boolean checkStockAvailability(UUID sanPhamChiTietId, int soLuongYeuCau) {
+        Optional<SanPhamChiTietEntity> sanPhamChiTiet = sanPhamChiTietRepository.findById(sanPhamChiTietId);
+        if (sanPhamChiTiet.isEmpty()) {
+            throw new EntityNotFoundException("Không tìm thấy sản phẩm chi tiết trong cơ sở dữ liệu");
+        }
+        return sanPhamChiTiet.get().getSoLuong() >= soLuongYeuCau;
     }
 
 }

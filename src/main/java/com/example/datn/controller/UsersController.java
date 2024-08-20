@@ -21,6 +21,6 @@ private final UserRepository userRepository;
 
     @GetMapping("/quanly-user")
     public String home(){
-        return "admin/adminWeb/Users .html";
+        return "admin/adminWeb/Users";
     }
 }

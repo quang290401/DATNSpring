@@ -30,39 +30,7 @@ public class LoginRestController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Sai Tài Khoản hoặc mật khẩu");
         }
     }
-//@PostMapping("/login")
-//public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest, HttpSession session) {
-//    try {
-//        // Xác thực người dùng
-//        Authentication authentication = authenticationManager.authenticate(
-//                new UsernamePasswordAuthenticationToken(
-//                        loginRequest.getTaiKhoan(),
-//                        loginRequest.getMatKhau()
-//                )
-//        );
-//
-//        // Đặt Authentication vào SecurityContext
-//        SecurityContextHolder.getContext().setAuthentication(authentication);
-//
-//        // Lấy thông tin người dùng
-//        UserDTO user = userService.findByTaiKhoan(loginRequest.getTaiKhoan());
-//
-//        // Đặt thông tin người dùng vào session
-//        session.setAttribute("user", user);
-//
-//        // Lấy vai trò người dùng
-//        String role = user.getVaiTro().getTenVaiTro();
-//
-//        // Trả về phản hồi đăng nhập thành công
-//        return ResponseEntity.ok(new LoginResponse("Logged in", "ROLE_" + role));
-//    } catch (BadCredentialsException e) {
-//        // Trả về phản hồi nếu thông tin đăng nhập không đúng
-//        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Sai Tài Khoản hoặc mật khẩu");
-//    } catch (Exception e) {
-//        // Trả về phản hồi nếu có lỗi khác
-//        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred");
-//    }
-//}
+
 
 
     @GetMapping("/logout")
