@@ -27,9 +27,12 @@ public interface HoaDonRepository extends JpaRepository<HoaDonEntity, UUID> {
     List<HoaDonEntity> findHoaDonsByTrangThai();
     @Query("SELECT h FROM HoaDonEntity h JOIN h.trangThaiHD t WHERE t.trangThai =('4')")
     List<HoaDonEntity> findTTByHoaDon();
+    @Query("SELECT h FROM HoaDonEntity h JOIN h.trangThaiHD t WHERE t.trangThai =('5')")
+    List<HoaDonEntity> findDangGiao();
     @Modifying
     @Query("UPDATE HoaDonEntity h SET h.trangThaiHD = (SELECT t FROM TrangThaiHDEntity t WHERE t.trangThai = '4') WHERE h.id = :idHoaDon")
     void updateTrangThaiHd(@Param("idHoaDon") UUID idHoaDon);
+
 
 
 

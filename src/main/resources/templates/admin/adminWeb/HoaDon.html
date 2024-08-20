@@ -41,15 +41,20 @@
             <a class="nav-link" href="#" id="hoaDonTab" onclick="showTab('hoaDonCho')">Hóa Đơn Chờ</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#" id="donHuyTab" onclick="showTab('hoaDonHuy')">Hóa Đơn Hủy</a>
+            <a class="nav-link" href="#" id="dangGiaoTab" onclick="showTab('hoaDonDangGiao')">Đang Giao Hàng</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="#" id="paidTab" onclick="showTab('paid')">Đã thanh toán</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#" id="donHuyTab" onclick="showTab('hoaDonHuy')">Hóa Đơn Hủy</a>
         </li>
         <!-- <li class="nav-item"> -->
         <!--     <a class="nav-link" href="#" id="hoaDonDangGiaoTab" onclick="showTab('hoaDonDangGiao')">Hóa Đơn Đang Giao</a> -->
         <!-- </li> -->
     </ul>
+
+<!--    hóa đơn chưa thanh toán-->
     <div id="unpaidInvoices" class="tab-content">
         <table id="unpaidTable" class="table table-bordered">
             <thead class="thead-dark">
@@ -86,6 +91,7 @@
                     </form>
                 </td>
             </tr>
+            <!-- Detail  hóa đơn chưa thanh toán -->
             <tr th:each="hoaDon : ${danhSachHoaDonChuaThanhToan}" th:id="'details-' + ${hoaDon.id}"
                 style="display:none;">
                 <td colspan="8">
@@ -112,7 +118,7 @@
             </tbody>
         </table>
     </div>
-
+<!--hóa đơn đã thanh toán-->
     <div id="paidInvoices" class="tab-content" style="display:none;">
         <table id="paidTable" class="table table-bordered">
             <thead class="thead-dark">
@@ -134,7 +140,7 @@
                 <td th:text="${hoaDon.id}"></td>
                 <td th:text="${hoaDon.createDate}"></td>
                 <td th:text="${hoaDon.ngayThanhToan}"></td>
-                <td th:text="'Đã thanh toán'"></td>
+                <td th:text="${hoaDon.getTrangThaiHD().ten}"></td>
                 <td th:text="${hoaDon.tongTien}"></td>
                 <td th:if="${hoaDon.user != null}" th:text="${hoaDon.user.ten + ' - ' + hoaDon.user.sdt}"></td>
             </tr>
@@ -142,6 +148,7 @@
                 style="display:none;">
                 <td colspan="8">
                     <div>
+                        <!-- Xem trong hóa đơn đã thanh toán có những sản phẩm gì-->
                         <h3>Chi tiết hóa đơn</h3>
                         <table class="table table-bordered">
                             <thead class="thead-dark">
@@ -167,6 +174,7 @@
 </div>
 
 
+<!--Hóa đơn đang chờ-->
 <div id="hoaDonCho" class="tab-content" style="display: none;">
     <table id="hoaDon" class="table table-bordered">
         <thead class="thead-dark">
@@ -192,16 +200,6 @@
             <td th:text="${hoaDon.tongTien}"></td>
             <td>
                 <a th:href="@{/hoadon/detail/{id}(id=${hoaDon.id})}" class="btn btn-primary">Detail</a>
-<!--                <form th:action="@{'/addToCart/' + ${hoaDon.id}}" method="get">-->
-<!--                    <button type="submit" class="btn btn-success">Thêm vào hóa đơn</button>-->
-<!--                </form>-->
-<!--                <form th:action="@{'/delete/' + ${hoaDon.id}}" method="post"-->
-<!--                      onsubmit="return confirm('Bạn có chắc chắn muốn xóa hóa đơn này?');">-->
-<!--                    <button type="submit" class="btn btn-danger">Xóa</button>-->
-<!--                </form>-->
-<!--                <form th:action="@{'/payment/'+ ${hoaDon.id}}" method="get">-->
-<!--                    <button type="submit" class="btn btn-primary">Thanh toán</button>-->
-<!--                </form>-->
             </td>
         </tr>
         <tr th:each="hoaDon : ${danhSachHoaDonCho}" th:id="'details-' + ${hoaDon.id}"
@@ -221,6 +219,7 @@
                             <th>Action</th>
                         </tr>
                         </thead>
+<!--                        hiện thị xem trong hóa đơn chờ có gì-->
                         <tbody th:attr="id='productListBody-' + ${hoaDon.id}">
                         </tbody>
                     </table>
@@ -232,8 +231,7 @@
 </div>
 
 
-
-
+<!--hóa đơn hủy-->
 <div id="hoaDonHuy" class="tab-content" style="display:none;">
     <table id="huyTable" class="table table-bordered">
         <thead class="thead-dark">
@@ -287,7 +285,73 @@
 </div>
 
 
+<!--hóa đơn đang giao-->
+<div id="hoaDonDangGiao" class="tab-content" style="display: none;">
+    <table id="hoaDonDG" class="table table-bordered">
+        <thead class="thead-dark">
+        <tr>
+            <th></th>
+            <th>Mã hóa đơn</th>
+            <th>Ngày tạo hóa đơn</th>
+            <th>Ngày Thanh Toán</th>
+            <th>Trạng thái</th>
+            <th>Tổng tiền</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="hoaDon : ${hdDangGiao}">
+            <td>
+                <button class="detailsButton btn btn-success" th:attr="data-hoaDonId=${hoaDon.id}">+</button>
+            </td>
+            <td th:text="${hoaDon.id}"></td>
+            <td th:text="${hoaDon.createDate}"></td>
+            <td th:text="${hoaDon.ngayThanhToan}"></td>
+            <td th:text="${hoaDon.getTrangThaiHD().ten}"></td>
+            <td th:text="${hoaDon.tongTien}"></td>
+            <td>
+                <a th:href="@{/hoadon/detail/{id}(id=${hoaDon.id})}" class="btn btn-primary">Detail</a>
+                <!--                <form th:action="@{'/addToCart/' + ${hoaDon.id}}" method="get">-->
+                <!--                    <button type="submit" class="btn btn-success">Thêm vào hóa đơn</button>-->
+                <!--                </form>-->
+                <!--                <form th:action="@{'/delete/' + ${hoaDon.id}}" method="post"-->
+                <!--                      onsubmit="return confirm('Bạn có chắc chắn muốn xóa hóa đơn này?');">-->
+                <!--                    <button type="submit" class="btn btn-danger">Xóa</button>-->
+                <!--                </form>-->
+                <!--                <form th:action="@{'/payment/'+ ${hoaDon.id}}" method="get">-->
+                <!--                    <button type="submit" class="btn btn-primary">Thanh toán</button>-->
+                <!--                </form>-->
+            </td>
+        </tr>
+        <tr th:each="hoaDon : ${hdDangGiao}" th:id="'details-' + ${hoaDon.id}"
+            style="display:none;">
+            <td colspan="8">
+                <div>
+                    <h3>Chi tiết hóa đơn</h3>
+                    <table class="table table-bordered">
+                        <thead class="thead-dark">
+                        <tr>
+                            <th>Tên sản phẩm</th>
+                            <th>Màu sắc</th>
+                            <th>Kích cỡ</th>
+                            <th>Số lượng</th>
+                            <th>Giá bán</th>
+                            <th>Thành tiền</th>
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+                        <tbody th:attr="id='productListBody-' + ${hoaDon.id}">
+                        </tbody>
+                    </table>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
 
+
+<!--Thay đổi sản phẩm  trong hóa đơn chi tiết -->
 <div id="updateProductDetailForm" style="display:none;">
     <h3>Sửa sản phẩm chi tiết</h3>
     <form id="updateProductForm" method="post" th:action="@{/updateProductDetail}">
@@ -301,18 +365,12 @@
 
         <div class="form-group">
             <label for="updateKichCo">Kích cỡ:</label>
-            <!--            <select class="form-control" id="updateKichCo" name="kichCo">-->
-            <!--                <option value="">Chọn kích cỡ</option>-->
-            <!--            </select>-->
             <input type="text" class="form-control" id="updateKichCo" name="kichCo" readonly/>
         </div>
 
         <div class="form-group">
             <label for="updateMauSac">Màu sắc:</label>
             <input type="text" class="form-control" id="updateMauSac" name="mauSac" readonly/>
-            <!--            <select class="form-control" id="updateMauSac" name="mauSac">-->
-            <!--                <option value="">Chọn màu sắc</option>-->
-            <!--            </select>-->
         </div>
 
         <div class="form-group">
@@ -345,6 +403,7 @@
 
     });
 
+    // Lấy ra các sản phẩm của hóa đơn
     function handleFormSubmit(event, hoaDonId, button) {
         event.preventDefault();
 
@@ -369,6 +428,7 @@
             });
     }
 
+    // hiển thị ra sản phẩm trong hóa đơn
     function showDetails(hoaDonId, data, button) {
         const productListBody = document.getElementById(`productListBody-${hoaDonId}`);
         if (productListBody) {
@@ -394,7 +454,6 @@
 
             // Call the function to check invoice status
             layHoaDonTheoId(hoaDonId);
-
             // Show the details row
             const detailsRow = document.getElementById(`details-${hoaDonId}`);
             if (detailsRow) {
@@ -407,7 +466,7 @@
             console.error(`Không tìm thấy phần tử có id 'productListBody-${hoaDonId}'.`);
         }
     }
-
+// lấy ra trạng thái của hóa đơn
     function layHoaDonTheoId(hoaDonId) {
         fetch(`http://localhost:8080/trangThai/${hoaDonId}`)
             .then(response => {
@@ -419,15 +478,12 @@
             .then(data => {
                 // Assume trangThai is a string
                 const trangThai = data.trangThai;
-
-                // Determine the statuses that should hide the buttons (using string values)
-                const trangThaiCanAn = ['1', '2', '3', '4'];
+                const trangThaiCanAn = ['1', '2', '3', '4','5'];
 
                 // Find all delete and edit buttons related to this invoice
                 const deleteButtons = document.querySelectorAll(`#productListBody-${hoaDonId} .btn-danger`);
                 const editButtons = document.querySelectorAll(`#productListBody-${hoaDonId} .btn-success`);
 
-                // Hide delete buttons if the status is 1, 2, 3, or 4
                 if (trangThaiCanAn.includes(trangThai)) {
                     deleteButtons.forEach(deleteButton => {
                         deleteButton.style.display = 'none'; // Hide delete button
@@ -437,8 +493,6 @@
                         deleteButton.style.display = 'block'; // Show delete button
                     });
                 }
-
-                // Hide edit buttons based on the same condition if needed
                 editButtons.forEach(editButton => {
                     if (trangThaiCanAn.includes(trangThai)) {
                         editButton.style.display = 'none'; // Hide edit button if status is 1, 2, 3, or 4
@@ -452,78 +506,7 @@
             });
     }
 
-
-    // function layThongTinSanPham(event, hoaDonId, sanPhamChiTietId) {
-    //     event.preventDefault();
-    //
-    //     const url = `/getProductDetail/${hoaDonId}/${sanPhamChiTietId}`;
-    //     console.log('Fetching product detail with URL:', url);
-    //
-    //     fetch(url)
-    //         .then(response => {
-    //             if (!response.ok) {
-    //                 throw new Error('Network response was not ok');
-    //             }
-    //             return response.json();
-    //         })
-    //         .then(data => {
-    //             console.log('Product detail:', data);
-    //             return fetch(`/getColorByShoeName/${encodeURIComponent(data.tenSanPham)}`)
-    //                 .then(response => {
-    //                     if (!response.ok) {
-    //                         throw new Error('Network response was not ok');
-    //                     }
-    //                     return response.json();
-    //                 })
-    //                 .then(colorData => {
-    //                     console.log('Color data:', colorData);
-    //                     const colorSelect = document.getElementById('updateMauSac');
-    //                     colorSelect.innerHTML = '<option value="">Chọn màu sắc</option>'; // Reset
-    //                     colorData.forEach(color => {
-    //                         const option = document.createElement('option');
-    //                         option.value = color;
-    //                         option.text = color;
-    //                         colorSelect.add(option);
-    //                     });
-    //                     colorSelect.value = data.mauSac;
-    //
-    //                     return fetch(`/getSizesByColor/${encodeURIComponent(data.mauSac)}/${encodeURIComponent(data.tenSanPham)}`)
-    //                         .then(response => {
-    //                             if (!response.ok) {
-    //                                 throw new Error('Network response was not ok');
-    //                             }
-    //                             return response.json();
-    //                         })
-    //                         .then(sizeData => {
-    //                             console.log('Size data:', sizeData);
-    //
-    //                             // Populate size select element
-    //                             const sizeSelect = document.getElementById('updateKichCo');
-    //                             sizeSelect.innerHTML = '<option value="">Chọn kích cỡ</option>';
-    //                             sizeData.forEach(size => {
-    //                                 const option = document.createElement('option');
-    //                                 option.value = size;
-    //                                 option.text = size;
-    //                                 sizeSelect.add(option);
-    //                             });
-    //                             sizeSelect.value = data.kichCo;
-    //
-    //                             // Populate other fields
-    //                             document.getElementById('updateSoLuong').value = data.soLuong || 0;
-    //                             document.getElementById('updateHoaDonId').value = hoaDonId;
-    //                             document.getElementById('updateSanPhamChiTietId').value = sanPhamChiTietId;
-    //                             document.getElementById('tenSanPham').value = data.tenSanPham;
-    //
-    //                             // Show the update form
-    //                             document.getElementById('updateProductDetailForm').style.display = 'block';
-    //                         });
-    //                 });
-    //         })
-    //         .catch(error => {
-    //             console.error('Error:', error);
-    //             alert('Đã xảy ra lỗi khi lấy thông tin sản phẩm.');
-    //         });
-    // }
+    // detail sản phẩm chi tiết
     function layThongTinSanPham(event, hoaDonId, sanPhamChiTietId) {
         event.preventDefault();
 
@@ -566,7 +549,7 @@
         }
         button.textContent = '+';
     }
-
+// dùng để xóa sản phẩm trong hóa đơn
     async function xoaChiTiet(event, hoaDonId, sanPhamId) {
         event.preventDefault();
         const confirmation = confirm('Bạn có chắc chắn muốn xóa sản phẩm này khỏi hóa đơn chi tiết?');
@@ -605,27 +588,31 @@
             }
         }
     }
-
+// chia ra các tab của table
     function showTab(tabName) {
         // Xác định tất cả các phần tử tab và nội dung tương ứng
         const unpaidTab = document.getElementById('unpaidTab'); //id của thẻ li
         const paidTab = document.getElementById('paidTab');
         const hoaDonTab = document.getElementById('hoaDonTab');
         const donHuyTab = document.getElementById('donHuyTab');
+        const dangGiaoTab = document.getElementById('dangGiaoTab');
         const unpaidInvoices = document.getElementById('unpaidInvoices');// id của table
         const paidInvoices = document.getElementById('paidInvoices');
         const hoaDonChoInvoices = document.getElementById('hoaDonCho');
         const huyInvoices = document.getElementById('hoaDonHuy');
+        const hoaDonDangGiao = document.getElementById('hoaDonDangGiao');
 
         // Xóa lớp 'active' và thiết lập trạng thái hiển thị cho tất cả các tab và nội dung
         unpaidTab.classList.remove('active');
         paidTab.classList.remove('active');
+        dangGiaoTab.classList.remove('active')
         hoaDonTab.classList.remove('active');
         donHuyTab.classList.remove('active');
         unpaidInvoices.style.display = 'none';
         paidInvoices.style.display = 'none';
         hoaDonChoInvoices.style.display = 'none';
         huyInvoices.style.display = 'none';
+        hoaDonDangGiao.style.display = 'none';
 
         // Cập nhật trạng thái cho tab được chọn và hiển thị nội dung tương ứng
         if (tabName === 'unpaid') {//onclick showtab
@@ -640,19 +627,12 @@
         } else if (tabName === 'hoaDonHuy') {
             donHuyTab.classList.add('active');
             huyInvoices.style.display = 'block';
-            // } else if (tabName === 'donHuy') {
-            //     donHuyTab.classList.add('active');
-            // }
+        }else if(tabName==='hoaDonDangGiao'){
+            dangGiaoTab.classList.add('active')
+            hoaDonDangGiao.style.display = 'block';
         }
+
     }
-
-        var table = $('#data-table').DataTable({
-            pageLength: 5
-        });
-        $('#searchInput').on('keyup', function () {
-            table.search(this.value).draw();
-        });
-
 </script>
 <style>
     #header {

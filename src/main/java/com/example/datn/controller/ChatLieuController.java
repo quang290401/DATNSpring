@@ -16,7 +16,6 @@ import java.util.UUID;
 
 @Controller
 public class ChatLieuController {
-
     @Autowired
     ChatLieuRepository chatLieuRepository;
 
@@ -41,9 +40,7 @@ public class ChatLieuController {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-
     }
-
     @PostMapping("/chatlieu/delete/{id}")
     public String deleteChatLieu(@PathVariable("id") UUID id, Model model) {
         try {
@@ -76,7 +73,7 @@ public class ChatLieuController {
             return "admin/adminWeb/ChatLieuDetail"; //
         } else {
             model.addAttribute("errorMessage", "Material not found.");
-            return "admin/adminWeb/ChatLieu";// Hoặc trả về trang danh sách nếu không tìm thấy đối tượng
+            return "admin/adminWeb/ChatLieu";
         }
     }
     @PostMapping("/chatlieu/update/{id}")

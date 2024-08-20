@@ -21,15 +21,15 @@
       </div>
       <div class="form-group col-md-4">
         <label for="phanTramGiam">Phần trăm giảm</label>
-        <input type="text" class="form-control" id="phanTramGiam" th:field="*{phanTramGiam}" placeholder="Phần Trăm Giảm" required>
+        <input type="number" step="1" class="form-control" id="phanTramGiam" th:field="*{phanTramGiam}" placeholder="Phần Trăm Giảm" required>
       </div>
       <div class="form-group col-md-2">
         <label for="ngayBatDau">Ngày Bắt Đầu:</label>
-        <input type="date" class="form-control" id="ngayBatDau" th:field="*{ngayBatDau}" placeholder="Ngày Bắt Đầu" required>
+        <input type="date" class="form-control" id="ngayBatDau" th:field="*{ngayBatDau}" required>
       </div>
       <div class="form-group col-md-2">
         <label for="ngayKetThuc">Ngày Kết Thúc:</label>
-        <input type="date" class="form-control" id="ngayKetThuc" th:field="*{ngayKetThuc}" placeholder="Ngày Kết Thúc" required>
+        <input type="date" class="form-control" id="ngayKetThuc" th:field="*{ngayKetThuc}" required>
       </div>
       <div class="form-group col-md-2">
         <label for="trangThai">Trạng Thái:</label>
@@ -56,46 +56,104 @@
     <tbody>
     <tr th:each="vouCher : ${listVoucher}">
       <td th:text="${vouCher.ten}"></td>
-      <td th:text="${vouCher.phanTramGiam}"%></td>
+      <td th:text="${vouCher.phanTramGiam + '%' }"></td>
       <td th:text="${vouCher.ngayBatDau}"></td>
       <td th:text="${vouCher.ngayKetThuc}"></td>
       <td th:text="${vouCher.createDate}"></td>
       <td th:text="${vouCher.updateDate}"></td>
-      <td th:text="${vouCher.trangThai}"></td>
+      <td th:text="${vouCher.trangThai == 1 ? 'Đang hoạt động' : 'Đã Tạm dừng'}"></td>
       <td>
         <a th:href="@{/voucher/detail/{id}(id=${vouCher.id})}" class="btn btn-primary">Detail</a>
         <form th:action="@{/voucher/delete/{id}(id=${vouCher.id})}" method="post">
           <button type="submit" class="btn btn-danger">Delete</button>
         </form>
-
-
       </td>
     </tr>
     </tbody>
   </table>
 </div>
+
 <script>
   $(document).ready(function() {
-    $('#voucherForm').submit(function(event) {
-      var ngayBatDau = new Date($('#ngayBatDau').val());
-      var ngayKetThuc = new Date($('#ngayKetThuc').val());
-      var today = new Date();
-      today.setHours(0,0,0,0);
+    $('#voucherForm').validate({
+      rules: {
+        ten: {
+          required: true,
+          minlength: 3,
+          maxlength: 100
+        },
+        phanTramGiam: {
+          required: true,
+          number: true,
+          min: 0,
+          max: 99
+        },
+        ngayBatDau: {
+          required: true,
+          date: true
+        },
+        ngayKetThuc: {
+          required: true,
+          date: true
+        },
+        trangThai: {
+          required: true,
+          digits: true,
+          min: 0,
+          max: 1
+        }
+      },
+      messages: {
+        ten: {
+          required: "Vui lòng nhập tên voucher.",
+          minlength: "Tên phải có ít nhất 3 ký tự.",
+          maxlength: "Tên không được vượt quá 100 ký tự."
+        },
+        phanTramGiam: {
+          required: "Vui lòng nhập phần trăm giảm.",
+          number: "Phần trăm giảm phải là số.",
+          min: "Phần trăm giảm phải lớn hơn hoặc bằng 0.",
+          max: "Phần trăm giảm phải nhỏ hơn hoặc bằng 99."
+        },
+        ngayBatDau: {
+          required: "Vui lòng chọn ngày bắt đầu.",
+          date: "Ngày bắt đầu không hợp lệ."
+        },
+        ngayKetThuc: {
+          required: "Vui lòng chọn ngày kết thúc.",
+          date: "Ngày kết thúc không hợp lệ."
+        },
+        trangThai: {
+          required: "Vui lòng nhập trạng thái.",
+          digits: "Trạng thái phải là số nguyên.",
+          min: "Trạng thái phải là 0 hoặc 1.",
+          max: "Trạng thái phải là 0 hoặc 1."
+        }
+      },
+      submitHandler: function(form) {
+        var ngayBatDau = new Date($('#ngayBatDau').val());
+        var ngayKetThuc = new Date($('#ngayKetThuc').val());
+        var today = new Date();
+        today.setHours(0,0,0,0);
 
-      if (ngayBatDau < today) {
-        alert('Ngày Bắt Đầu không được trong quá khứ');
-        event.preventDefault();
-        return false;
-      }
+        if (ngayBatDau < today) {
+          alert('Ngày Bắt Đầu không được trong quá khứ');
+          return false;
+        }
 
-      if (ngayKetThuc < ngayBatDau) {
-        alert('Ngày Kết Thúc phải sau Ngày Bắt Đầu');
-        event.preventDefault();
-        return false;
+        if (ngayKetThuc < ngayBatDau) {
+          alert('Ngày Kết Thúc phải sau Ngày Bắt Đầu');
+          return false;
+        }
+        if (ngayKetThuc < today) {
+          $('#trangThai').val(0); // Set trạng thái to "Đã Tạm dừng"
+        }
+        form.submit();
       }
     });
   });
 </script>
+
 <div th:replace="admin/common/foodter.html"></div>
 </body>
 </html>

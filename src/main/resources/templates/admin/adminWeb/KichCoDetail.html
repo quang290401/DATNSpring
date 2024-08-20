@@ -33,7 +33,7 @@
 <div class="container mt-4">
   <div class="card">
     <div class="card-body">
-      <<form th:action="@{/kichco/update/{id}(id=${kichCo.id})}" method="post">
+      <form th:action="@{/kichco/update/{id}(id=${kichCo.id})}" method="post">
       <div class="row">
         <div class="col-md-6">
           <div class="form-group">
@@ -41,11 +41,11 @@
             <input type="text" id="id" class="form-control" th:value="${kichCo.id}"  readonly>
           </div>
           <div class="form-group">
-            <label for="tenKichCo">Mã:</label>
+            <label for="tenKichCo">Tên Kích Cỡ:</label>
             <input type="text" id="tenKichCo" class="form-control" th:value="${kichCo.tenKichCo}" name="tenKichCo">
           </div>
           <div class="form-group">
-            <label for="doDai">Địa Chỉ:</label>
+            <label for="doDai">Độ Dài</label>
             <input type="text" id="doDai" class="form-control" th:value="${kichCo.doDai}" name="doDai">
           </div>
       <div class="text-center">

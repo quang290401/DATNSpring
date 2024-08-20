@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -21,16 +22,25 @@ public class VouCherController {
     @Autowired
     VouCherRepository vouCherRepository;
 
+    private void checkAndUpdateVoucherStatus(VouCherEntity vouCher) {
+        LocalDate today = LocalDate.now();
+        if (vouCher.getNgayKetThuc().isBefore(today)) {
+            vouCher.setTrangThai(0);
+            vouCherRepository.save(vouCher);
+        }
+    }
+
     @GetMapping("/voucher/getAll")
     public String getAllVouCher(Model model) {
         List<VouCherEntity> listVoucher = vouCherRepository.findAll();
+        listVoucher.forEach(this::checkAndUpdateVoucherStatus);
         model.addAttribute("listVoucher", listVoucher);
         model.addAttribute("vouCher", new VouCherEntity());
         return "admin/adminWeb/VouCher";
     }
 
     @PostMapping("/voucher/add")
-    public String addDiaChi(@Valid @ModelAttribute("vouCher") VouCherEntity vouCher, BindingResult result, Model model) {
+    public String addVouCher(@Valid @ModelAttribute("vouCher") VouCherEntity vouCher, BindingResult result, Model model) {
         if (result.hasErrors()) {
             List<VouCherEntity> listVoucher = vouCherRepository.findAll();
             model.addAttribute("listVoucher", listVoucher);
@@ -70,7 +80,7 @@ public class VouCherController {
         }
     }
     @GetMapping("/voucher/detail/{id}")
-    public String getDiaChiDetail(@PathVariable("id") UUID id, Model model) {
+    public String getVouCherDetail(@PathVariable("id") UUID id, Model model) {
         Optional<VouCherEntity> vouCherOptional = vouCherRepository.findById(id);
         if (vouCherOptional.isPresent()) {
             VouCherEntity vouCher = vouCherOptional.get();
@@ -83,7 +93,7 @@ public class VouCherController {
     }
 
     @PostMapping("/voucher/update/{id}")
-    public String updateChatLieu(@PathVariable("id") UUID id, @ModelAttribute("chatLieu") VouCherEntity updateVouCher, Model model) {
+    public String updateVouCher(@PathVariable("id") UUID id, @ModelAttribute("chatLieu") VouCherEntity updateVouCher, Model model) {
         try {
             // Kiểm tra xem chất liệu có tồn tại không
             if (!vouCherRepository.existsById(id)) {

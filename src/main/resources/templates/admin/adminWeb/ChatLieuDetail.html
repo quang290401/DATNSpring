@@ -10,7 +10,6 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <th:block th:replace="~{cssImport.html :: layout_import_css}"/>
     <style>
-        /* Custom CSS */
         .form-group {
             margin-bottom: 20px;
         }
@@ -19,13 +18,6 @@
 <body>
 <div th:replace="admin/common/Header.html"></div>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container">
-        <a class="navbar-brand" href="#">Chi Tiết Chat Lieu</a>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ml-auto">
-            </ul>
-        </div>
-    </div>
 </nav>
 <div class="container mt-4">
     <div class="card">
@@ -33,35 +25,24 @@
             Thông Tin Chất Liệu
         </div>
         <div class="card-body">
-            <<form >
+            <form >
         <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="id">ID:</label>
                             <input type="text" id="id" class="form-control" th:value="${chatLieu.id}"  readonly>
                         </div>
-<!--                        <div class="form-group">-->
-<!--                            <label for="ma">Mã:</label>-->
-<!--                            <input type="text" id="ma" class="form-control" th:value="${chatLieu.ma}" name="ma">-->
-<!--                        </div>-->
                         <div class="form-group">
                             <label for="ten">Tên:</label>
                             <input type="text" id="ten" class="form-control" th:value="${chatLieu.ten}" name="ten">
                         </div>
                     </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="moTa">Mô Tả:</label>
-                            <textarea id="moTa" class="form-control"
-                                      th:text="${chatLieu.moTa}" name="moTa"></textarea>
-                        </div>
                         <div class="form-group">
                             <label for="trangThai">Trạng Thái:</label>
                             <input type="text" id="trangThai" class="form-control"
                                    th:value="${chatLieu.trangThai}" name="trangThai">
                         </div>
                     </div>
-                </div>
                 <div class="text-center">
                     <button type="submit" class="btn btn-success">Chỉnh Sửa</button>
                     <a href="/chatlieu/getAll" class="btn btn-secondary">Quay lại</a>

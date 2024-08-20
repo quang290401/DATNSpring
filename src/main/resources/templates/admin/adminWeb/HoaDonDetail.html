@@ -66,6 +66,17 @@
   <div class="invoice-header text-center">
     <h1>Chi tiết hóa đơn</h1>
   </div>
+
+  <!-- Alert Messages -->
+  <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+    <span th:text="${errorMessage}"></span>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+  <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+    <span th:text="${successMessage}"></span>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+
   <!-- Edit Invoice Card -->
   <div class="card invoice-edit">
     <div class="card-header bg-primary text-white">
@@ -73,63 +84,69 @@
     </div>
     <div class="card-body">
       <form th:action="@{/hoadon/update/{id}(id=${hoaDon.id})}" method="post">
+        <!-- ID hóa đơn -->
         <div class="form-group">
           <label for="id">ID hóa đơn:</label>
           <input type="text" id="id" class="form-control" th:value="${hoaDon.id}" readonly>
         </div>
+
+        <!-- Ngày tạo hóa đơn -->
         <div class="form-group">
-          <label for="ngayTao">Ngày tạo hóa đơn:</label>
+          <label for="ngayTao">Ngày đặt hàng:</label>
           <input type="text" id="ngayTao" class="form-control" th:value="${#temporals.format(hoaDon.createDate, 'dd/MM/yyyy HH:mm:ss')}" readonly>
         </div>
+
+        <!-- Ngày thanh toán -->
         <div class="form-group">
           <label for="ngayThanhToan">Ngày thanh toán:</label>
           <input type="text" id="ngayThanhToan" class="form-control" th:value="${hoaDon.ngayThanhToan != null ? #temporals.format(hoaDon.ngayThanhToan, 'dd/MM/yyyy HH:mm:ss') : 'Chưa thanh toán'}" readonly>
         </div>
+
+        <!-- Trạng thái hóa đơn -->
         <div class="form-group">
           <label>Trạng thái:</label>
           <div class="d-flex justify-content-between">
-            <div class="form-check flex-fill">
+
+            <!-- ShipCod -->
+            <div class="form-check flex-fill" th:if="${hoaDon.trangThaiHD.trangThai != '3' && hoaDon.trangThaiHD.trangThai != '5'}">
               <input class="form-check-input" type="radio" name="trangThai" id="shipcode" value="2" th:checked="${hoaDon.trangThaiHD.trangThai == '2'}">
-              <label class="form-check-label status-shipcode" for="shipcode">
-              ShipCod
-              </label>
+              <label class="form-check-label status-shipcode" for="shipcode">ShipCod</label>
             </div>
-            <div class="form-check flex-fill">
-              <input class="form-check-input" type="radio" name="trangThai" id="daNhanHang" value="1" th:checked="${hoaDon.trangThaiHD.trangThai == '1'}">
-              <label class="form-check-label status-daNhanHang" for="daNhanHang">
-                Đã nhận hàng
-              </label>
-            </div>
-            <div class="form-check flex-fill">
+
+            <!-- Thanh toán Online -->
+            <div class="form-check flex-fill" th:if="${hoaDon.trangThaiHD.trangThai != '2' && hoaDon.trangThaiHD.trangThai != '5'}">
               <input class="form-check-input" type="radio" name="trangThai" id="thanhToanOnline" value="3" th:checked="${hoaDon.trangThaiHD.trangThai == '3'}">
-              <label class="form-check-label status-daNhanHang" for="daNhanHang">
-            Thanh Toán Online
-              </label>
+              <label class="form-check-label status-daNhanHang" for="thanhToanOnline">Thanh Toán Online</label>
             </div>
-            <div class="form-check flex-fill">
-              <input class="form-check-input" type="radio" name="trangThai" id="daHuy" value="4" th:checked="${hoaDon.trangThaiHD.trangThai == '4'}">
-              <label class="form-check-label status-daHuy" for="daHuy">
-                Đã hủy
-              </label>
-            </div>
+
+            <!-- Đang giao hàng -->
             <div class="form-check flex-fill">
               <input class="form-check-input" type="radio" name="trangThai" id="dangGiaoHang" value="5" th:checked="${hoaDon.trangThaiHD.trangThai == '5'}">
-              <label class="form-check-label status-dangGiaoHang" for="dangGiaoHang">
-                Đang giao hàng
-              </label>
+              <label class="form-check-label status-dangGiaoHang" for="dangGiaoHang">Đang giao hàng</label>
             </div>
+
+            <!-- Đã nhận hàng -->
             <div class="form-check flex-fill">
-              <input class="form-check-input" type="radio" name="trangThai" id="shipcod" value="0" th:checked="${hoaDon.trangThaiHD.trangThai == '0'}">
-              <label class="form-check-label status-dangGiaoHang" for="dangGiaoHang">
-              Chưa Thanh Toán
-              </label>
+              <input class="form-check-input" type="radio" name="trangThai" id="daNhanHang" value="1" th:checked="${hoaDon.trangThaiHD.trangThai == '1'}">
+              <label class="form-check-label status-daNhanHang" for="daNhanHang">Đã nhận hàng</label>
             </div>
+
+            <!-- Đã hủy -->
+            <div class="form-check flex-fill">
+              <input class="form-check-input" type="radio" name="trangThai" id="daHuy" value="4" th:checked="${hoaDon.trangThaiHD.trangThai == '4'}">
+              <label class="form-check-label status-daHuy" for="daHuy">Đã hủy</label>
+            </div>
+
           </div>
         </div>
+
+        <!-- Tổng tiền -->
         <div class="form-group">
           <label for="tongTien">Tổng tiền:</label>
           <input type="text" id="tongTien" class="form-control" th:value="${#numbers.formatDecimal(hoaDon.tongTien, 0, 'COMMA', 2, 'POINT')}" readonly>
         </div>
+
+        <!-- Buttons -->
         <div class="text-center">
           <button type="submit" class="btn btn-custom">Lưu thay đổi</button>
           <a href="http://localhost:8080/getAll" class="btn btn-secondary">Quay lại</a>

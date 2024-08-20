@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chi Tiết Chat Lieu</title>
+  <title>Chi Tiết VouCher</title>
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdn.jsdelivr.net/jquery.validation/latest/jquery.validate.min.js"></script>
@@ -13,6 +13,12 @@
     /* Custom CSS */
     .form-group {
       margin-bottom: 20px;
+    }
+    .status-dangHoatDong {
+      background-color: #17a2b8;
+    }
+    .status-daTamDung {
+      background-color: #dc3545;
     }
   </style>
 </head>
@@ -29,10 +35,10 @@
 <div class="container mt-4">
   <div class="card">
     <div class="card-header">
-      Thông Tin Địa Chỉ
+    Thông Tin Voucher
     </div>
     <div class="card-body">
-      <<form th:action="@{/voucher/update/{id}(id=${vouCher.id})}" method="post" id="voucherForm">
+      <form th:action="@{/voucher/update/{id}(id=${vouCher.id})}" method="post" id="voucherForm">
       <div class="row">
         <div class="col-md-6">
           <div class="form-group">
@@ -48,19 +54,32 @@
             <input type="text" id="phanTramGiam" class="form-control" th:value="${vouCher.phanTramGiam}" name="phanTramGiam">
           </div>
           <div class="form-group">
-            <label for="ngayBatDau">Thành Phố:</label>
+            <label for="ngayBatDau">Ngày Bắt Đầu:</label>
             <input type="date" id="ngayBatDau" class="form-control" th:value="${vouCher.ngayBatDau}" name="ngayBatDau">
           </div>
           <div class="form-group">
-            <label for="ngayKetThuc">Quốc Gia:</label>
+            <label for="ngayKetThuc">Ngày Kết Thúc:</label>
             <input type="date" id="ngayKetThuc" class="form-control" th:value="${vouCher.ngayKetThuc}" name="ngayKetThuc">
           </div>
+
           <div class="form-group">
-            <label for="trangThai">Trạng Thái:</label>
-            <input type="text" id="trangThai" class="form-control"
-                   th:value="${vouCher.trangThai}" name="trangThai">
-          </div>
+            <label>Trạng thái:</label>
+            <div class="form-check flex-fill">
+                <input class="form-check-input" type="radio" name="trangThai" id="dangHoatDong" value="1" th:checked="${vouCher.trangThai ==1}">
+                <label class="form-check-label status-dangHoatDong" for="dangHoatDong">
+                 Đang Hoạt Động
+                </label>
+              </div>
+            <div class="form-check flex-fill">
+            <input class="form-check-input" type="radio" name="trangThai" id="daTamDung" value="0" th:checked="${vouCher.trangThai ==0}">
+            <label class="form-check-label status-daTamDung" for="daTamDung">
+            Đã Tạm Dừng
+            </label>
+            </div>
+            </div>
+
         </div>
+
       </div>
       <div class="text-center">
         <button type="submit" class="btn btn-success">Chỉnh Sửa</button>
