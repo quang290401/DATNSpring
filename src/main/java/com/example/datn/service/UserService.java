@@ -1,9 +1,6 @@
 package com.example.datn.service;
 
-import com.example.datn.dto.SanPhamChiTietFiterDTO;
-import com.example.datn.dto.UserCrud;
-import com.example.datn.dto.UserDTO;
-import com.example.datn.dto.UsersFiterDTO;
+import com.example.datn.dto.*;
 import org.springframework.data.domain.Page;
 
 import java.awt.print.Pageable;
@@ -16,5 +13,9 @@ public interface UserService {
      UserCrud addUser(UserCrud userCrud);
      void updateUserKhoa(UUID idUser);
      void updateUserMo(UUID idUser);
+
+     void updateUserMatKhau(ChangePasswordRequest passwordRequest);
     Page<UserDTO> findAll(Integer totalPage, Integer totalItem, UsersFiterDTO form);
+
+
 }

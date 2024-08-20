@@ -4,10 +4,7 @@ import com.example.datn.Repository.DiaChiRepository;
 import com.example.datn.Repository.GioHangRepository;
 import com.example.datn.Repository.UsersRepository;
 import com.example.datn.Repository.VaiTroRepository;
-import com.example.datn.dto.SanPhamChiTietDTO;
-import com.example.datn.dto.UserCrud;
-import com.example.datn.dto.UserDTO;
-import com.example.datn.dto.UsersFiterDTO;
+import com.example.datn.dto.*;
 import com.example.datn.entity.*;
 
 import com.example.datn.service.UserService;
@@ -123,6 +120,24 @@ public class UserServiceIMPL implements UserService {
     public void updateUserMo(UUID idUser) {
         usersRepository.updateUserMo(idUser);
     }
+
+    @Override
+    @Transactional
+    public void updateUserMatKhau(ChangePasswordRequest changePasswordRequest) {
+        // Chuyển đổi từ DTO sang Entity
+        UserEntity userEntity = usersRepository.findByTaiKhoan(changePasswordRequest.getTaiKhoan())
+                .orElseThrow(() -> new IllegalArgumentException("Người dùng không tồn tại"));
+
+        // Kiểm tra mật khẩu cũ
+        if (userEntity.getMatKhau().equals(changePasswordRequest.getMatKhauCu())) {
+            // Cập nhật mật khẩu mới
+            userEntity.setMatKhau(changePasswordRequest.getMatKhauMoi());
+            usersRepository.save(userEntity);
+        } else {
+            throw new IllegalArgumentException("Mật khẩu cũ không đúng!");
+        }
+    }
+
 
     @Override
     public Page<UserDTO> findAll(Integer totalPage, Integer totalItem, UsersFiterDTO form) {
