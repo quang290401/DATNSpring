@@ -38,6 +38,25 @@ public class UserStatusFilter implements Filter {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
         HttpSession session = httpRequest.getSession(false);
+        String requestURI = httpRequest.getRequestURI();
+
+        // Kiểm tra nếu người dùng đang truy cập vào trang admin
+        if (requestURI.startsWith("/admin")) {
+            // Nếu chưa có session hoặc session không chứa thông tin user
+            if (session == null || session.getAttribute("user") == null) {
+                httpResponse.sendRedirect(httpRequest.getContextPath() + "/dang-nhap");
+                return;
+            }
+        }
+        if (requestURI.startsWith("/BanHangOff")||
+                requestURI.startsWith("/thongke")|| requestURI.startsWith("/quanly-user")) {
+            // Nếu chưa có session hoặc session không chứa thông tin user
+            if (session == null || session.getAttribute("user") == null) {
+                httpResponse.sendRedirect(httpRequest.getContextPath() + "/dang-nhap");
+                return;
+            }
+        }
+
 
         if (session != null && session.getAttribute("user") != null) {
             UserDTO user = (UserDTO) session.getAttribute("user");
@@ -54,13 +73,18 @@ public class UserStatusFilter implements Filter {
                 httpResponse.sendRedirect(httpRequest.getContextPath() + "/dang-nhap");
                 return;
             }
+
             String userRole = updatedUser.get().getVaiTro().getTenVaiTro(); // Giả sử bạn có phương thức getTenVaiTro() trong entity
-            String requestURI = httpRequest.getRequestURI();
-            if ("USER".equals(userRole) && requestURI.startsWith("/admin")) {
+            if ("USER".equals(userRole) && (requestURI.startsWith("/admin")
+                    || requestURI.startsWith("/BanHangOff")
+                    || requestURI.startsWith("/thongke")
+                    || requestURI.startsWith("/quanly-user"))) {
                 session.invalidate();
                 httpResponse.sendRedirect(httpRequest.getContextPath() + "/dang-nhap");
                 return;
             }
+
+
 
         }
 
