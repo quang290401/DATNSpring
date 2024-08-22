@@ -442,11 +442,12 @@
 
         $('#voucherSelect').change(function () {
             var selectedOption = $(this).find('option:selected').val();
-            var originalTotalAmount = parseFloat($('#cart2 tbody').find('strong').last().text().replace(/,/g, '')); // Lưu giá tiền gốc ban đầu
+            var originalTotalAmount = parseFloat($('#cart2 tbody').find('#totalAmount2').last().text().replace(/,/g, '')); // Lưu giá tiền gốc ban đầu
             var formattedOriginalTotalAmount = originalTotalAmount.toLocaleString('en'); // Định dạng giá trị ban đầu
             if (selectedOption === "") {
                 $('#shipCode').prop('checked', false);
                 loadCart();
+                updateTotalAmount();
 
             } else {
                 var selectedDiscount = $(this).find('option:selected').data('discount');

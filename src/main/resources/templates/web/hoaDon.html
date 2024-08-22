@@ -93,7 +93,7 @@
             <h2>Danh Sách Hóa Đơn</h2>
             <label for="status-select">Chọn Trạng Thái: </label>
             <select id="status-select" class="form-control">
-                <option value="2" >Chờ Nhận Hàng</option>
+                <option value="2" > Đã Mua </option>
                 <option value="3">Hủy</option>
             </select>
             <table>
@@ -238,13 +238,25 @@
 
                 invoiceList.append(row); // Thêm hàng vào invoiceList
             });
+            $('.invoice-checkbox').change(function () {
+                if ($(this).is(':checked')) {
+                    // Bỏ chọn tất cả các checkbox khác
+                    $('.invoice-checkbox').not(this).prop('checked', false);
+
+                    var invoiceId = $(this).val();
+                    loadProducts(invoiceId);
+                } else {
+                    // Nếu checkbox bị bỏ chọn, làm trống bảng sản phẩm
+                    $('#product-list').empty();
+                }
+            });
 
             // Thêm sự kiện thay đổi cho các checkbox
             $('.invoice-checkbox').change(function () {
                 // Bỏ chọn tất cả các checkbox khác
                 $('.invoice-checkbox').not(this).prop('checked', false);
                 // Gọi API để lấy danh sách sản phẩm cho hóa đơn đã chọn
-                var invoiceId = $(this).val();
+                var invoiceId = "0"
                 loadProducts(invoiceId);
             });
         }
@@ -274,6 +286,7 @@
             });
         }
     });
+
 
 </script>
 </body>

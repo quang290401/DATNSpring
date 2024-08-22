@@ -21,7 +21,7 @@ public class VouCherIMPL implements VouCherService {
     private final ModelMapper modelMapper;
     @Override
     public List<VoucherDTO> getAllVoucher() {
-        List<VouCherEntity> entityList = vouCherRepository.findAll();
+        List<VouCherEntity> entityList = vouCherRepository.findAllActiveVouchers();
         return entityList.stream()
                 .map(entity -> modelMapper.map(entity, VoucherDTO.class))
                 .collect( Collectors.toList());
