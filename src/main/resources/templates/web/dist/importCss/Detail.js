@@ -88,7 +88,6 @@ $(document).ready(function () {
     fetchTop4Products();
 });
 $(document).ready(function () {
-    // Lấy userId từ phần tử input
     var userId = $('#userId').val();
     console.log('Đã lấy userId:', userId);
     console.log('Kiểu dữ liệu của userId:', typeof userId);
