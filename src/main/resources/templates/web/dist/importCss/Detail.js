@@ -92,11 +92,9 @@ $(document).ready(function () {
     var userId = $('#userId').val();
     console.log('Đã lấy userId:', userId);
     console.log('Kiểu dữ liệu của userId:', typeof userId);
-    // Kiểm tra giá trị của userId
-    // Kiểm tra giá trị của userId
     if (userId === null || userId === "" || userId === "null" || userId === undefined) {
         console.log('UserId is null, empty, undefined, or "null" string, redirecting to login page');
-        window.location.href = "http://localhost:8080/dang-nhap";
+       window.location.href= "http://localhost:8080/dang-nhap";
         return;
     }
     // Tiếp tục nếu userId hợp lệ
