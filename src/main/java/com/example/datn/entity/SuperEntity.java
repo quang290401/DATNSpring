@@ -32,8 +32,8 @@ public class SuperEntity {
                 this.updateDate = LocalDate.now().atStartOfDay();
         }
 
-        protected void Createdate() {
-                this.createDate = LocalDate.now();
+        protected void createdate() {
+                this.createDate = LocalDate.from(LocalDate.now().atStartOfDay());
         }
 
     }

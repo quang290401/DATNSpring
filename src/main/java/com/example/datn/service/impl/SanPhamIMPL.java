@@ -19,6 +19,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -60,6 +62,8 @@ public class SanPhamIMPL implements SanPhamService {
         SanPhamEntity sanPhamEntity = SanPhamEntity.builder()
                 .tenSanPham(sanPhamDTO.getTenSanPham())
                 .trangThai(sanPhamDTO.getTrangThai()).build();
+        sanPhamEntity.setCreateDate(LocalDate.now());
+        sanPhamEntity.setUpdateDate(LocalDateTime.now());
         sanPhamRepository.save(sanPhamEntity);
         return modelMapper.map(sanPhamEntity, SanPhamDTO.class);
 

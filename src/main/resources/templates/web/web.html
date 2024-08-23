@@ -168,7 +168,8 @@
                                 <!-- Product actions-->
                                 <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
                                     <div class="text-center">
-                                        ${product.soLuong > 0 ? `<a class="btn btn-outline-dark mt-auto view-options" href="#" data-product-id="${productId}">View options</a>` : `<span class="btn btn-outline-dark mt-auto text-danger">Hết hàng</span>`}
+                                        ${product.soLuong > 0 && product.trangThai !== 0 ? `<a class="btn btn-outline-dark mt-auto view-options" href="#" data-product-id="${productId}">View options</a>` :
+                    `<span class="btn btn-outline-dark mt-auto text-danger">${product.trangThai === 0 ? 'Dừng bán' : 'Hết hàng'}</span>`}
                                     </div>
                                 </div>
                             </div>

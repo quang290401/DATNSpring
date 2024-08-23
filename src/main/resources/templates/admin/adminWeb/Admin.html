@@ -1374,6 +1374,11 @@
                 id: $('#code-product').val(),
                 trangThai: $('#active-product').is(':checked') ? 1 : 0
             };
+            if($('#code-product').val()=='' || $('#name-product').val()==''){
+                alert('Bạn Không Được Để Trống');
+                return;
+            }
+
 
             $.ajax({
                 url: '/api/sp',
@@ -1381,14 +1386,15 @@
                 contentType: 'application/json',
                 data: JSON.stringify(sanPhamDTO),
                 success: function (response) {
-                    alert('Cập Nhật Sản Phẩm Thành!');
+                    alert('Cập Nhật Sản Phẩm Thành Công!');
                     currentPage = 0;
                     loadProducts(currentPage);
-
+                    $('#name-product').val('');
+                    $('#code-product').val('');
                 },
                 error: function (error) {
                     console.log('Error:', error);
-                    alert('Đã xảy ra lỗi khi thêm sản phẩm.');
+                    alert('Đã xảy ra lỗi khi Cập Nhật sản phẩm.');
                 }
             });
         });
@@ -1397,7 +1403,14 @@
                 tenSanPham: $('#name-product').val(),
                 trangThai: $('#active-product').is(':checked') ? 1 : 0
             };
-
+            if( $('#name-product').val()==''){
+                alert('Bạn Không Được Để Trống');
+                return;
+            }
+            if (!$('#active-product').is(':checked')) {
+                alert('Bạn phải chọn trạng thái của sản phẩm.');
+                return;
+            }
             $.ajax({
                 url: '/api/sp',
                 type: 'POST',
@@ -1405,7 +1418,9 @@
                 data: JSON.stringify(sanPhamDTO),
                 success: function (response) {
                     alert('Sản phẩm đã được thêm thành công!');
-                    loadProducts();
+                    loadProducts(currentPage);
+                    $('#name-product').val('');
+                    $('#code-product').val('');
                 },
                 error: function (error) {
                     console.log('Error:', error);
