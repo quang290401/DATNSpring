@@ -24,10 +24,10 @@
         <div class="main-content">
             <div class="main-content-inner">
                 <div id="header">
-                    <h1>Invoice Generator</h1>
                     <form action="/create" method="post" th:action="@{/create}">
                         <button type="submit" id="createInvoiceBtn" class="btn btn-success">Tạo hóa đơn</button>
                     </form>
+                    <a href="/BanHangOff" class="btn btn-secondary">Danh Sách Sản Phẩm</a>
                 </div>
                 <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
                     <span th:text="${errorMessage}"></span>
@@ -760,7 +760,6 @@
                 <script>
                     const showFormButton = document.getElementById('createInvoiceBtn');
                     const createInvoiceForm = document.getElementById('createInvoiceForm');
-
                     showFormButton.addEventListener('click', function () {
                         createInvoiceForm.style.display = 'block';
                     });

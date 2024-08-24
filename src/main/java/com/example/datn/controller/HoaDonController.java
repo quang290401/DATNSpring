@@ -114,7 +114,6 @@ public String createHoaDon(@ModelAttribute("hoaDon") HoaDonEntity hoaDon, Redire
         if (hoaDonOptional.isPresent()) {
             HoaDonEntity hoaDon = hoaDonOptional.get();
             model.addAttribute("hoaDon", hoaDon);
-            // Không cần thêm gì nữa vì trạng thái đã được chứa trong đối tượng hoaDon
             return "admin/adminWeb/HoaDonDetail";
         } else {
             model.addAttribute("errorMessage", "Hóa đơn không tồn tại.");
@@ -132,7 +131,7 @@ public String createHoaDon(@ModelAttribute("hoaDon") HoaDonEntity hoaDon, Redire
             // Check if the invoice exists
             if (!hoaDonRepository.existsById(id)) {
                 redirectAttributes.addFlashAttribute("errorMessage", "Hóa đơn không tồn tại.");
-                return "redirect:/hoadon/detail/" + id; // Redirect to the detail page with the error message
+                return "redirect:/hoadon/detail/" + id;
             }
 
             // Fetch the invoice entity
@@ -143,19 +142,13 @@ public String createHoaDon(@ModelAttribute("hoaDon") HoaDonEntity hoaDon, Redire
             }
             String trangThaiHienTai = hoaDonEntity.getTrangThaiHD().getTrangThai();
             System.out.println("Trang Thai hien tai: " + trangThaiHienTai);
-
-            // If changing the status to "4" (Đã hủy), return quantities to inventory
             if ("4".equals(trangThai)) {
                 for (HoaDonChiTietEntity chiTiet : hoaDonEntity.getHoaDonChiTiets()) {
                     SanPhamChiTietEntity sanPhamChiTiet = chiTiet.getSanPhamChiTiet();
                     int soLuong = chiTiet.getSoLuong();
                     System.out.println("Old So Luong: " + sanPhamChiTiet.getSoLuong());
-
-                    // Increase the quantity of the products back to inventory
                     sanPhamChiTiet.setSoLuong(sanPhamChiTiet.getSoLuong() + soLuong);
                     System.out.println("New So Luong: " + sanPhamChiTiet.getSoLuong());
-
-                    // Save the updated product details back to the repository
                     chiTietSPRepository.save(sanPhamChiTiet);
                 }
             }
@@ -164,13 +157,11 @@ public String createHoaDon(@ModelAttribute("hoaDon") HoaDonEntity hoaDon, Redire
             TrangThaiHDEntity trangThaiHDEntity = trangThaiHDRepository.findByTrangThai(trangThai);
             if (trangThaiHDEntity == null) {
                 redirectAttributes.addFlashAttribute("errorMessage", "Trạng thái không hợp lệ.");
-                return "redirect:/hoadon/detail/" + id; // Redirect to the detail page with the error message
+                return "redirect:/hoadon/detail/" + id;
             }
-
             hoaDonEntity.setTrangThaiHD(trangThaiHDEntity);
             hoaDonRepository.save(hoaDonEntity);
 
-            // Add success message and redirect
             redirectAttributes.addFlashAttribute("successMessage", "Cập nhật trạng thái hóa đơn thành công.");
             return "redirect:/getAll";
 
@@ -195,38 +186,6 @@ public String createHoaDon(@ModelAttribute("hoaDon") HoaDonEntity hoaDon, Redire
         model.addAttribute("danhSachHoaDon", danhSachHoaDon);
         return "admin/adminWeb/BanHangOff";
     }
-
-//    @PostMapping("/updateStatus")
-//    public String updateStatus(@RequestParam("id") UUID hoaDonId, @RequestParam("trangThai") String trangThai) {
-//        System.out.println("Trang Thai moi: " + trangThai);  // Debugging line
-//
-//        HoaDonEntity hoaDon = hoaDonRepository.findById(hoaDonId).orElse(null);
-//
-//        if (hoaDon != null) {
-//            // Lấy trạng thái hiện tại trước khi cập nhật
-//            String trangThaiHienTai = hoaDon.getTrangThaiHD().getTrangThai();
-//            System.out.println("Trang Thai hien tai: " + trangThaiHienTai);  // Debugging line
-//
-//            // Kiểm tra nếu trạng thái hiện tại là "Đang giao hàng" và trạng thái mới là "Đã hủy"
-//            if ("dangGiaoHang".equals(trangThaiHienTai) && "4".equals(trangThai)) {
-//                for (HoaDonChiTietEntity chiTiet : hoaDon.getHoaDonChiTiets()) {
-//                    SanPhamChiTietEntity sanPhamChiTiet = chiTiet.getSanPhamChiTiet();
-//                    int soLuong = chiTiet.getSoLuong();
-//                    System.out.println("Old So Luong: " + sanPhamChiTiet.getSoLuong());  // Debugging line
-//                    sanPhamChiTiet.setSoLuong(sanPhamChiTiet.getSoLuong() + soLuong);
-//                    System.out.println("New So Luong: " + sanPhamChiTiet.getSoLuong());  // Debugging line
-//                    chiTietSPRepository.save(sanPhamChiTiet);
-//                }
-//            }
-//
-//            // Cập nhật trạng thái hóa đơn
-//            TrangThaiHDEntity trangThaiHDEntity = trangThaiHDRepository.findByTrangThai(trangThai);
-//            hoaDon.setTrangThaiHD(trangThaiHDEntity);
-//            hoaDonRepository.save(hoaDon);
-//        }
-//
-//        return "redirect:/hoa-don";
-//    }
 
     @PostMapping("/updateDetail")
     public ResponseEntity<String> updateDetail(@RequestParam UUID hoaDonId, @RequestParam UUID sanPhamChiTietId, @RequestParam int soLuong) {
@@ -556,66 +515,130 @@ public String addProductToHoaDon(@PathVariable(required = false) String hoaDonId
         model.addAttribute("hoaDon", hoaDon);
         return "admin/adminWeb/ThanhToan";
     }
-    @PostMapping("/payment/{hoaDonId}")
-    public String processPayment(
-            @PathVariable("hoaDonId") UUID hoaDonId,
-            @RequestParam(required = false) String tenKhachHang,
-            @RequestParam(required = false) String sdt,
-            RedirectAttributes redirectAttributes) {
-        try {
-            // Tìm kiếm HoaDonEntity theo ID
-            Optional<HoaDonEntity> optionalHoaDon = hoaDonRepository.findById(hoaDonId);
-            if (optionalHoaDon.isEmpty()) {
-                redirectAttributes.addFlashAttribute("errorMessage", "Không tìm thấy hóa đơn với ID: " + hoaDonId);
-                return "redirect:/getAll";
-            }
-            HoaDonEntity hoaDon = optionalHoaDon.get();
-            // Tìm kiếm TrangThaiHDEntity theo tên "Đã Thanh Toán"
-            Optional<TrangThaiHDEntity> daThanhToanOpt = Optional.ofNullable(trangThaiHDRepository.findByTrangThai("1"));
-            if (daThanhToanOpt.isEmpty()) {
-                redirectAttributes.addFlashAttribute("errorMessage", "Trạng thái 'Đã Thanh Toán' không tìm thấy.");
-                return "redirect:/getAll";
-            }
-            TrangThaiHDEntity daThanhToan = daThanhToanOpt.get();
-            hoaDon.setTrangThaiHD(daThanhToan);
-            hoaDon.setNgayThanhToan(LocalDate.now());
-
-            UserEntity userEntity = null;
-            if (tenKhachHang != null && !tenKhachHang.trim().isEmpty() && sdt != null && !sdt.trim().isEmpty()) {
-                List<UserEntity> userEntities = userRepository.findByTenAndSdt(tenKhachHang, sdt);
-                if (!userEntities.isEmpty()) {
-                    userEntity = userEntities.get(0); // Sử dụng khách hàng hiện có
-                }
-                // Nếu không tìm thấy khách hàng, tạo mới
-                if (userEntity == null) {
-                    userEntity = new UserEntity();
-                    userEntity.setTaiKhoan("");
-                    userEntity.setNgaySinh(LocalDate.parse("2024-01-01"));
-                    userEntity.setHo("/");
-                    userEntity.setTenDem("/");
-                    userEntity.setTen(tenKhachHang);
-                    userEntity.setNgaySinh(LocalDate.now());
-                    userEntity.setSdt(sdt);
-                    userEntity.setGioiTinh(1);
-                    userEntity.setTrangThai(1);
-                    userEntity = userRepository.save(userEntity);
-                }
-            } else {
-                userEntity = userRepository.findByTen("Khách lẻ").orElseGet(() -> {
-                    UserEntity defaultUser = new UserEntity();
-                    defaultUser.setTen("Khách lẻ");
-                    defaultUser.setTrangThai(0); // Thiết lập các thuộc tính khác nếu cần
-                    return userRepository.save(defaultUser);
-                });
-            }
-            hoaDon.setUser(userEntity);
-            hoaDonRepository.save(hoaDon);
-            redirectAttributes.addFlashAttribute("successMessage", "Đã thanh toán hóa đơn thành công");
-        } catch (IllegalArgumentException e) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Chuỗi UUID không hợp lệ cho hoaDonId");
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Đã xảy ra lỗi, vui lòng thử lại: " + e.getMessage());
+//    @PostMapping("/payment/{hoaDonId}")
+//    public String processPayment(
+//            @PathVariable("hoaDonId") UUID hoaDonId,
+//            @RequestParam(required = false) String tenKhachHang,
+//            @RequestParam(required = false) String sdt,
+//            RedirectAttributes redirectAttributes) {
+//        try {
+//            // Tìm kiếm HoaDonEntity theo ID
+//            Optional<HoaDonEntity> optionalHoaDon = hoaDonRepository.findById(hoaDonId);
+//            if (optionalHoaDon.isEmpty()) {
+//                redirectAttributes.addFlashAttribute("errorMessage", "Không tìm thấy hóa đơn với ID: " + hoaDonId);
+//                return "redirect:/getAll";
+//            }
+//            HoaDonEntity hoaDon = optionalHoaDon.get();
+//            // Tìm kiếm TrangThaiHDEntity theo tên "Đã Thanh Toán"
+//            Optional<TrangThaiHDEntity> daThanhToanOpt = Optional.ofNullable(trangThaiHDRepository.findByTrangThai("1"));
+//            if (daThanhToanOpt.isEmpty()) {
+//                redirectAttributes.addFlashAttribute("errorMessage", "Trạng thái 'Đã Thanh Toán' không tìm thấy.");
+//                return "redirect:/getAll";
+//            }
+//            TrangThaiHDEntity daThanhToan = daThanhToanOpt.get();
+//            hoaDon.setTrangThaiHD(daThanhToan);
+//            hoaDon.setNgayThanhToan(LocalDate.now());
+//
+//            UserEntity userEntity = null;
+//            if (tenKhachHang != null && !tenKhachHang.trim().isEmpty() && sdt != null && !sdt.trim().isEmpty()) {
+//                List<UserEntity> userEntities = userRepository.findByTenAndSdt(tenKhachHang, sdt);
+//                if (!userEntities.isEmpty()) {
+//                    userEntity = userEntities.get(0);
+//                }
+//                // Nếu không tìm thấy khách hàng, tạo mới
+//                if (userEntity == null) {
+//                    userEntity = new UserEntity();
+//                    userEntity.setTaiKhoan("");
+//                    userEntity.setNgaySinh(LocalDate.parse("2024-01-01"));
+//                    userEntity.setHo("/");
+//                    userEntity.setTenDem("/");
+//                    userEntity.setTen(tenKhachHang);
+//                    userEntity.setNgaySinh(LocalDate.now());
+//                    userEntity.setSdt(sdt);
+//                    userEntity.setGioiTinh(1);
+//                    userEntity.setTrangThai(1);
+//                    userEntity = userRepository.save(userEntity);
+//                }
+//            } else {
+//                userEntity = userRepository.findByTen("Khách lẻ").orElseGet(() -> {
+//                    UserEntity defaultUser = new UserEntity();
+//                    defaultUser.setTen("Khách lẻ");
+//                    defaultUser.setTrangThai(0); // Thiết lập các thuộc tính khác nếu cần
+//                    return userRepository.save(defaultUser);
+//                });
+//            }
+//            hoaDon.setUser(userEntity);
+//            hoaDonRepository.save(hoaDon);
+//            redirectAttributes.addFlashAttribute("successMessage", "Đã thanh toán hóa đơn thành công");
+//        } catch (IllegalArgumentException e) {
+//            redirectAttributes.addFlashAttribute("errorMessage", "Chuỗi UUID không hợp lệ cho hoaDonId");
+//        } catch (Exception e) {
+//            redirectAttributes.addFlashAttribute("errorMessage", "Đã xảy ra lỗi, vui lòng thử lại: " + e.getMessage());
+//        }
+//        return "redirect:/getAll";
+//    }
+@PostMapping("/payment/{hoaDonId}")
+public String processPayment(
+        @PathVariable("hoaDonId") UUID hoaDonId,
+        @RequestParam(required = false) String tenKhachHang,
+        @RequestParam(required = false) String sdt,
+        RedirectAttributes redirectAttributes) {
+    try {
+        // Tìm kiếm HoaDonEntity theo ID
+        Optional<HoaDonEntity> optionalHoaDon = hoaDonRepository.findById(hoaDonId);
+        if (optionalHoaDon.isEmpty()) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Không tìm thấy hóa đơn với ID: " + hoaDonId);
+            return "redirect:/getAll";
         }
-        return "redirect:/getAll";
+        HoaDonEntity hoaDon = optionalHoaDon.get();
+
+        // Tìm kiếm TrangThaiHDEntity theo tên "Đã Thanh Toán"
+        Optional<TrangThaiHDEntity> daThanhToanOpt = Optional.ofNullable(trangThaiHDRepository.findByTrangThai("1"));
+        if (daThanhToanOpt.isEmpty()) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Trạng thái 'Đã Thanh Toán' không tìm thấy.");
+            return "redirect:/getAll";
+        }
+        TrangThaiHDEntity daThanhToan = daThanhToanOpt.get();
+        hoaDon.setTrangThaiHD(daThanhToan);
+        hoaDon.setNgayThanhToan(LocalDate.now());
+        UserEntity userEntity;
+        if (tenKhachHang == null || tenKhachHang.trim().isEmpty()) {
+            userEntity = userRepository.findByTen("Khách lẻ").orElseGet(() -> {
+                UserEntity defaultUser = new UserEntity();
+                defaultUser.setTen("Khách lẻ");
+                defaultUser.setTrangThai(0);
+                return userRepository.save(defaultUser);
+            });
+        } else {
+            List<UserEntity> userEntities = userRepository.findByTenAndSdt(tenKhachHang, sdt);
+            if (userEntities.isEmpty()) {
+                userEntity = new UserEntity();
+                userEntity.setTaiKhoan("");
+                userEntity.setNgaySinh(LocalDate.parse("2024-01-01")); // Thiết lập ngày sinh mặc định
+                userEntity.setHo("/");
+                userEntity.setTenDem("/");
+                userEntity.setTen(tenKhachHang);
+                userEntity.setSdt(sdt);
+                userEntity.setGioiTinh(1);
+                userEntity.setTrangThai(1);
+                userEntity = userRepository.save(userEntity);
+            } else if (userEntities.size() == 1) {
+                userEntity = userEntities.get(0);
+            } else {
+                redirectAttributes.addFlashAttribute("errorMessage", "Có nhiều khách hàng với cùng tên và số điện thoại.");
+                return "redirect:/getAll";
+            }
+        }
+        hoaDon.setUser(userEntity);
+        hoaDonRepository.save(hoaDon);
+
+        redirectAttributes.addFlashAttribute("successMessage", "Đã thanh toán hóa đơn thành công");
+    } catch (IllegalArgumentException e) {
+        redirectAttributes.addFlashAttribute("errorMessage", "Chuỗi UUID không hợp lệ cho hoaDonId");
+    } catch (Exception e) {
+        redirectAttributes.addFlashAttribute("errorMessage", "Đã xảy ra lỗi, vui lòng thử lại: " + e.getMessage());
     }
+    return "redirect:/getAll";
+}
+
 }
