@@ -49,7 +49,9 @@ public class UserStatusFilter implements Filter {
             }
         }
         if (requestURI.startsWith("/BanHangOff")||
-                requestURI.startsWith("/thongke")|| requestURI.startsWith("/quanly-user")) {
+                requestURI.startsWith("/thongke")|| requestURI.startsWith("/quanly-user")
+                ||
+                requestURI.startsWith("/voucher")) {
             // Nếu chưa có session hoặc session không chứa thông tin user
             if (session == null || session.getAttribute("user") == null) {
                 httpResponse.sendRedirect(httpRequest.getContextPath() + "/dang-nhap");
@@ -78,7 +80,9 @@ public class UserStatusFilter implements Filter {
             if ("USER".equals(userRole) && (requestURI.startsWith("/admin")
                     || requestURI.startsWith("/BanHangOff")
                     || requestURI.startsWith("/thongke")
-                    || requestURI.startsWith("/quanly-user"))) {
+                    || requestURI.startsWith("/quanly-user")
+                    ||requestURI.startsWith("/voucher"))
+             ) {
                 session.invalidate();
                 httpResponse.sendRedirect(httpRequest.getContextPath() + "/dang-nhap");
                 return;
