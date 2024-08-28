@@ -33,7 +33,8 @@ public interface  UsersRepository extends JpaRepository<UserEntity, UUID>, JpaSp
     @Query("SELECT u FROM UserEntity u WHERE u.taiKhoan = :taiKhoan AND u.matKhau = :matKhau")
     Optional<UserEntity> findByTaiKhoanAndMatKhau(@Param("taiKhoan") String taiKhoan, @Param("matKhau") String matKhau);
 
-
+    @Query("SELECT u FROM UserEntity u WHERE u.taiKhoan = :taiKhoan AND u.sdt = :std")
+    UserEntity findByTkAndSDT(@Param("taiKhoan") String taiKhoan, @Param("std") String std);
     Optional<UserEntity> findBySdt(String sdt);
 
 

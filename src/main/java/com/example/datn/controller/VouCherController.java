@@ -47,6 +47,7 @@ public class VouCherController {
             return "admin/adminWeb/VouCher";
         }
         try {
+            vouCher.setCreateDate(LocalDate.now());
             vouCherRepository.save(vouCher);
             System.out.println(vouCher);
             return "redirect:/voucher/getAll";

@@ -22,8 +22,9 @@
         }
 
         h1 {
-            font-weight: bold;
-            margin: 0;
+            font-size: 22px; /* Giảm kích thước chữ */
+            text-align: center; /* Căn giữa chữ */
+            margin-bottom: 10px; /* Giảm khoảng cách dưới tiêu đề */
         }
 
         h2 {
@@ -255,6 +256,26 @@
             color: #3c97bf;
             text-decoration: none;
         }
+        .form-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .form-grid input {
+            width: 48%; /* Đảm bảo các ô nhập liệu có kích thước bằng nhau và chia đều */
+            margin-bottom: 10px;
+        }
+        .form-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .form-grid input {
+            width: 48%; /* Đảm bảo các ô nhập liệu có kích thước bằng nhau và chia đều */
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
@@ -264,15 +285,18 @@
         <form id="signin-form">
             <h1>Đăng Kí</h1>
             <span>hoặc dùng tài khoản của bạn</span>
-            <input type="text" placeholder="Họ" name="ho" autocomplete="family-name" />
-            <input type="text" placeholder="Tên Đệm" name="tenDem" autocomplete="additional-name" />
-            <input type="text" placeholder="Tên" name="ten" autocomplete="given-name" />
-            <input type="text" placeholder="Account" name="account" autocomplete="username" />
-            <input type="password" placeholder="Password" name="password" autocomplete="current-password" />
-            <input type="date" placeholder="Ngày Sinh" name="birthdate" autocomplete="bday" />
-            <input type="text" placeholder="SDT" name="sdt" autocomplete="SDT" />
+            <div class="form-grid">
+                <input type="text" placeholder="Họ" name="ho" autocomplete="family-name"/>
+                <input type="text" placeholder="Tên Đệm" name="tenDem" autocomplete="additional-name"/>
+                <input type="text" placeholder="Tên" name="ten" autocomplete="given-name"/>
+                <input type="text" placeholder="Account" name="account" autocomplete="username"/>
+                <input type="password" placeholder="Password" name="password" autocomplete="current-password"/>
+                <input type="date" placeholder="Ngày Sinh" name="birthdate" autocomplete="bday"/>
+                <input type="text" placeholder="SDT" name="sdt" autocomplete="SDT"/>
+                <input type="email" placeholder="Email" name="Email" autocomplete="Email"/>
+            </div>
             <a href="#">Quên mật khẩu?</a>
-            <button type="submit">Đắng Kí</button>
+            <button type="submit">Đăng Kí</button>
         </form>
     </div>
     <div class="overlay-container">
@@ -293,8 +317,8 @@
     </div>
 </div>
 <script>
-    $(document).ready(function() {
-        $('#signin-form').submit(function(event) {
+    $(document).ready(function () {
+        $('#signin-form').submit(function (event) {
             event.preventDefault(); // Ngăn chặn form submit mặc định
 
             // Xóa thông báo lỗi cũ nếu có
@@ -307,10 +331,11 @@
                 taiKhoan: $('input[name=account]').val(),
                 matKhau: $('input[name=password]').val(),
                 ngaySinh: $('input[name=birthdate]').val(),
-                sdt: $('input[name=sdt]').val()
+                sdt: $('input[name=sdt]').val(),
+                email: $('input[name=Email]').val()
             };
             if (!loginData.ho || !loginData.tenDem || !loginData.ten ||
-                !loginData.taiKhoan || !loginData.matKhau || !loginData.ngaySinh || !loginData.sdt) {
+                !loginData.taiKhoan || !loginData.matKhau || !loginData.ngaySinh || !loginData.sdt || !loginData.email) {
                 alert("vui lòng điền đầy đủ thông tin")
                 return;
             }
@@ -326,11 +351,11 @@
                 contentType: 'application/json',
                 url: '/api/user/add-user',
                 data: JSON.stringify(loginData),
-                success: function(response) {
+                success: function (response) {
                     console.log('Đăng ký thành công:', response);
                     alert('Đăng ký thành công!');
                 },
-                error: function(error) {
+                error: function (error) {
                     console.error('Lỗi khi đăng ký:', error);
                     console.log('Response Text:', error.responseText);
                     alert("Trùng Số Điện Thoại Hoặc Tài Khoản")

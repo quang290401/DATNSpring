@@ -38,6 +38,8 @@ public class UserEntity extends SuperEntity{
     private int gioiTinh;
         @Column(name = "trangThai", length = 10, nullable = true)
     private int trangThai;
+    @Column(name = "email", length =100,nullable = true)
+    private String email;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name  = "vaiTro_id")
     private VaiTroEntity vaiTro;

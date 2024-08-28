@@ -33,6 +33,7 @@ public class UserDTO extends SuperDTO{
     private int gioiTinh;
 
     private int trangThai;
+    private String email;
 
     private VaiTroDTO vaiTro;
 

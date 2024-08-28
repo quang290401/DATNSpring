@@ -28,6 +28,7 @@ public class UserCrud {
     private int gioiTinh;
 
     private int trangThai;
+    private String email;
 
     private UUID vaiTro;
     private UUID diaChi;

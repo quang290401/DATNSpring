@@ -25,5 +25,8 @@ public class HinhAnhRestController {
     public HinhAnhDTO addHinhANh (@RequestBody HinhAnhDTO hinhAnhDTO){
         return hinhAnhService.addHinhAnh(hinhAnhDTO);
     }
-
+    @PutMapping("/update")
+    public HinhAnhDTO updateHinhAnh (@RequestBody HinhAnhDTO hinhAnhDTO){
+        return hinhAnhService.UpdateHinhAnh(hinhAnhDTO);
+    }
 }

@@ -96,6 +96,7 @@ public class UserServiceIMPL implements UserService {
                 .ten(userCrud.getTen())
                 .sdt(userCrud.getSdt())
                 .trangThai(1)
+                .email(userCrud.getEmail())
                 .ngaySinh(userCrud.getNgaySinh())
                 .build();
         usersRepository.save(userEntity);

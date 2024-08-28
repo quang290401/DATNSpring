@@ -359,6 +359,7 @@
                                 </div>
                                 <input type="file" class="form-control" id="duongDanSuffix" name="duongDanSuffix"
                                        required>
+                                <input type="text" class="form-control" id="idHinhAnhSufix" name="idHinhAnhSufix" required>
                             </div>
                         </div>
                     </form>
@@ -619,8 +620,19 @@
                             <td>${index + 1}</td>
                             <td><img src="${product.duongDan}" alt="Hình ảnh" style="width: 50px; height: 50px;"></td>
                             <td>${product.createDate}</td>
+                            <td><input type="checkbox" class="product-checkbox" data-id="${product.id}" data-name="${product.duongDan}"></td>
                         </tr>`;
                             hinhAnhTable.append(row);
+                        });
+                        $('.product-checkbox').on('click', function () {
+                            $('.product-checkbox').not(this).prop('checked', false);
+                            if ($(this).is(':checked')) {
+                                $('#idHinhAnhSufix').val($(this).data('id'));
+                                $('#duongDanSuffix').val($(this).data('name'));
+                            } else {
+                                $('#idHinhAnhSufix').val('');
+                                $('#duongDanSuffix').val('');
+                            }
                         });
 
                         // Cập nhật ô select hình ảnh
@@ -1150,11 +1162,43 @@
                 success: function (response) {
                     alert('Hình ảnh đã được thêm thành công!');
                     loadAllImages();
+                    $('#idHinhAnhSufix').val('');
+                    $('#duongDanSuffix').val('');
 
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     console.error('Lỗi khi gọi API: ', textStatus, errorThrown);
                     alert('Đã xảy ra lỗi khi thêm hình ảnh.');
+                }
+            });
+        });
+        $('#updateButtonHinhAnh').click(function () {
+            let fileInput = $('#duongDanSuffix');
+            let filePath = fileInput.val();
+            let fileName = filePath.split('\\').pop().split('/').pop();
+            let duongDan = `img2/${fileName}`;
+            let id = $('#idHinhAnhSufix').val()
+
+            let hinhAnhDTO = {
+                id:id,
+                duongDan: duongDan,
+            };
+
+            $.ajax({
+                url: '/api/hinhanh/update',
+                method: 'PUT',
+                contentType: 'application/json',
+                data: JSON.stringify(hinhAnhDTO),
+                success: function (response) {
+                    alert('Hình ảnh đã được cập nhật  thành công!');
+                    loadAllImages();
+                    $('#idHinhAnhSufix').val('');
+                    $('#duongDanSuffix').val('');
+
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.error('Lỗi khi gọi API: ', textStatus, errorThrown);
+                    alert('Đã xảy ra lỗi khi cập nhật hình ảnh.');
                 }
             });
         });
