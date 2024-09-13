@@ -297,23 +297,6 @@
                                 $('.btn-submit').attr('disabled', true);
                             }
                         });
-                        document.getElementById('payButton').addEventListener('click', function (event) {
-                            event.preventDefault(); // Ngăn chặn hành vi mặc định của nút
-
-                            // Sử dụng confirm để hỏi người dùng có muốn in hóa đơn không
-                            let userConfirmation = confirm("Bạn có muốn in hóa đơn không?");
-
-                            if (userConfirmation) {
-                                // Nếu người dùng chọn OK
-                                alert("Hóa đơn sẽ được in...");
-                                // Thực hiện hành động in hóa đơn
-                                // Ví dụ: Submit form hoặc thực hiện một hành động khác
-                                // document.querySelector('form').submit(); // Ví dụ submit form
-                            } else {
-                                // Nếu người dùng chọn Cancel
-                                alert("Bạn đã hủy việc in hóa đơn.");
-                            }
-                        });
 
                         $('#generateQrCodeBtn').click(function () {
                             var paymentMethod = $('input[name="paymentMethod"]:checked').val();
