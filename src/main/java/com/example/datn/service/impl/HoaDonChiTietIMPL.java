@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
 import java.math.BigDecimal;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -126,6 +127,16 @@ public class HoaDonChiTietIMPL implements HoaDonChiTietService {
                 .map(entity -> modelMapper.map(entity, HoaDonDTO.class))
                 .collect( Collectors.toList());
     }
+
+    @Override
+    public List<HoaDonDTO> getAllHoaDonByIdUserTC(UUID idUser) {
+        Optional<UserEntity> user =  usersRepository.findById(idUser);
+        List<HoaDonEntity> entityList = hoaDonRepository.findByHoaByIdUserTC(user.get().getId());
+        return entityList.stream()
+                .map(entity -> modelMapper.map(entity, HoaDonDTO.class))
+                .collect( Collectors.toList());
+    }
+
     @Override
     public List<HoaDonDTO> getAllHoaDonByIdUserHuy(UUID idUser) {
         Optional<UserEntity> user =  usersRepository.findById(idUser);
@@ -152,6 +163,30 @@ public class HoaDonChiTietIMPL implements HoaDonChiTietService {
             throw new EntityNotFoundException("Không tìm thấy sản phẩm chi tiết trong cơ sở dữ liệu");
         }
         return sanPhamChiTiet.get().getSoLuong() >= soLuongYeuCau;
+    }
+
+    @Override
+    public void deleteHoaDonCT(UUID id,UUID idHoaDon,BigDecimal tongTra,int soLuong) {
+        hoaDonChiTietRepository.deleteById(id);
+        hoaDonRepository.updateTongTien(idHoaDon,tongTra);
+        sanPhamChiTietRepository.updateSoLuongCong(id,soLuong);
+
+    }
+
+    @Override
+    public void updateHDCTByidHdSP(UUID newIdSpct, UUID idHoaDon,UUID idSpctCuren,int soLuong) {
+        System.out.println("newIdSpct: " + newIdSpct);
+        System.out.println("idHoaDon: " + idHoaDon);
+        System.out.println("idSpctCuren: " + idSpctCuren);
+        System.out.println("soLuong: " + soLuong);
+        try {
+            hoaDonChiTietRepository.updateHoaDonCT(newIdSpct, idHoaDon, idSpctCuren);
+            sanPhamChiTietRepository.updateSoLuongCong(idSpctCuren, soLuong);
+            sanPhamChiTietRepository.updateSoLuong(newIdSpct, soLuong);
+        } catch (Exception e) {
+            System.out.println("General Error: " + e.getMessage());
+        }
+
     }
 
 }

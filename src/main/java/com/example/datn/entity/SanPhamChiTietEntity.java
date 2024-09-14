@@ -63,6 +63,9 @@ public class SanPhamChiTietEntity extends SuperEntity{
     @JsonIgnore
     @OneToMany(mappedBy = "sanPhamChiTiet")
     private List<HoaDonChiTietEntity> hoaDonChiTiets = new ArrayList<HoaDonChiTietEntity>();
+    @JsonIgnore
+    @OneToMany(mappedBy = "sanPhamChiTiet")
+    private List<TraHangEntity> traHangs = new ArrayList<TraHangEntity>();
 
 
     @Override
@@ -84,6 +87,7 @@ public class SanPhamChiTietEntity extends SuperEntity{
                 ", trangThai=" + trangThai +
                 ", gioHangChiTietEntities=" + gioHangChiTietEntities +
                 ", hoaDonChiTiets=" + hoaDonChiTiets +
+                ", traHangs=" + traHangs +
                 '}';
     }
 }

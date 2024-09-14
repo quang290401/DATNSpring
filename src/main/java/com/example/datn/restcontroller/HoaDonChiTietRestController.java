@@ -26,6 +26,10 @@ public class HoaDonChiTietRestController {
     public List<HoaDonDTO> getALLHoaDonByIdUser (@PathVariable UUID idUser) {
         return hoaDonChiTietService.getAllHoaDonByIdUser(idUser);
     }
+    @GetMapping("/tc/{idUser}")
+    public List<HoaDonDTO> getALLHoaDonByIdUserTC (@PathVariable UUID idUser) {
+        return hoaDonChiTietService.getAllHoaDonByIdUserTC(idUser);
+    }
     @GetMapping("/GetALL/{idHoaDon}")
     public List<HoaDonChiTietDTO> getALLHoaDonByIdHoaDon (@PathVariable UUID idHoaDon) {
         return hoaDonChiTietService.getALlHoaDonCTByIdHoaDon(idHoaDon);
@@ -34,6 +38,21 @@ public class HoaDonChiTietRestController {
     public List<HoaDonDTO> getALLHoaDonByIdHoaDonHuy(@PathVariable UUID idHoaDon) {
         return hoaDonChiTietService.getAllHoaDonByIdUserHuy(idHoaDon);
     }
+    @DeleteMapping("/xoa/{idSp}/{idHoaDon}/{tongTra}/{soLuong}")
+    public void deleteHDCT(@PathVariable("idSp") UUID idSp,
+                           @PathVariable("idHoaDon") UUID idHoaDon,
+                           @PathVariable("tongTra") BigDecimal tongTra,
+                           @PathVariable("soLuong") int soLuong) {
+        hoaDonChiTietService.deleteHoaDonCT(idSp, idHoaDon, tongTra,soLuong);
+    }
+    @PutMapping("/update/{newIdSpct}/{idHd}/{idSpctCurent}/{soLuong}")
+    public void updateHdCT(@PathVariable("idHd") UUID idHd,
+                           @PathVariable("idSpctCurent") UUID idSpctCurent,
+                           @PathVariable("newIdSpct") UUID newIdSpct,
+                           @PathVariable("soLuong") int soLuong) {
+        hoaDonChiTietService.updateHDCTByidHdSP(newIdSpct, idHd, idSpctCurent,soLuong);
+    }
+
 
 
 }

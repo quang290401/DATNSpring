@@ -99,6 +99,7 @@ public class UserServiceIMPL implements UserService {
                 .email(userCrud.getEmail())
                 .ngaySinh(userCrud.getNgaySinh())
                 .build();
+        userEntity.setCreateDate(LocalDate.now());
         usersRepository.save(userEntity);
         GioHangEntity gioHangEntity = new GioHangEntity();
         gioHangEntity.setId(idGioHang);

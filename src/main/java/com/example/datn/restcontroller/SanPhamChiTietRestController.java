@@ -59,5 +59,13 @@ public class SanPhamChiTietRestController {
         Pageable topFour = PageRequest.of(0, 4);
         return sanPhamChiTietService.GetForSP(topFour);
     }
+    @GetMapping("/by-idsp/{idSP}")
+    public ResponseEntity<List<SanPhamChiTietDTO>> getSanPhamChiTietByIdSP(@PathVariable UUID idSP) {
+        // Gọi phương thức từ service để lấy dữ liệu
+        List<SanPhamChiTietDTO> dtos = sanPhamChiTietService.AllSanPhamChiTietByidSP(idSP);
+
+        // Trả về danh sách DTO dưới dạng JSON
+        return ResponseEntity.ok(dtos);
+    }
 
 }

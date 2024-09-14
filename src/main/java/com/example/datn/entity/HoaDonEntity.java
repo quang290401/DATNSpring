@@ -34,4 +34,7 @@
         @JsonIgnore
         @OneToMany(mappedBy = "hoaDon")
         private List<HoaDonChiTietEntity> hoaDonChiTiets = new ArrayList<HoaDonChiTietEntity>();
+        @JsonIgnore
+        @OneToMany(mappedBy = "hoaDon")
+        private List<TraHangEntity> traHangs = new ArrayList<TraHangEntity>();
     }

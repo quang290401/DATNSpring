@@ -163,4 +163,12 @@ public class SanPhamChiTietIMPL implements SanPhamChiTietService {
                 .map(entity -> modelMapper.map(entity, SanPhamChiTietDTO.class))
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<SanPhamChiTietDTO> AllSanPhamChiTietByidSP(UUID idSP) {
+        List<SanPhamChiTietEntity> entities = sanPhamChiTietRepository.findByIdSP(idSP);
+        return entities.stream()
+                .map(entity -> modelMapper.map(entity, SanPhamChiTietDTO.class))
+                .collect(Collectors.toList());
+    }
 }

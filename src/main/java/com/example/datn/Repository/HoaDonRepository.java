@@ -2,6 +2,7 @@ package com.example.datn.Repository;
 
 import com.example.datn.dto.TrangThaiHoaDonDTO;
 import com.example.datn.entity.HoaDonEntity;
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,13 +11,20 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 @Repository
 public interface HoaDonRepository extends JpaRepository<HoaDonEntity, UUID> {
-    @Query("SELECT g FROM HoaDonEntity g WHERE g.user.id = :userId AND g.trangThaiHD.trangThai IN ('1','2','3','5') ORDER BY g.createDate DESC")
+    @Modifying
+    @Transactional
+    @Query("UPDATE HoaDonEntity h SET h.tongTien = h.tongTien - :tongTra WHERE h.id = :id")
+    void updateTongTien(@Param("id") UUID id, @Param("tongTra") BigDecimal tongTra);
+    @Query("SELECT g FROM HoaDonEntity g WHERE g.user.id = :userId AND g.trangThaiHD.trangThai IN ('2','3','5') ORDER BY g.createDate DESC")
     List<HoaDonEntity> findByHoaByIdUser(@Param("userId") UUID userId);
+    @Query("SELECT g FROM HoaDonEntity g WHERE g.user.id = :userId AND g.trangThaiHD.trangThai IN ('1') ORDER BY g.createDate DESC")
+    List<HoaDonEntity> findByHoaByIdUserTC(@Param("userId") UUID userId);
     @Query("SELECT g FROM HoaDonEntity g WHERE g.user.id = :userId AND g.trangThaiHD.trangThai IN ('4') ORDER BY g.createDate DESC")
     List<HoaDonEntity> findByHoaByIdUserHuy(@Param("userId") UUID userId);
 

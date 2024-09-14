@@ -15,4 +15,5 @@ public interface SanPhamChiTietService {
     SanPhamChiTietCrud upDateSanPhamChiTiet(SanPhamChiTietCrud sanPhamChiTietCrud);
     SanPhamChiTietDTO findById(UUID id);
     List<SanPhamChiTietDTO> GetForSP(Pageable pageable);
+    List<SanPhamChiTietDTO> AllSanPhamChiTietByidSP(UUID idSP);
 }
