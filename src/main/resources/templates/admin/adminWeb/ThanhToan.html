@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -10,63 +11,49 @@
         body {
             padding: 20px;
         }
-
         .invoice-heading {
             background-color: #f5f5f5;
             padding: 10px;
             margin-bottom: 20px;
         }
-
         .invoice-details {
             margin-bottom: 20px;
         }
-
         .table {
             margin-bottom: 20px;
         }
-
         .btn-submit {
             margin-top: 20px;
         }
-
         .error-message {
             color: red;
             margin-top: 10px;
         }
-
         .success-message {
             color: green;
             margin-top: 10px;
         }
-
         .form-group {
             margin-bottom: 20px;
         }
-
         .radio-label {
             font-weight: bold;
         }
-
         .money-payment {
             display: none;
         }
-
         .money-return-red {
             color: red;
         }
-
         #qrCodeContainer {
             display: none;
         }
-
         .form-control.error input {
             border-color: red;
         }
-
         .form-control.success input {
             border-color: green;
         }
-
     </style>
     <th:block th:replace="~{cssImport.html :: layout_import_css}"/>
 </head>
@@ -85,7 +72,6 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="row">
                         <div class="col-md-6">
                             <!-- Display HoaDonEntity details -->
@@ -93,10 +79,8 @@
                                 <!--        <p><strong>Hóa đơn ID:</strong> <span id="hoaDonIdSpan" th:text="${hoaDon.id}"></span></p>-->
                                 <p><strong>Ngày Tạo:</strong> <span th:text="${hoaDon.createDate}"></span></p>
                             </div>
-                            <form th:action="@{'/payment/'+ ${hoaDon.id}}" method="post" id="checkoutForm"
-                                  onsubmit="return checkValidate();">
+                            <form th:action="@{'/payment/'+ ${hoaDon.id}}" method="post" id="checkoutForm">
                                 <input type="hidden" name="hoaDonId" th:value="${hoaDon.id}"/>
-
                                 <div class="form-group">
                                     <label for="tenKhachHang"><strong>Tên khách hàng:</strong></label>
                                     <input type="text" class="form-control" id="tenKhachHang" name="tenKhachHang"
@@ -111,7 +95,6 @@
                                            placeholder="Số điện thoại"/>
                                     <small class="error-message"></small>
                                 </div>
-
                                 <!-- Chi tiết sản phẩm -->
                                 <div class="table-responsive">
                                     <table class="table table-bordered">
@@ -134,15 +117,8 @@
                                         </tbody>
                                     </table>
                                 </div>
-                                <select id="voucherSelect" class="form-control">
-                                    <option value="">Chọn Voucher</option>
-                                </select>
                                 <p><strong>Tổng tiền:</strong> <span id="tongTienSpan"
                                                                      th:text="${hoaDon.tongTien}"></span></p>
-
-                                <td colspan="3" class="text-right"><strong>Tổng Tiền:</strong></td>
-                                <td colspan="2" class="text-center"><strong id="totalAmount3">${totalAmount}</strong>
-                                </td>
                                 <div class="form-group">
                                     <label class="radio-label"><strong>Phương thức thanh toán:</strong></label><br/>
                                     <div class="form-check form-check-inline">
@@ -156,14 +132,12 @@
                                         <label class="form-check-label" for="paymentMethod2">Chuyển khoản</label>
                                     </div>
                                 </div>
-
                                 <div class="form-group money-payment" id="moneyPayment">
                                     <label for="tienKhachDua"><strong>Tiền khách đưa:</strong></label>
                                     <input type="text" class="form-control" id="tienKhachDua" name="tienKhachDua"
                                            min="0" step="1000">
                                     <small id="moneyReturnHelp" class="form-text text-muted"></small>
                                 </div>
-
                                 <div class="form-group" id="qrCodeContainer">
                                     <label for="qrCode"><strong>Mã QR Chuyển khoản:</strong></label>
                                     <div id="qrCode"></div>
@@ -172,14 +146,12 @@
                                 </div>
                                 <button type="submit" class="btn btn-primary btn-submit" disabled>Thanh toán</button>
                             </form>
-
                             <!-- Error and success messages -->
                             <div th:if="${errorMessage}" class="error-message" th:text="${errorMessage}"></div>
                             <div th:if="${successMessage}" class="success-message" th:text="${successMessage}"></div>
                         </div>
                     </div>
                 </div>
-
                 <!-- Bootstrap JS and dependencies (for optional features) -->
                 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
                 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"
@@ -189,59 +161,52 @@
                         integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8sh+EWlE/hb3EhsR/pAITtcQj6eGwYXpG2QNIq"
                         crossorigin="anonymous"></script>
                 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+                <!--<script>-->
+                <!--  function checkValidate() {-->
+                <!--    let tenKhachHang = document.getElementById('tenKhachHang');-->
+                <!--    let sdt = document.getElementById('sdt');-->
+                <!--    let usernameValue = tenKhachHang.value.trim();-->
+                <!--    let phoneValue = sdt.value.trim();-->
+                <!--    let isCheck = true;-->
+                <!--    // Kiểm tra trường tên khách hàng nếu có giá trị-->
+                <!--    if (usernameValue !== '') {-->
+                <!--      if (!isNaN(usernameValue) || usernameValue.includes(' ')) {-->
+                <!--        // Kiểm tra xem tên có phải là số hoặc có khoảng cách-->
+                <!--        setError(tenKhachHang, 'Tên khách hàng không được là số và không chứa khoảng cách');-->
+                <!--        isCheck = false;-->
+                <!--      } else {-->
+                <!--        setSuccess(tenKhachHang);-->
+                <!--      }-->
+                <!--    }-->
+                <!--    // Kiểm tra trường số điện thoại nếu có giá trị-->
+                <!--    if (phoneValue !== '') {-->
+                <!--      if (!isPhone(phoneValue)) {-->
+                <!--        setError(sdt, 'Số điện thoại không đúng định dạng');-->
+                <!--        isCheck = false;-->
+                <!--      } else {-->
+                <!--        setSuccess(sdt);-->
+                <!--      }-->
+                <!--    }-->
+                <!--    return isCheck;-->
+                <!--  }-->
+                <!--  function isPhone(phone) {-->
+                <!--    const phonePattern = /^\d{10,15}$/;-->
+                <!--    return phonePattern.test(phone);-->
+                <!--  }-->
+                <!--  // Hàm thiết lập thông báo lỗi-->
+                <!--  function setError(element, message) {-->
+                <!--    let errorMessage = element.nextElementSibling;-->
+                <!--    errorMessage.textContent = message;-->
+                <!--    element.classList.add('is-invalid');-->
+                <!--  }-->
+                <!--  // Hàm thiết lập thông báo thành công-->
+                <!--  function setSuccess(element) {-->
+                <!--    let errorMessage = element.nextElementSibling;-->
+                <!--    errorMessage.textContent = '';-->
+                <!--    element.classList.remove('is-invalid');-->
+                <!--  }-->
+                <!--</script>-->
                 <script>
-                    function checkValidate() {
-                        let tenKhachHang = document.getElementById('tenKhachHang');
-                        let sdt = document.getElementById('sdt');
-
-                        let usernameValue = tenKhachHang.value.trim();
-                        let phoneValue = sdt.value.trim();
-
-                        let isCheck = true;
-                        if (usernameValue !== '') {
-
-                            const invalidCharPattern = /[^a-zA-ZÀ-ỹ\s]/;
-                            if (invalidCharPattern.test(usernameValue)) {
-                                setError(tenKhachHang, 'Tên khách hàng không được chứa số hoặc ký tự đặc biệt');
-                                isCheck = false;
-                            } else {
-                                setSuccess(tenKhachHang);
-                            }
-                        }
-                        if (phoneValue !== '') {
-                            if (!isPhone(phoneValue)) {
-                                setError(sdt, 'Số điện thoại không đúng định dạng');
-                                isCheck = false;
-                            } else {
-                                setSuccess(sdt);
-                            }
-                        }
-                        return isCheck;
-                    }
-
-                    function isPhone(phone) {
-                        const phonePattern = /^0[1-9]\d{8}$/
-                        return phonePattern.test(phone);
-                    }
-
-                    // Hàm thiết lập thông báo lỗi
-                    function setError(element, message) {
-                        let errorMessage = element.nextElementSibling;
-                        errorMessage.textContent = message;
-                        element.classList.add('is-invalid');
-                    }
-
-                    // Hàm thiết lập thông báo thành công
-                    function setSuccess(element) {
-                        let errorMessage = element.nextElementSibling;
-                        errorMessage.textContent = '';
-                        element.classList.remove('is-invalid');
-                    }
-
-                </script>
-
-                <script>
-
                     let isQrGenerated = false;
                     $(document).ready(function () {
                         let isQrGenerated = false;
@@ -250,15 +215,10 @@
                         function updateMoneyReturn() {
                             var tienKhachDuaStr = $('#tienKhachDua').val().replace(/\./g, '');
                             var tienKhachDua = parseInt(tienKhachDuaStr);
-                            var voucher = parseFloat($('#voucherID').text().replace(/,/g, '')) || 0;
-                            var totalAmount = 0// Nếu không có voucher, mặc định là 0
-                            var updatedTotalAmount = totalAmount + shippingCost - voucher;
-                            $('#totalAmount3').text(updatedTotalAmount.toLocaleString('en').replace(/,/g, ''));
                             var moneyReturnHelp = $('#moneyReturnHelp');
                             var submitButton = $('.btn-submit');
                             if (!isNaN(tienKhachDua)) {
                                 var tienTraLai = tienKhachDua - tongTien;
-
                                 if (tienTraLai >= 0) {
                                     moneyReturnHelp.text('Tiền trả lại: ' + tienTraLai.toLocaleString('vi-VN') + ' VND');
                                     moneyReturnHelp.removeClass('money-return-red');
@@ -273,11 +233,9 @@
                                 submitButton.attr('disabled', true); // Vô hiệu hóa nút thanh toán nếu không có giá trị nhập
                             }
                         }
-
                         $('#tienKhachDua').on('input', function () {
                             updateMoneyReturn();
                         });
-
                         $('#tienKhachDua').on('blur', function () {
                             var tienKhachDuaStr = $(this).val().replace(/\./g, '');
                             var tienKhachDua = parseInt(tienKhachDuaStr);
@@ -285,7 +243,6 @@
                                 $(this).val(tienKhachDua.toLocaleString('vi-VN'));
                             }
                         });
-                        updateTotalAmount()
                         $('input[name="paymentMethod"]').on('change', function () {
                             var selectedMethod = $('input[name="paymentMethod"]:checked').val();
                             if (selectedMethod === 'tienMat') {
@@ -302,10 +259,8 @@
                                 $('.btn-submit').attr('disabled', true);
                             }
                         });
-
                         $('#generateQrCodeBtn').click(function () {
                             var paymentMethod = $('input[name="paymentMethod"]:checked').val();
-
                             if (paymentMethod === 'chuyenKhoan') {
                                 var requestData = {
                                     "accountNo": "9159678903",
@@ -315,7 +270,6 @@
                                     "addInfo": "Thanh toan " + hoaDonId,
                                     "template": "compact"
                                 };
-
                                 $.ajax({
                                     url: 'https://api.vietqr.io/v2/generate',
                                     type: 'POST',
@@ -343,7 +297,6 @@
                                 console.error('Invalid input for QR Code generation.');
                             }
                         });
-
                         $('#checkoutForm').on('submit', function (event) {
                             var selectedMethod = $('input[name="paymentMethod"]:checked').val();
                             if (selectedMethod === 'chuyenKhoan' && !isQrGenerated) {
@@ -351,13 +304,11 @@
                                 event.preventDefault(); // Ngăn chặn form submit nếu chưa tạo mã QR
                             }
                         });
-
                         // Trigger change event to set initial state
                         $('input[name="paymentMethod"]:checked').trigger('change');
                     });
                     $('#checkoutForm').on('submit', function (event) {
                         event.preventDefault(); // Ngăn chặn hành động submit mặc định
-
                         // Hiển thị thông báo xác nhận in hóa đơn
                         if (confirm("Bạn có muốn in hóa đơn không?")) {
                             // Thực hiện hành động in hóa đơn
