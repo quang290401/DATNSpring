@@ -83,7 +83,7 @@
             },
             success: function(data) {
                 $('#result-txnRef').text(data.txnRef);
-                $('#result-amount').text(data.amount);
+                $('#result-amount').text((data.amount / 100).toLocaleString());
                 $('#result-bankCode').text(data.bankCode);
                 $('#result-orderInfo').text(data.orderInfo);
                 $('#result-customerName').text(data.customerName); // Display customer name
