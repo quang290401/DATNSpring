@@ -23,8 +23,13 @@ public class VouCherController {
     VouCherRepository vouCherRepository;
 
     private void checkAndUpdateVoucherStatus(VouCherEntity vouCher) {
-        LocalDate today = LocalDate.now();
-        if (vouCher.getNgayKetThuc().isBefore(today)) {
+        LocalDate ngayKetThuc = LocalDate.now();
+        LocalDate ngayBatDau = LocalDate.now();
+        if (vouCher.getNgayKetThuc().isBefore(ngayKetThuc)) {
+            vouCher.setTrangThai(0);
+            vouCherRepository.save(vouCher);
+        }
+        if (vouCher.getNgayBatDau().isAfter(ngayBatDau)) {
             vouCher.setTrangThai(0);
             vouCherRepository.save(vouCher);
         }
@@ -48,6 +53,7 @@ public class VouCherController {
         }
         try {
             vouCher.setCreateDate(LocalDate.now());
+            vouCher.setTrangThai(1);
             vouCherRepository.save(vouCher);
             System.out.println(vouCher);
             return "redirect:/voucher/getAll";
@@ -63,7 +69,7 @@ public class VouCherController {
             //Kiểm tra xem nó có tồn tại không
             if (!vouCherRepository.existsById(id)) {
                 // Nếu không tồn tại
-                model.addAttribute("errorMessage", "Không tìm thấy Chất liệu này");
+                model.addAttribute("errorMessage", "Không tìm thấy VouCher này");
                 List<VouCherEntity> listVoucher = vouCherRepository.findAll();
                 model.addAttribute("listVoucher", listVoucher);
                 return "admin/adminWeb/VouCher";
@@ -88,29 +94,37 @@ public class VouCherController {
             model.addAttribute("vouCher", vouCher);
             return "admin/adminWeb/VouCherDetail";
         } else {
-            model.addAttribute("errorMessage", "Địa chỉ không tồn tại.");
+            model.addAttribute("errorMessage", "VouCher không tồn tại.");
             return "admin/adminWeb/VouCher";
         }
     }
 
     @PostMapping("/voucher/update/{id}")
-    public String updateVouCher(@PathVariable("id") UUID id, @ModelAttribute("chatLieu") VouCherEntity updateVouCher, Model model) {
+    public String updateVouCher(@PathVariable("id") UUID id, @ModelAttribute("vouCher") VouCherEntity updateVouCher, Model model) {
         try {
-            // Kiểm tra xem chất liệu có tồn tại không
+            // Kiểm tra xem voucher có tồn tại không
             if (!vouCherRepository.existsById(id)) {
-                model.addAttribute("errorMessage", "Chất liệu không tồn tại.");
+                model.addAttribute("errorMessage", "VouCher không tồn tại.");
                 List<VouCherEntity> listVoucher = vouCherRepository.findAll();
                 model.addAttribute("listVoucher", listVoucher);
                 return "admin/adminWeb/VouCher";
             }
 
-            // Lấy thông tin chất liệu cần cập nhật từ cơ sở dữ liệu
+            // Lấy thông tin voucher cần cập nhật từ cơ sở dữ liệu
             VouCherEntity existingVouCher = vouCherRepository.findById(id).orElse(null);
             if (existingVouCher == null) {
-                return "redirect:/diachi/getAll";
+                return "redirect:/voucher/getAll";
             }
 
-            // Cập nhật thông tin chất liệu
+            // Kiểm tra trạng thái ngày bắt đầu và ngày kết thúc
+            LocalDate ngayHienTai = LocalDate.now();
+
+            if (updateVouCher.getNgayKetThuc().isBefore(ngayHienTai) || updateVouCher.getNgayBatDau().isAfter(ngayHienTai)) {
+                model.addAttribute("errorMessage", "Ngày bắt đầu hoặc kết thúc không hợp lệ. Voucher không thể cập nhật.");
+                return "redirect:/voucher/getAll";
+            }
+
+            // Cập nhật thông tin voucher
             existingVouCher.setId(updateVouCher.getId());
             existingVouCher.setTen(updateVouCher.getTen());
             existingVouCher.setPhanTramGiam(updateVouCher.getPhanTramGiam());
@@ -119,11 +133,14 @@ public class VouCherController {
             existingVouCher.setTrangThai(updateVouCher.getTrangThai());
             existingVouCher.setUpdateDate(updateVouCher.getUpdateDate());
 
+            // Lưu voucher đã được cập nhật
             vouCherRepository.save(existingVouCher);
+
             return "redirect:/voucher/getAll";
         } catch (Exception e) {
-            model.addAttribute("errorMessage", "Có lỗi xảy ra khi cập nhật chất liệu.");
+            model.addAttribute("errorMessage", "Có lỗi xảy ra khi cập nhật VouCher.");
             return "redirect:/voucher/detail";
         }
     }
+
 }

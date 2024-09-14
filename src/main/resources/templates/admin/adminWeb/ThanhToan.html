@@ -93,7 +93,8 @@
                                 <!--        <p><strong>Hóa đơn ID:</strong> <span id="hoaDonIdSpan" th:text="${hoaDon.id}"></span></p>-->
                                 <p><strong>Ngày Tạo:</strong> <span th:text="${hoaDon.createDate}"></span></p>
                             </div>
-                            <form th:action="@{'/payment/'+ ${hoaDon.id}}" method="post" id="checkoutForm">
+                            <form th:action="@{'/payment/'+ ${hoaDon.id}}" method="post" id="checkoutForm"
+                                  onsubmit="return checkValidate();">
                                 <input type="hidden" name="hoaDonId" th:value="${hoaDon.id}"/>
 
                                 <div class="form-group">
@@ -133,10 +134,15 @@
                                         </tbody>
                                     </table>
                                 </div>
-
+                                <select id="voucherSelect" class="form-control">
+                                    <option value="">Chọn Voucher</option>
+                                </select>
                                 <p><strong>Tổng tiền:</strong> <span id="tongTienSpan"
                                                                      th:text="${hoaDon.tongTien}"></span></p>
 
+                                <td colspan="3" class="text-right"><strong>Tổng Tiền:</strong></td>
+                                <td colspan="2" class="text-center"><strong id="totalAmount3">${totalAmount}</strong>
+                                </td>
                                 <div class="form-group">
                                     <label class="radio-label"><strong>Phương thức thanh toán:</strong></label><br/>
                                     <div class="form-check form-check-inline">
@@ -157,6 +163,7 @@
                                            min="0" step="1000">
                                     <small id="moneyReturnHelp" class="form-text text-muted"></small>
                                 </div>
+
                                 <div class="form-group" id="qrCodeContainer">
                                     <label for="qrCode"><strong>Mã QR Chuyển khoản:</strong></label>
                                     <div id="qrCode"></div>
@@ -182,59 +189,56 @@
                         integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8sh+EWlE/hb3EhsR/pAITtcQj6eGwYXpG2QNIq"
                         crossorigin="anonymous"></script>
                 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-                <!--<script>-->
-                <!--  function checkValidate() {-->
-                <!--    let tenKhachHang = document.getElementById('tenKhachHang');-->
-                <!--    let sdt = document.getElementById('sdt');-->
+                <script>
+                    function checkValidate() {
+                        let tenKhachHang = document.getElementById('tenKhachHang');
+                        let sdt = document.getElementById('sdt');
 
-                <!--    let usernameValue = tenKhachHang.value.trim();-->
-                <!--    let phoneValue = sdt.value.trim();-->
+                        let usernameValue = tenKhachHang.value.trim();
+                        let phoneValue = sdt.value.trim();
 
-                <!--    let isCheck = true;-->
+                        let isCheck = true;
+                        if (usernameValue !== '') {
 
-                <!--    // Kiểm tra trường tên khách hàng nếu có giá trị-->
-                <!--    if (usernameValue !== '') {-->
-                <!--      if (!isNaN(usernameValue) || usernameValue.includes(' ')) {-->
-                <!--        // Kiểm tra xem tên có phải là số hoặc có khoảng cách-->
-                <!--        setError(tenKhachHang, 'Tên khách hàng không được là số và không chứa khoảng cách');-->
-                <!--        isCheck = false;-->
-                <!--      } else {-->
-                <!--        setSuccess(tenKhachHang);-->
-                <!--      }-->
-                <!--    }-->
+                            const invalidCharPattern = /[^a-zA-ZÀ-ỹ\s]/;
+                            if (invalidCharPattern.test(usernameValue)) {
+                                setError(tenKhachHang, 'Tên khách hàng không được chứa số hoặc ký tự đặc biệt');
+                                isCheck = false;
+                            } else {
+                                setSuccess(tenKhachHang);
+                            }
+                        }
+                        if (phoneValue !== '') {
+                            if (!isPhone(phoneValue)) {
+                                setError(sdt, 'Số điện thoại không đúng định dạng');
+                                isCheck = false;
+                            } else {
+                                setSuccess(sdt);
+                            }
+                        }
+                        return isCheck;
+                    }
 
-                <!--    // Kiểm tra trường số điện thoại nếu có giá trị-->
-                <!--    if (phoneValue !== '') {-->
-                <!--      if (!isPhone(phoneValue)) {-->
-                <!--        setError(sdt, 'Số điện thoại không đúng định dạng');-->
-                <!--        isCheck = false;-->
-                <!--      } else {-->
-                <!--        setSuccess(sdt);-->
-                <!--      }-->
-                <!--    }-->
+                    function isPhone(phone) {
+                        const phonePattern = /^0[1-9]\d{8}$/
+                        return phonePattern.test(phone);
+                    }
 
-                <!--    return isCheck;-->
-                <!--  }-->
-                <!--  function isPhone(phone) {-->
-                <!--    const phonePattern = /^\d{10,15}$/;-->
-                <!--    return phonePattern.test(phone);-->
-                <!--  }-->
+                    // Hàm thiết lập thông báo lỗi
+                    function setError(element, message) {
+                        let errorMessage = element.nextElementSibling;
+                        errorMessage.textContent = message;
+                        element.classList.add('is-invalid');
+                    }
 
-                <!--  // Hàm thiết lập thông báo lỗi-->
-                <!--  function setError(element, message) {-->
-                <!--    let errorMessage = element.nextElementSibling;-->
-                <!--    errorMessage.textContent = message;-->
-                <!--    element.classList.add('is-invalid');-->
-                <!--  }-->
+                    // Hàm thiết lập thông báo thành công
+                    function setSuccess(element) {
+                        let errorMessage = element.nextElementSibling;
+                        errorMessage.textContent = '';
+                        element.classList.remove('is-invalid');
+                    }
 
-                <!--  // Hàm thiết lập thông báo thành công-->
-                <!--  function setSuccess(element) {-->
-                <!--    let errorMessage = element.nextElementSibling;-->
-                <!--    errorMessage.textContent = '';-->
-                <!--    element.classList.remove('is-invalid');-->
-                <!--  }-->
-
-                <!--</script>-->
+                </script>
 
                 <script>
                     let isQrGenerated = false;
@@ -243,13 +247,28 @@
                         var tongTien = parseInt($('#tongTienSpan').text());
                         var hoaDonId = $('#hoaDonIdSpan').text().trim();
 
+
+                        // function updateTotalAmount() {
+                        //
+                        //     // Lấy giá trị hiện tại từ các phần tử HTML
+                        //     var totalAmount = parseFloat($('#totalAmount2').text().replace(/,/g, '')); // Loại bỏ dấu phẩy nếu có
+                        //     var voucher = parseFloat($('#voucherID').text().replace(/,/g, '')) || 0; // Nếu không có voucher, mặc định là 0
+                        //
+                        //     // Tính toán tổng tiền mới
+                        //     var updatedTotalAmount = totalAmount - voucher;
+                        //
+                        //     // Cập nhật tổng tiền trong bảng
+                        //     $('#totalAmount3').text(updatedTotalAmount.toLocaleString('en').replace(/,/g, ''));
+                        // }
                         function updateMoneyReturn() {
                             var tienKhachDuaStr = $('#tienKhachDua').val().replace(/\./g, '');
                             var tienKhachDua = parseInt(tienKhachDuaStr);
-
+                            var voucher = parseFloat($('#voucherID').text().replace(/,/g, '')) || 0;
+                            var totalAmount = 0// Nếu không có voucher, mặc định là 0
+                            var updatedTotalAmount = totalAmount + shippingCost - voucher;
+                            $('#totalAmount3').text(updatedTotalAmount.toLocaleString('en').replace(/,/g, ''));
                             var moneyReturnHelp = $('#moneyReturnHelp');
                             var submitButton = $('.btn-submit');
-
                             if (!isNaN(tienKhachDua)) {
                                 var tienTraLai = tienKhachDua - tongTien;
 
@@ -279,7 +298,7 @@
                                 $(this).val(tienKhachDua.toLocaleString('vi-VN'));
                             }
                         });
-
+                        updateTotalAmount()
                         $('input[name="paymentMethod"]').on('change', function () {
                             var selectedMethod = $('input[name="paymentMethod"]:checked').val();
                             if (selectedMethod === 'tienMat') {
@@ -349,6 +368,42 @@
                         // Trigger change event to set initial state
                         $('input[name="paymentMethod"]:checked').trigger('change');
                     });
+                //     $.ajax({
+                //         url: '/api/voucher',
+                //         type: 'GET',
+                //         success: function (response) {
+                //             response.forEach(function (voucher) {
+                //                 $('#voucherSelect').append(`
+                //     <option value="${voucher.id}" data-discount="${voucher.phanTramGiam}">${voucher.ten} - ${voucher.phanTramGiam}%</option>
+                // `);
+                //             });
+                //         },
+                //         error: function (xhr) {
+                //             alert('An error occurred while loading the vouchers. Please try again.');
+                //         }
+                //     });
+                //
+                //     $('#voucherSelect').change(function () {
+                //         var selectedOption = $(this).find('option:selected').val();
+                //         var originalTotalAmount = parseFloat($('#cart2 tbody').find('#totalAmount2').last().text().replace(/,/g, '')); // Lưu giá tiền gốc ban đầu
+                //         var formattedOriginalTotalAmount = originalTotalAmount.toLocaleString('en'); // Định dạng giá trị ban đầu
+                //         if (selectedOption === "") {
+                //             $('#shipCode').prop('checked', false);
+                //             loadCart();
+                //             updateTotalAmount();
+                //
+                //         } else {
+                //             var selectedDiscount = $(this).find('option:selected').data('discount');
+                //             var newTotalAmount = originalTotalAmount - (originalTotalAmount * (selectedDiscount / 100));
+                //             var formattedAmount = parseFloat(newTotalAmount).toLocaleString('en');
+                //             $('#voucherID').text(originalTotalAmount * (selectedDiscount / 100));
+                //             formattedAmount = formattedAmount.replace(/,/g, '.').replace(/\./g, '');
+                //
+                //             // $('#totalAmount').text(formattedAmount);
+                //             // $('#totalAmount2').text(formattedAmount);// Cập nhật tổng tiền trong modal
+                //             updateTotalAmount();
+                //         }
+                //     });
                 </script>
             </div>
         </div>

@@ -2,6 +2,8 @@ package com.example.datn.Repository;
 
 import com.example.datn.dto.TrangThaiHoaDonDTO;
 import com.example.datn.entity.HoaDonEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -23,12 +25,21 @@ public interface HoaDonRepository extends JpaRepository<HoaDonEntity, UUID> {
             "JOIN hd.trangThaiHD tt " +
             "WHERE hd.id = :hoaDonId")
     TrangThaiHoaDonDTO findTrangThaiByHoaDonId(@Param("hoaDonId") UUID hoaDonId);
-    @Query("SELECT h FROM HoaDonEntity h JOIN h.trangThaiHD t WHERE t.trangThai IN ('2', '3')")
-    List<HoaDonEntity> findHoaDonsByTrangThai();
-    @Query("SELECT h FROM HoaDonEntity h JOIN h.trangThaiHD t WHERE t.trangThai =('4')")
-    List<HoaDonEntity> findTTByHoaDon();
-    @Query("SELECT h FROM HoaDonEntity h JOIN h.trangThaiHD t WHERE t.trangThai =('5')")
-    List<HoaDonEntity> findDangGiao();
+    @Query("SELECT h FROM HoaDonEntity h JOIN h.trangThaiHD t WHERE t.trangThai IN ('2', '3') ORDER BY h.ngayThanhToan DESC")
+    Page<HoaDonEntity> findHoaDonsByTrangThai(Pageable pageable);
+
+    @Query("SELECT h FROM HoaDonEntity h JOIN h.trangThaiHD t WHERE t.trangThai = '4' ORDER BY h.ngayThanhToan DESC")
+    Page<HoaDonEntity> findTTByHoaDon(Pageable pageable);
+
+    @Query("SELECT h FROM HoaDonEntity h JOIN h.trangThaiHD t WHERE t.trangThai = '1' ORDER BY h.ngayThanhToan DESC")
+    Page<HoaDonEntity> findHDBYTT(Pageable pageable);
+
+    @Query("SELECT h FROM HoaDonEntity h JOIN h.trangThaiHD t WHERE t.trangThai = '0' ORDER BY h.ngayThanhToan DESC")
+    Page<HoaDonEntity> findHDChuaThanhToan(Pageable pageable);
+
+    @Query("SELECT h FROM HoaDonEntity h JOIN h.trangThaiHD t WHERE t.trangThai = '5' ORDER BY h.ngayThanhToan DESC")
+    Page<HoaDonEntity> findDangGiao(Pageable pageable);
+
     @Modifying
     @Query("UPDATE HoaDonEntity h SET h.trangThaiHD = (SELECT t FROM TrangThaiHDEntity t WHERE t.trangThai = '4') WHERE h.id = :idHoaDon")
     void updateTrangThaiHd(@Param("idHoaDon") UUID idHoaDon);

@@ -1,134 +1,122 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="csrf-token" content="${_csrf.token}">
-    <title>Invoice Generator</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
-    <link href="https://cdn.datatables.net/1.10.24/css/dataTables.bootstrap4.min.css" rel="stylesheet">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap4.min.js"></script>
-
-    <link rel="stylesheet" href="/path/to/styles.css">
-    <th:block th:replace="~{cssImport.html :: layout_import_css}"/>
-</head>
-<body>
-<div th:replace="~{admin/common/Header.html}"></div>
-<div th:replace="~{admin/common/menu.html}"></div>
-<div class="content-wrapper">
-    <section class="content">
-        <div class="main-content">
-            <div class="main-content-inner">
-                <div id="header">
-                    <form action="/create" method="post" th:action="@{/create}">
-                        <button type="submit" id="createInvoiceBtn" class="btn btn-success">Tạo hóa đơn</button>
-                    </form>
-                    <a href="/BanHangOff" class="btn btn-secondary">Danh Sách Sản Phẩm</a>
-                </div>
-                <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <span th:text="${errorMessage}"></span>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-                <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
-                    <span th:text="${successMessage}"></span>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-                <div id="invoicesContainer">
-                    <h2>Danh sách hóa đơn</h2>
-                    <ul class="nav nav-tabs">
-                        <li class="nav-item">
-                            <a class="nav-link active" href="#" id="unpaidTab" onclick="showTab('unpaid')">Chưa thanh
-                                toán</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#" id="hoaDonTab" onclick="showTab('hoaDonCho')">Hóa Đơn Chờ</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#" id="dangGiaoTab" onclick="showTab('hoaDonDangGiao')">Đang Giao
-                                Hàng</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#" id="paidTab" onclick="showTab('paid')">Đã thanh toán</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#" id="donHuyTab" onclick="showTab('hoaDonHuy')">Hóa Đơn Hủy</a>
-                        </li>
-                        <!-- <li class="nav-item"> -->
-                        <!--     <a class="nav-link" href="#" id="hoaDonDangGiaoTab" onclick="showTab('hoaDonDangGiao')">Hóa Đơn Đang Giao</a> -->
-                        <!-- </li> -->
-                    </ul>
-
-                    <!--    hóa đơn chưa thanh toán-->
-                    <div id="unpaidInvoices" class="tab-content">
-                        <table id="unpaidTable" class="table table-bordered">
-                            <thead class="thead-dark">
-                            <tr>
-                                <th></th>
-                                <th>Mã hóa đơn</th>
-                                <th>Ngày tạo hóa đơn</th>
-                                <th>Ngày Thanh Toán</th>
-                                <th>Trạng thái</th>
-                                <th>Tổng tiền</th>
-                                <th>Actions</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr th:each="hoaDon : ${danhSachHoaDonChuaThanhToan}">
-                                <td>
-                                    <button class="detailsButton btn btn-success" th:attr="data-hoaDonId=${hoaDon.id}">
-                                        +
-                                    </button>
-                                </td>
-                                <td th:text="${hoaDon.id}"></td>
-                                <td th:text="${hoaDon.createDate}"></td>
-                                <td th:text="${hoaDon.ngayThanhToan}"></td>
-                                <td th:text="${hoaDon.getTrangThaiHD().ten}"></td>
-                                <td th:text="${hoaDon.tongTien}"></td>
-                                <td>
-                                    <form th:action="@{'/addToCart/' + ${hoaDon.id}}" method="get">
-                                        <button type="submit" class="btn btn-success">Thêm vào hóa đơn</button>
-                                    </form>
-                                    <form th:action="@{'/delete/' + ${hoaDon.id}}" method="post"
-                                          onsubmit="return confirm('Bạn có chắc chắn muốn xóa hóa đơn này?');">
-                                        <button type="submit" class="btn btn-danger">Xóa</button>
-                                    </form>
-                                    <form th:action="@{'/payment/'+ ${hoaDon.id}}" method="get">
-                                        <button type="submit" class="btn btn-primary">Thanh toán</button>
-                                    </form>
-                                </td>
-                            </tr>
-                            <!-- Detail  hóa đơn chưa thanh toán -->
-                            <tr th:each="hoaDon : ${danhSachHoaDonChuaThanhToan}" th:id="'details-' + ${hoaDon.id}"
-                                style="display:none;">
-                                <td colspan="8">
-                                    <div>
-                                        <h3>Chi tiết hóa đơn</h3>
-                                        <table class="table table-bordered">
-                                            <thead class="thead-dark">
-                                            <tr>
-                                                <th>Tên sản phẩm</th>
-                                                <th>Màu sắc</th>
-                                                <th>Kích cỡ</th>
-                                                <th>Số lượng</th>
-                                                <th>Giá bán</th>
-                                                <th>Thành tiền</th>
-                                                <th>Action</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody th:attr="id='productListBody-' + ${hoaDon.id}">
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.css">
+        <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.js"></script>
+        <th:block th:replace="~{cssImport.html :: layout_import_css}"/>
+    </head>
+    <body>
+    <div th:replace="~{admin/common/Header.html}"></div>
+    <div th:replace="~{admin/common/menu.html}"></div>
+    <div class="content-wrapper">
+        <section class="content">
+            <div class="main-content">
+                <div class="main-content-inner">
+                    <div id="header">
+                        <form action="/create" method="post" th:action="@{/create}">
+                            <button type="submit" id="createInvoiceBtn" class="btn btn-success">Tạo hóa đơn</button>
+                        </form>
+                        <a href="/BanHangOff" class="btn btn-secondary">Danh Sách Sản Phẩm</a>
                     </div>
-                    <!--hóa đơn đã thanh toán-->
+                    <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <span th:text="${errorMessage}"></span>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+                        <span th:text="${successMessage}"></span>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    <div id="invoicesContainer">
+                        <h2>Danh sách hóa đơn</h2>
+                        <ul class="nav nav-tabs">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="unpaidTab" onclick="showTab('unpaid')">Chưa thanh toán</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="paidTab" onclick="showTab('paid')">Đã thanh toán</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="hoaDonTab" onclick="showTab('hoaDonCho')">Hóa Đơn Chờ</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="donHuyTab" onclick="showTab('hoaDonHuy')">Hóa Đơn Hủy</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="dangGiaoTab" onclick="showTab('hoaDonDangGiao')">Đang Giao Hàng</a>
+                            </li>
+                        </ul>
+
+                        <!--    hóa đơn chưa thanh toán-->
+                        <div id="unpaidInvoices" class="tab-content">
+                            <table id="unpaidTable" class="table table-bordered">
+                                <thead class="thead-dark">
+                                <tr>
+                                    <th></th>
+                                    <th>Mã hóa đơn</th>
+                                    <th>Ngày tạo hóa đơn</th>
+                                    <th>Ngày Thanh Toán</th>
+                                    <th>Trạng thái</th>
+                                    <th>Tổng tiền</th>
+                                    <th>Actions</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="hoaDon : ${danhSachHoaDonChuaThanhToan}">
+                                    <td>
+                                        <button class="detailsButton btn btn-success" th:attr="data-hoaDonId=${hoaDon.id}" onclick="showDetails(${hoaDon.id}, productsData[${hoaDon.id}], this)">
+                                            +
+                                        </button>
+                                    </td>
+                                    <td th:text="${hoaDon.id}"></td>
+                                    <td th:text="${hoaDon.createDate}"></td>
+                                    <td th:text="${hoaDon.ngayThanhToan}"></td>
+                                    <td th:text="${hoaDon.getTrangThaiHD().ten}"></td>
+                                    <td th:text="${hoaDon.tongTien}"></td>
+                                    <td>
+                                        <form th:action="@{'/addToCart/' + ${hoaDon.id}}" method="get">
+                                            <button type="submit" class="btn btn-success">Thêm vào hóa đơn</button>
+                                        </form>
+                                        <form th:action="@{'/delete/' + ${hoaDon.id}}" method="post" onsubmit="return confirm('Bạn có chắc chắn muốn xóa hóa đơn này?');">
+                                            <button type="submit" class="btn btn-danger">Xóa</button>
+                                        </form>
+                                        <form th:action="@{'/payment/' + ${hoaDon.id}}" method="get">
+                                            <button type="submit" class="btn btn-primary">Thanh toán</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                <!-- Chi tiết hóa đơn chưa thanh toán -->
+                                <tr th:each="hoaDon : ${danhSachHoaDonChuaThanhToan}" th:id="'details-' + ${hoaDon.id}" style="display:none;">
+                                    <td colspan="7">
+                                        <div>
+                                            <h3>Chi tiết hóa đơn</h3>
+                                            <table class="table table-bordered">
+                                                <thead class="thead-dark">
+                                                <tr>
+                                                    <th>Tên sản phẩm</th>
+                                                    <th>Màu sắc</th>
+                                                    <th>Kích cỡ</th>
+                                                    <th>Số lượng</th>
+                                                    <th>Giá bán</th>
+                                                    <th>Thành tiền</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody th:attr="id='productListBody-' + ${hoaDon.id}">
+                                                <!-- Nội dung chi tiết sản phẩm sẽ được chèn ở đây -->
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+
+                        <!--hóa đơn đã thanh toán-->
                     <div id="paidInvoices" class="tab-content" style="display:none;">
                         <table id="paidTable" class="table table-bordered">
                             <thead class="thead-dark">
@@ -184,67 +172,65 @@
                             </tbody>
                         </table>
                     </div>
+
+
+                    <!--Hóa đơn đang chờ-->
+                    <div id="hoaDonCho" class="tab-content" style="display: none;">
+                        <table id="hoaDon" class="table table-bordered">
+                            <thead class="thead-dark">
+                            <tr>
+                                <th></th>
+                                <th>Mã hóa đơn</th>
+                                <th>Ngày tạo hóa đơn</th>
+                                <th>Ngày Thanh Toán</th>
+                                <th>Trạng thái</th>
+                                <th>Tổng tiền</th>
+                                <th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="hoaDon : ${danhSachHoaDonCho}">
+                                <td>
+                                    <button class="detailsButton btn btn-success" th:attr="data-hoaDonId=${hoaDon.id}">+
+                                    </button>
+                                </td>
+                                <td th:text="${hoaDon.id}"></td>
+                                <td th:text="${hoaDon.createDate}"></td>
+                                <td th:text="${hoaDon.ngayThanhToan}"></td>
+                                <td th:text="${hoaDon.getTrangThaiHD().ten}"></td>
+                                <td th:text="${hoaDon.tongTien}"></td>
+                                <td>
+                                    <a th:href="@{/hoadon/detail/{id}(id=${hoaDon.id})}" class="btn btn-primary">Detail</a>
+                                </td>
+                            </tr>
+                            <tr th:each="hoaDon : ${danhSachHoaDonCho}" th:id="'details-' + ${hoaDon.id}"
+                                style="display:none;">
+                                <td colspan="8">
+                                    <div>
+                                        <h3>Chi tiết hóa đơn</h3>
+                                        <table class="table table-bordered">
+                                            <thead class="thead-dark">
+                                            <tr>
+                                                <th>Tên sản phẩm</th>
+                                                <th>Màu sắc</th>
+                                                <th>Kích cỡ</th>
+                                                <th>Số lượng</th>
+                                                <th>Giá bán</th>
+                                                <th>Thành tiền</th>
+                                                <th>Action</th>
+                                            </tr>
+                                            </thead>
+                                            <!--                        hiện thị xem trong hóa đơn chờ có gì-->
+                                            <tbody th:attr="id='productListBody-' + ${hoaDon.id}">
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-
-
-                <!--Hóa đơn đang chờ-->
-                <div id="hoaDonCho" class="tab-content" style="display: none;">
-                    <table id="hoaDon" class="table table-bordered">
-                        <thead class="thead-dark">
-                        <tr>
-                            <th></th>
-                            <th>Mã hóa đơn</th>
-                            <th>Ngày tạo hóa đơn</th>
-                            <th>Ngày Thanh Toán</th>
-                            <th>Trạng thái</th>
-                            <th>Tổng tiền</th>
-                            <th>Actions</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr th:each="hoaDon : ${danhSachHoaDonCho}">
-                            <td>
-                                <button class="detailsButton btn btn-success" th:attr="data-hoaDonId=${hoaDon.id}">+
-                                </button>
-                            </td>
-                            <td th:text="${hoaDon.id}"></td>
-                            <td th:text="${hoaDon.createDate}"></td>
-                            <td th:text="${hoaDon.ngayThanhToan}"></td>
-                            <td th:text="${hoaDon.getTrangThaiHD().ten}"></td>
-                            <td th:text="${hoaDon.tongTien}"></td>
-                            <td>
-                                <a th:href="@{/hoadon/detail/{id}(id=${hoaDon.id})}" class="btn btn-primary">Detail</a>
-                            </td>
-                        </tr>
-                        <tr th:each="hoaDon : ${danhSachHoaDonCho}" th:id="'details-' + ${hoaDon.id}"
-                            style="display:none;">
-                            <td colspan="8">
-                                <div>
-                                    <h3>Chi tiết hóa đơn</h3>
-                                    <table class="table table-bordered">
-                                        <thead class="thead-dark">
-                                        <tr>
-                                            <th>Tên sản phẩm</th>
-                                            <th>Màu sắc</th>
-                                            <th>Kích cỡ</th>
-                                            <th>Số lượng</th>
-                                            <th>Giá bán</th>
-                                            <th>Thành tiền</th>
-                                            <th>Action</th>
-                                        </tr>
-                                        </thead>
-                                        <!--                        hiện thị xem trong hóa đơn chờ có gì-->
-                                        <tbody th:attr="id='productListBody-' + ${hoaDon.id}">
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-
                 <!--hóa đơn hủy-->
                 <div id="hoaDonHuy" class="tab-content" style="display:none;">
                     <table id="huyTable" class="table table-bordered">
@@ -299,116 +285,121 @@
                         </tbody>
                     </table>
                 </div>
+            </div>
 
 
-                <!--hóa đơn đang giao-->
-                <div id="hoaDonDangGiao" class="tab-content" style="display: none;">
-                    <table id="hoaDonDG" class="table table-bordered">
-                        <thead class="thead-dark">
-                        <tr>
-                            <th></th>
-                            <th>Mã hóa đơn</th>
-                            <th>Ngày tạo hóa đơn</th>
-                            <th>Ngày Thanh Toán</th>
-                            <th>Trạng thái</th>
-                            <th>Tổng tiền</th>
-                            <th>Actions</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr th:each="hoaDon : ${hdDangGiao}">
-                            <td>
-                                <button class="detailsButton btn btn-success" th:attr="data-hoaDonId=${hoaDon.id}">+
-                                </button>
-                            </td>
-                            <td th:text="${hoaDon.id}"></td>
-                            <td th:text="${hoaDon.createDate}"></td>
-                            <td th:text="${hoaDon.ngayThanhToan}"></td>
-                            <td th:text="${hoaDon.getTrangThaiHD().ten}"></td>
-                            <td th:text="${hoaDon.tongTien}"></td>
-                            <td>
-                                <a th:href="@{/hoadon/detail/{id}(id=${hoaDon.id})}" class="btn btn-primary">Detail</a>
-                                <!--                <form th:action="@{'/addToCart/' + ${hoaDon.id}}" method="get">-->
-                                <!--                    <button type="submit" class="btn btn-success">Thêm vào hóa đơn</button>-->
-                                <!--                </form>-->
-                                <!--                <form th:action="@{'/delete/' + ${hoaDon.id}}" method="post"-->
-                                <!--                      onsubmit="return confirm('Bạn có chắc chắn muốn xóa hóa đơn này?');">-->
-                                <!--                    <button type="submit" class="btn btn-danger">Xóa</button>-->
-                                <!--                </form>-->
-                                <!--                <form th:action="@{'/payment/'+ ${hoaDon.id}}" method="get">-->
-                                <!--                    <button type="submit" class="btn btn-primary">Thanh toán</button>-->
-                                <!--                </form>-->
-                            </td>
-                        </tr>
-                        <tr th:each="hoaDon : ${hdDangGiao}" th:id="'details-' + ${hoaDon.id}"
-                            style="display:none;">
-                            <td colspan="8">
-                                <div>
-                                    <h3>Chi tiết hóa đơn</h3>
-                                    <table class="table table-bordered">
-                                        <thead class="thead-dark">
-                                        <tr>
-                                            <th>Tên sản phẩm</th>
-                                            <th>Màu sắc</th>
-                                            <th>Kích cỡ</th>
-                                            <th>Số lượng</th>
-                                            <th>Giá bán</th>
-                                            <th>Thành tiền</th>
-                                            <th>Action</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody th:attr="id='productListBody-' + ${hoaDon.id}">
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
+            <!--hóa đơn đang giao-->
+            <div id="hoaDonDangGiao" class="tab-content" style="display: none;">
+                <table id="hoaDonDG" class="table table-bordered">
+                    <thead class="thead-dark">
+                    <tr>
+                        <th></th>
+                        <th>Mã hóa đơn</th>
+                        <th>Ngày tạo hóa đơn</th>
+                        <th>Ngày Thanh Toán</th>
+                        <th>Trạng thái</th>
+                        <th>Tổng tiền</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="hoaDon : ${hdDangGiao}">
+                        <td>
+                            <button class="detailsButton btn btn-success" th:attr="data-hoaDonId=${hoaDon.id}">+
+                            </button>
+                        </td>
+                        <td th:text="${hoaDon.id}"></td>
+                        <td th:text="${hoaDon.createDate}"></td>
+                        <td th:text="${hoaDon.ngayThanhToan}"></td>
+                        <td th:text="${hoaDon.getTrangThaiHD().ten}"></td>
+                        <td th:text="${hoaDon.tongTien}"></td>
+                        <td>
+                            <a th:href="@{/hoadon/detail/{id}(id=${hoaDon.id})}" class="btn btn-primary">Detail</a>
+                            <!--                <form th:action="@{'/addToCart/' + ${hoaDon.id}}" method="get">-->
+                            <!--                    <button type="submit" class="btn btn-success">Thêm vào hóa đơn</button>-->
+                            <!--                </form>-->
+                            <!--                <form th:action="@{'/delete/' + ${hoaDon.id}}" method="post"-->
+                            <!--                      onsubmit="return confirm('Bạn có chắc chắn muốn xóa hóa đơn này?');">-->
+                            <!--                    <button type="submit" class="btn btn-danger">Xóa</button>-->
+                            <!--                </form>-->
+                            <!--                <form th:action="@{'/payment/'+ ${hoaDon.id}}" method="get">-->
+                            <!--                    <button type="submit" class="btn btn-primary">Thanh toán</button>-->
+                            <!--                </form>-->
+                        </td>
+                    </tr>
+                    <tr th:each="hoaDon : ${hdDangGiao}" th:id="'details-' + ${hoaDon.id}"
+                        style="display:none;">
+                        <td colspan="8">
+                            <div>
+                                <h3>Chi tiết hóa đơn</h3>
+                                <table class="table table-bordered">
+                                    <thead class="thead-dark">
+                                    <tr>
+                                        <th>Tên sản phẩm</th>
+                                        <th>Màu sắc</th>
+                                        <th>Kích cỡ</th>
+                                        <th>Số lượng</th>
+                                        <th>Giá bán</th>
+                                        <th>Thành tiền</th>
+                                        <th>Action</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody th:attr="id='productListBody-' + ${hoaDon.id}">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
 
 
-                <!--Thay đổi sản phẩm  trong hóa đơn chi tiết -->
-                <div id="updateProductDetailForm" style="display:none;">
-                    <h3>Sửa sản phẩm chi tiết</h3>
-                    <form id="updateProductForm" method="post" th:action="@{/updateProductDetail}">
-                        <input type="hidden" name="hoaDonId" id="updateHoaDonId"/>
-                        <input type="hidden" name="sanPhamChiTietId" id="updateSanPhamChiTietId"/>
+            <!--Thay đổi sản phẩm  trong hóa đơn chi tiết -->
+            <div id="updateProductDetailForm" style="display:none;">
+                <h3>Sửa sản phẩm chi tiết</h3>
+                <form id="updateProductForm" method="post" th:action="@{/updateProductDetail}">
+                    <input type="hidden" name="hoaDonId" id="updateHoaDonId"/>
+                    <input type="hidden" name="sanPhamChiTietId" id="updateSanPhamChiTietId"/>
 
-                        <div class="form-group">
-                            <label for="tenSanPham">Tên:</label>
-                            <input type="text" class="form-control" id="tenSanPham" name="tenSanPham" readonly/>
-                        </div>
+                    <div class="form-group">
+                        <label for="tenSanPham">Tên:</label>
+                        <input type="text" class="form-control" id="tenSanPham" name="tenSanPham" readonly/>
+                    </div>
 
-                        <div class="form-group">
-                            <label for="updateKichCo">Kích cỡ:</label>
-                            <input type="text" class="form-control" id="updateKichCo" name="kichCo" readonly/>
-                        </div>
+                    <div class="form-group">
+                        <label for="updateKichCo">Kích cỡ:</label>
+                        <input type="text" class="form-control" id="updateKichCo" name="kichCo" readonly/>
+                    </div>
 
-                        <div class="form-group">
-                            <label for="updateMauSac">Màu sắc:</label>
-                            <input type="text" class="form-control" id="updateMauSac" name="mauSac" readonly/>
-                        </div>
+                    <div class="form-group">
+                        <label for="updateMauSac">Màu sắc:</label>
+                        <input type="text" class="form-control" id="updateMauSac" name="mauSac" readonly/>
+                    </div>
 
-                        <div class="form-group">
-                            <label for="updateSoLuong">Số lượng:</label>
-                            <input type="number" class="form-control" id="updateSoLuong" name="soLuong" min="1"
-                                   readonly/>
-                        </div>
+                    <div class="form-group">
+                        <label for="updateSoLuong">Số lượng:</label>
+                        <input type="number" class="form-control" id="updateSoLuong" name="soLuong" min="1"
+                               readonly/>
+                    </div>
 
-                        <button type="submit" class="btn btn-success">Cập nhật</button>
-                        <button type="button" class="btn btn-secondary" onclick="hideUpdateProductForm()">Hủy</button>
-                    </form>
-                </div>
+                    <button type="submit" class="btn btn-success">Cập nhật</button>
+                    <button type="button" class="btn btn-secondary" onclick="hideUpdateProductForm()">Hủy</button>
+                </form>
+            </div>
+                <script>
+                    $(document).ready(function() {
+                        // Khởi tạo DataTable cho các bảng
+                        $('#unpaidTable').DataTable();
+                        $('#paidTable').DataTable();
+                        $('#hoaDon').DataTable();
+                        $('#huyTable').DataTable();
+                        $('#hoaDonDG').DataTable();
 
-                <script th:inline="javascript">
-                    document.addEventListener('DOMContentLoaded', function () {
                         const detailsButtons = document.querySelectorAll('.detailsButton');
-
                         detailsButtons.forEach(button => {
                             button.addEventListener('click', function (event) {
                                 event.preventDefault();
-
                                 const hoaDonId = button.getAttribute('data-hoaDonId');
                                 const currentSign = button.textContent.trim();
                                 if (currentSign === '+') {
@@ -418,13 +409,10 @@
                                 }
                             });
                         });
-
                     });
 
                     // Lấy ra các sản phẩm của hóa đơn
                     function handleFormSubmit(event, hoaDonId, button) {
-                        event.preventDefault();
-
                         const url = `/getDetails/${hoaDonId}`;
                         console.log(`Fetching details for invoice ID: ${hoaDonId}`);
                         console.log('URL: ' + url);
@@ -463,15 +451,13 @@
                 <td>
                     <button type="button" id="deleteButton-${hoaDonId}-${product.sanPhamId}" class="btn btn-danger" onclick="xoaChiTiet(event, '${hoaDonId}', '${product.sanPhamId}')">Xóa</button>
                 </td>
-                <td>
-                    <button type="button" id="updateSP-${hoaDonId}-${product.sanPhamId}" class="btn btn-success" onclick="layThongTinSanPham(event, '${hoaDonId}', '${product.sanPhamId}')">Sửa</button>
-                </td>
             `;
                                 productListBody.appendChild(newRow);
                             });
 
                             // Call the function to check invoice status
                             layHoaDonTheoId(hoaDonId);
+
                             // Show the details row
                             const detailsRow = document.getElementById(`details-${hoaDonId}`);
                             if (detailsRow) {
@@ -495,29 +481,18 @@
                                 return response.json(); // Process JSON
                             })
                             .then(data => {
-                                // Assume trangThai is a string
                                 const trangThai = data.trangThai;
                                 const trangThaiCanAn = ['1', '2', '3', '4', '5'];
 
-                                // Find all delete and edit buttons related to this invoice
                                 const deleteButtons = document.querySelectorAll(`#productListBody-${hoaDonId} .btn-danger`);
                                 const editButtons = document.querySelectorAll(`#productListBody-${hoaDonId} .btn-success`);
 
-                                if (trangThaiCanAn.includes(trangThai)) {
-                                    deleteButtons.forEach(deleteButton => {
-                                        deleteButton.style.display = 'none'; // Hide delete button
-                                    });
-                                } else {
-                                    deleteButtons.forEach(deleteButton => {
-                                        deleteButton.style.display = 'block'; // Show delete button
-                                    });
-                                }
-                                editButtons.forEach(editButton => {
-                                    if (trangThaiCanAn.includes(trangThai)) {
-                                        editButton.style.display = 'none'; // Hide edit button if status is 1, 2, 3, or 4
-                                    } else {
-                                        editButton.style.display = 'block'; // Show edit button if status is not 1, 2, 3, or 4
-                                    }
+                                deleteButtons.forEach(button => {
+                                    button.style.display = trangThaiCanAn.includes(trangThai) ? 'none' : 'block';
+                                });
+
+                                editButtons.forEach(button => {
+                                    button.style.display = trangThaiCanAn.includes(trangThai) ? 'none' : 'block';
                                 });
                             })
                             .catch(error => {
@@ -527,8 +502,6 @@
 
                     // detail sản phẩm chi tiết
                     function layThongTinSanPham(event, hoaDonId, sanPhamChiTietId) {
-                        event.preventDefault();
-
                         const url = `/getProductDetail/${hoaDonId}/${sanPhamChiTietId}`;
                         console.log('Fetching product detail with URL:', url);
 
@@ -548,7 +521,6 @@
                                 document.getElementById('updateHoaDonId').value = hoaDonId;
                                 document.getElementById('updateSanPhamChiTietId').value = sanPhamChiTietId;
 
-                                // Show the update form
                                 document.getElementById('updateProductDetailForm').style.display = 'block';
                             })
                             .catch(error => {
@@ -611,22 +583,20 @@
 
                     // chia ra các tab của table
                     function showTab(tabName) {
-                        // Xác định tất cả các phần tử tab và nội dung tương ứng
                         const unpaidTab = document.getElementById('unpaidTab'); //id của thẻ li
                         const paidTab = document.getElementById('paidTab');
                         const hoaDonTab = document.getElementById('hoaDonTab');
                         const donHuyTab = document.getElementById('donHuyTab');
                         const dangGiaoTab = document.getElementById('dangGiaoTab');
-                        const unpaidInvoices = document.getElementById('unpaidInvoices');// id của table
+                        const unpaidInvoices = document.getElementById('unpaidInvoices'); // id của table
                         const paidInvoices = document.getElementById('paidInvoices');
                         const hoaDonChoInvoices = document.getElementById('hoaDonCho');
                         const huyInvoices = document.getElementById('hoaDonHuy');
                         const hoaDonDangGiao = document.getElementById('hoaDonDangGiao');
 
-                        // Xóa lớp 'active' và thiết lập trạng thái hiển thị cho tất cả các tab và nội dung
                         unpaidTab.classList.remove('active');
                         paidTab.classList.remove('active');
-                        dangGiaoTab.classList.remove('active')
+                        dangGiaoTab.classList.remove('active');
                         hoaDonTab.classList.remove('active');
                         donHuyTab.classList.remove('active');
                         unpaidInvoices.style.display = 'none';
@@ -635,141 +605,380 @@
                         huyInvoices.style.display = 'none';
                         hoaDonDangGiao.style.display = 'none';
 
-                        // Cập nhật trạng thái cho tab được chọn và hiển thị nội dung tương ứng
-                        if (tabName === 'unpaid') {//onclick showtab
+                        if (tabName === 'unpaid') { //onclick showtab
                             unpaidTab.classList.add('active');
                             unpaidInvoices.style.display = 'block';
+                            $('#unpaidTable').DataTable().columns.adjust().draw();
                         } else if (tabName === 'paid') {
                             paidTab.classList.add('active');
                             paidInvoices.style.display = 'block';
+                            $('#paidTable').DataTable().columns.adjust().draw();
                         } else if (tabName === 'hoaDonCho') {
                             hoaDonTab.classList.add('active');
                             hoaDonChoInvoices.style.display = 'block';
+                            $('#hoaDon').DataTable().columns.adjust().draw();
                         } else if (tabName === 'hoaDonHuy') {
                             donHuyTab.classList.add('active');
                             huyInvoices.style.display = 'block';
+                            $('#huyTable').DataTable().columns.adjust().draw();
                         } else if (tabName === 'hoaDonDangGiao') {
-                            dangGiaoTab.classList.add('active')
+                            dangGiaoTab.classList.add('active');
                             hoaDonDangGiao.style.display = 'block';
+                            $('#hoaDonDG').DataTable().columns.adjust().draw();
                         }
-
                     }
+
                 </script>
+
+<!--                <script>-->
+<!--                    $(document).ready(function() {-->
+<!--                        // Khởi tạo DataTable cho các bảng-->
+<!--                        const detailsButtons = document.querySelectorAll('.detailsButton');-->
+<!--                        detailsButtons.forEach(button => {-->
+<!--                            button.addEventListener('click', function (event) {-->
+<!--                                event.preventDefault();-->
+<!--                                const hoaDonId = button.getAttribute('data-hoaDonId');-->
+<!--                                const currentSign = button.textContent.trim();-->
+<!--                                if (currentSign === '+') {-->
+<!--                                    handleFormSubmit(event, hoaDonId, button);-->
+<!--                                } else {-->
+<!--                                    hideDetails(hoaDonId, button);-->
+<!--                                }-->
+<!--                            });-->
+<!--                        });-->
+<!--                    });-->
+
+<!--                    // Lấy ra các sản phẩm của hóa đơn-->
+<!--                    function handleFormSubmit(event, hoaDonId, button) {-->
+<!--                        const url = `/getDetails/${hoaDonId}`;-->
+<!--                        console.log(`Fetching details for invoice ID: ${hoaDonId}`);-->
+<!--                        console.log('URL: ' + url);-->
+
+<!--                        fetch(url)-->
+<!--                            .then(response => {-->
+<!--                                if (!response.ok) {-->
+<!--                                    throw new Error('Network response was not ok');-->
+<!--                                }-->
+<!--                                return response.json();-->
+<!--                            })-->
+<!--                            .then(data => {-->
+<!--                                console.log('Details:', data);-->
+<!--                                showDetails(hoaDonId, data, button);-->
+<!--                            })-->
+<!--                            .catch(error => {-->
+<!--                                console.error('Error fetching details:', error);-->
+<!--                                alert(`Đã xảy ra lỗi khi lấy chi tiết: ${error.message}`);-->
+<!--                            });-->
+<!--                    }-->
+
+<!--                    // hiển thị ra sản phẩm trong hóa đơn-->
+<!--                    function showDetails(hoaDonId, data, button) {-->
+<!--                        const productListBody = document.getElementById(`productListBody-${hoaDonId}`);-->
+<!--                        if (productListBody) {-->
+<!--                            productListBody.innerHTML = '';-->
+<!--                            data.forEach(product => {-->
+<!--                                const newRow = document.createElement('tr');-->
+<!--                                newRow.innerHTML = `-->
+<!--                    <td>${product.sanPham}</td>-->
+<!--                    <td>${product.mauSac}</td>-->
+<!--                    <td>${product.kichCo}</td>-->
+<!--                    <td>${product.soLuong}</td>-->
+<!--                    <td>${product.giaBan}</td>-->
+<!--                    <td>${product.thanhTien}</td>-->
+<!--                    <td>-->
+<!--                        <button type="button" id="deleteButton-${hoaDonId}-${product.sanPhamId}" class="btn btn-danger" onclick="xoaChiTiet(event, '${hoaDonId}', '${product.sanPhamId}')">Xóa</button>-->
+<!--                    </td>-->
+
+<!--                `;-->
+<!--                                productListBody.appendChild(newRow);-->
+<!--                            });-->
+
+<!--                            // Call the function to check invoice status-->
+<!--                            layHoaDonTheoId(hoaDonId);-->
+<!--                            // Show the details row-->
+<!--                            const detailsRow = document.getElementById(`details-${hoaDonId}`);-->
+<!--                            if (detailsRow) {-->
+<!--                                detailsRow.style.display = 'table-row';-->
+<!--                            }-->
+
+<!--                            // Change button text to '-' after updating details-->
+<!--                            button.textContent = '-';-->
+<!--                        } else {-->
+<!--                            console.error(`Không tìm thấy phần tử có id 'productListBody-${hoaDonId}'.`);-->
+<!--                        }-->
+<!--                    }-->
+
+<!--                    // lấy ra trạng thái của hóa đơn-->
+<!--                    function layHoaDonTheoId(hoaDonId) {-->
+<!--                        fetch(`http://localhost:8080/trangThai/${hoaDonId}`)-->
+<!--                            .then(response => {-->
+<!--                                if (!response.ok) {-->
+<!--                                    throw new Error('Network response was not ok');-->
+<!--                                }-->
+<!--                                return response.json(); // Process JSON-->
+<!--                            })-->
+<!--                            .then(data => {-->
+<!--                                const trangThai = data.trangThai;-->
+<!--                                const trangThaiCanAn = ['1', '2', '3', '4', '5'];-->
+
+<!--                                const deleteButtons = document.querySelectorAll(`#productListBody-${hoaDonId} .btn-danger`);-->
+<!--                                const editButtons = document.querySelectorAll(`#productListBody-${hoaDonId} .btn-success`);-->
+
+<!--                                deleteButtons.forEach(button => {-->
+<!--                                    button.style.display = trangThaiCanAn.includes(trangThai) ? 'none' : 'block';-->
+<!--                                });-->
+
+<!--                                editButtons.forEach(button => {-->
+<!--                                    button.style.display = trangThaiCanAn.includes(trangThai) ? 'none' : 'block';-->
+<!--                                });-->
+<!--                            })-->
+<!--                            .catch(error => {-->
+<!--                                console.error('Error fetching invoice status:', error);-->
+<!--                            });-->
+<!--                    }-->
+
+<!--                    // detail sản phẩm chi tiết-->
+<!--                    function layThongTinSanPham(event, hoaDonId, sanPhamChiTietId) {-->
+<!--                        const url = `/getProductDetail/${hoaDonId}/${sanPhamChiTietId}`;-->
+<!--                        console.log('Fetching product detail with URL:', url);-->
+
+<!--                        fetch(url)-->
+<!--                            .then(response => {-->
+<!--                                if (!response.ok) {-->
+<!--                                    throw new Error('Network response was not ok');-->
+<!--                                }-->
+<!--                                return response.json();-->
+<!--                            })-->
+<!--                            .then(data => {-->
+<!--                                console.log('Product detail:', data);-->
+<!--                                document.getElementById('tenSanPham').value = data.tenSanPham || 'N/A';-->
+<!--                                document.getElementById('updateMauSac').value = data.mauSac || 'N/A';-->
+<!--                                document.getElementById('updateKichCo').value = data.kichCo || 'N/A';-->
+<!--                                document.getElementById('updateSoLuong').value = data.soLuong || 0;-->
+<!--                                document.getElementById('updateHoaDonId').value = hoaDonId;-->
+<!--                                document.getElementById('updateSanPhamChiTietId').value = sanPhamChiTietId;-->
+
+<!--                                document.getElementById('updateProductDetailForm').style.display = 'block';-->
+<!--                            })-->
+<!--                            .catch(error => {-->
+<!--                                console.error('Error:', error);-->
+<!--                                alert('Đã xảy ra lỗi khi lấy thông tin sản phẩm.');-->
+<!--                            });-->
+<!--                    }-->
+
+<!--                    function hideUpdateProductForm() {-->
+<!--                        document.getElementById('updateProductDetailForm').style.display = 'none';-->
+<!--                    }-->
+
+<!--                    function hideDetails(hoaDonId, button) {-->
+<!--                        const detailsRow = document.getElementById(`details-${hoaDonId}`);-->
+<!--                        if (detailsRow) {-->
+<!--                            detailsRow.style.display = 'none';-->
+<!--                        }-->
+<!--                        button.textContent = '+';-->
+<!--                    }-->
+
+<!--                    // dùng để xóa sản phẩm trong hóa đơn-->
+<!--                    async function xoaChiTiet(event, hoaDonId, sanPhamId) {-->
+<!--                        event.preventDefault();-->
+<!--                        const confirmation = confirm('Bạn có chắc chắn muốn xóa sản phẩm này khỏi hóa đơn chi tiết?');-->
+<!--                        if (confirmation) {-->
+<!--                            const url = `/sanphamct/delete/${hoaDonId}/${sanPhamId}`;-->
+<!--                            console.log(url);-->
+<!--                            try {-->
+<!--                                const response = await fetch(url, {-->
+<!--                                    method: 'POST',-->
+<!--                                    headers: {-->
+<!--                                        'Content-Type': 'application/json',-->
+<!--                                    },-->
+<!--                                });-->
+
+<!--                                const responseText = await response.text();-->
+<!--                                let responseData;-->
+
+<!--                                try {-->
+<!--                                    responseData = JSON.parse(responseText);-->
+<!--                                } catch (error) {-->
+<!--                                    throw new Error(`Invalid JSON: ${responseText}`);-->
+<!--                                }-->
+
+<!--                                if (!response.ok) {-->
+<!--                                    throw new Error(responseData.message || 'Network response was not ok');-->
+<!--                                }-->
+
+<!--                                // Xử lý xóa thành công-->
+<!--                                console.log('Delete request successful', responseData);-->
+<!--                                alert(responseData.message || 'Sản phẩm chi tiết đã được xóa thành công');-->
+<!--                                // Tải lại trang-->
+<!--                                window.location.reload();-->
+<!--                            } catch (error) {-->
+<!--                                console.error('Error deleting product detail:', error.message);-->
+<!--                                alert(`Lỗi khi xóa sản phẩm chi tiết: ${error.message}`);-->
+<!--                            }-->
+<!--                        }-->
+<!--                    }-->
+
+<!--                    // chia ra các tab của table-->
+<!--                    function showTab(tabName) {-->
+<!--                        const unpaidTab = document.getElementById('unpaidTab'); //id của thẻ li-->
+<!--                        const paidTab = document.getElementById('paidTab');-->
+<!--                        const hoaDonTab = document.getElementById('hoaDonTab');-->
+<!--                        const donHuyTab = document.getElementById('donHuyTab');-->
+<!--                        const dangGiaoTab = document.getElementById('dangGiaoTab');-->
+<!--                        const unpaidInvoices = document.getElementById('unpaidInvoices');// id của table-->
+<!--                        const paidInvoices = document.getElementById('paidInvoices');-->
+<!--                        const hoaDonChoInvoices = document.getElementById('hoaDonCho');-->
+<!--                        const huyInvoices = document.getElementById('hoaDonHuy');-->
+<!--                        const hoaDonDangGiao = document.getElementById('hoaDonDangGiao');-->
+
+<!--                        unpaidTab.classList.remove('active');-->
+<!--                        paidTab.classList.remove('active');-->
+<!--                        dangGiaoTab.classList.remove('active')-->
+<!--                        hoaDonTab.classList.remove('active');-->
+<!--                        donHuyTab.classList.remove('active');-->
+<!--                        unpaidInvoices.style.display = 'none';-->
+<!--                        paidInvoices.style.display = 'none';-->
+<!--                        hoaDonChoInvoices.style.display = 'none';-->
+<!--                        huyInvoices.style.display = 'none';-->
+<!--                        hoaDonDangGiao.style.display = 'none';-->
+
+<!--                        if (tabName === 'unpaid') { //onclick showtab-->
+<!--                            unpaidTab.classList.add('active');-->
+<!--                            unpaidInvoices.style.display = 'block';-->
+<!--                            $('#unpaidTable').DataTable().columns.adjust().draw();-->
+<!--                        } else if (tabName === 'paid') {-->
+<!--                            paidTab.classList.add('active');-->
+<!--                            paidInvoices.style.display = 'block';-->
+<!--                            $('#paidTable').DataTable().columns.adjust().draw();-->
+<!--                        } else if (tabName === 'hoaDonCho') {-->
+<!--                            hoaDonTab.classList.add('active');-->
+<!--                            hoaDonChoInvoices.style.display = 'block';-->
+<!--                            $('#hoaDon').DataTable().columns.adjust().draw();-->
+<!--                        } else if (tabName === 'hoaDonHuy') {-->
+<!--                            donHuyTab.classList.add('active');-->
+<!--                            huyInvoices.style.display = 'block';-->
+<!--                            $('#huyTable').DataTable().columns.adjust().draw();-->
+<!--                        } else if (tabName === 'hoaDonDangGiao') {-->
+<!--                            dangGiaoTab.classList.add('active')-->
+<!--                            hoaDonDangGiao.style.display = 'block';-->
+<!--                            $('#hoaDonDG').DataTable().columns.adjust().draw();-->
+
+<!--                        }-->
+<!--                    }-->
+<!--                </script>-->
                 <style>
-                    #header {
-                        text-align: center;
-                        margin-bottom: 20px;
-                    }
+            #header {
+                text-align: center;
+                margin-bottom: 20px;
+            }
 
-                    .nav-tabs {
-                        margin-bottom: 20px;
-                    }
+            .nav-tabs {
+                margin-bottom: 20px;
+            }
 
-                    .nav-tabs .nav-link.active {
-                        background-color: #007bff;
-                        color: white;
-                    }
+            .nav-tabs .nav-link.active {
+                background-color: #007bff;
+                color: white;
+            }
 
-                    .nav-tabs .nav-link {
-                        color: #007bff;
-                        cursor: pointer;
-                    }
+            .nav-tabs .nav-link {
+                color: #007bff;
+                cursor: pointer;
+            }
 
-                    .nav-tabs .nav-link:hover {
-                        text-decoration: underline;
-                    }
+            .nav-tabs .nav-link:hover {
+                text-decoration: underline;
+            }
 
-                    .table {
-                        width: 100%;
-                        border-collapse: collapse;
-                        margin-bottom: 20px;
-                    }
+            .table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-bottom: 20px;
+            }
 
-                    .table, .table th, .table td {
-                        border: 1px solid #ddd;
-                    }
+            .table, .table th, .table td {
+                border: 1px solid #ddd;
+            }
 
-                    .table th, .table td {
-                        padding: 8px;
-                        text-align: left;
-                    }
+            .table th, .table td {
+                padding: 8px;
+                text-align: left;
+            }
 
-                    .table th {
-                        background-color: #f2f2f2;
-                        color: black;
-                    }
+            .table th {
+                background-color: #f2f2f2;
+                color: black;
+            }
 
-                    .table tr:nth-child(even) {
-                        background-color: #f9f9f9;
-                    }
+            .table tr:nth-child(even) {
+                background-color: #f9f9f9;
+            }
 
-                    .table tr:hover {
-                        background-color: #f1f1f1;
-                    }
+            .table tr:hover {
+                background-color: #f1f1f1;
+            }
 
-                    .btn {
-                        padding: 10px 20px;
-                        margin: 5px;
-                        border: none;
-                        cursor: pointer;
-                    }
+            .btn {
+                padding: 10px 20px;
+                margin: 5px;
+                border: none;
+                cursor: pointer;
+            }
 
-                    .btn-success {
-                        background-color: #28a745;
-                        color: white;
-                    }
+            .btn-success {
+                background-color: #28a745;
+                color: white;
+            }
 
-                    .btn-info {
-                        background-color: #17a2b8;
-                        color: white;
-                    }
+            .btn-info {
+                background-color: #17a2b8;
+                color: white;
+            }
 
-                    .btn-danger {
-                        background-color: #dc3545;
-                        color: white;
-                    }
+            .btn-danger {
+                background-color: #dc3545;
+                color: white;
+            }
 
-                    .btn-link {
-                        color: #007bff;
-                        text-decoration: none;
-                    }
+            .btn-link {
+                color: #007bff;
+                text-decoration: none;
+            }
 
-                    .btn-link:hover {
-                        text-decoration: underline;
-                    }
+            .btn-link:hover {
+                text-decoration: underline;
+            }
 
-                    #createInvoiceForm {
-                        border: 1px solid #ddd;
-                        padding: 20px;
-                        margin-bottom: 20px;
-                    }
+            #createInvoiceForm {
+                border: 1px solid #ddd;
+                padding: 20px;
+                margin-bottom: 20px;
+            }
 
-                    #createInvoiceForm label {
-                        display: block;
-                        margin-bottom: 5px;
-                    }
+            #createInvoiceForm label {
+                display: block;
+                margin-bottom: 5px;
+            }
 
-                    #createInvoiceForm input {
-                        width: 100%;
-                        padding: 8px;
-                        margin-bottom: 10px;
-                        border: 1px solid #ddd;
-                        border-radius: 4px;
-                    }
-                </style>
-                <script>
-                    const showFormButton = document.getElementById('createInvoiceBtn');
-                    const createInvoiceForm = document.getElementById('createInvoiceForm');
-                    showFormButton.addEventListener('click', function () {
-                        createInvoiceForm.style.display = 'block';
-                    });
-
-                </script>
-            </div>
-        </div>
-    </section>
+            #createInvoiceForm input {
+                width: 100%;
+                padding: 8px;
+                margin-bottom: 10px;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+            }
+        </style>
+        <script>
+            const showFormButton = document.getElementById('createInvoiceBtn');
+            const createInvoiceForm = document.getElementById('createInvoiceForm');
+            showFormButton.addEventListener('click', function () {
+                createInvoiceForm.style.display = 'block';
+            });
+        </script>
 </div>
+        </section>
+    </div>
+    </body>
 <div th:replace="~{admin/common/foodter.html}"></div>
 <th:block th:replace="jsImport.html :: layout_import_js"/>
-</body>
 </html>
