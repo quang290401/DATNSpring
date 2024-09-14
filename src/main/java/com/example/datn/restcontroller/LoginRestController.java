@@ -24,7 +24,7 @@ public class LoginRestController {
         if (user != null && user.getMatKhau().equals(loginRequest.getMatKhau())) {
             session.setAttribute("user", user);
             String role = user.getVaiTro().getTenVaiTro();  // Assuming getVaiTro returns the role name
-            System.out.println("QuangS :"+role.toString());
+//            System.out.println("QuangS :"+role.toString());
             return ResponseEntity.ok(new LoginResponse("Logged in", role));
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Sai Tài Khoản hoặc mật khẩu");

@@ -58,54 +58,84 @@ public class HoaDonController {
         this.trangThaiHDRepository = trangThaiHDRepository;
     }
 
-//    @GetMapping("/getAll")
-//    public String getAllHoaDon(Model model) {
-//
-//        // Lọc các hóa đơn đã thanh toán
-//        List<HoaDonEntity> danhSachHoaDonDaThanhToan = hoaDonRepository.findHDBYTT();
-//        model.addAttribute("danhSachHoaDonDaThanhToan", danhSachHoaDonDaThanhToan);
-//
-//        List<HoaDonEntity> danhSachHoaDonChuaThanhToan = hoaDonRepository.findHDChuaThanhToan();
-//        model.addAttribute("danhSachHoaDonChuaThanhToan", danhSachHoaDonChuaThanhToan);
-//        List<HoaDonEntity> danhSachHoaDonCho = hoaDonRepository.findHoaDonsByTrangThai();
-//        model.addAttribute("danhSachHoaDonCho", danhSachHoaDonCho);
-//        List<HoaDonEntity> hoaDonHuy = hoaDonRepository.findTTByHoaDon();
-//        model.addAttribute("hoaDonHuy", hoaDonHuy);
-//        List<HoaDonEntity> hdDangGiao = hoaDonRepository.findDangGiao();
-//        model.addAttribute("hdDangGiao", hdDangGiao);
-//        return "admin/adminWeb/HoaDon";
-//    }
+
 @GetMapping("/agetAll")
 public String get(Model model){
     return "admin/adminWeb/new";
 }
 @GetMapping("/getAll")
 public String getAllHoaDon(Model model,
-                           @RequestParam(defaultValue = "0") int pageUnpaid,
-                           @RequestParam(defaultValue = "0") int pagePaid,
-                           @RequestParam(defaultValue = "0") int pageWaiting,
-                           @RequestParam(defaultValue = "0") int pageCancelled) {
-
+                           @RequestParam(defaultValue = "0") int pageHDCtt) {
+    if (pageHDCtt < 0) {
+        pageHDCtt = 0;
+    }
     // Phân trang cho từng danh sách hóa đơn
-    Pageable pageableUnpaid = PageRequest.of(pageUnpaid, 5); // 5 là số bản ghi mỗi trang
-    Pageable pageablePaid = PageRequest.of(pagePaid, 5);
-    Pageable pageableWaiting = PageRequest.of(pageWaiting, 5);
-    Pageable pageableCancelled = PageRequest.of(pageCancelled, 5);
-
-    Page<HoaDonEntity> danhSachHoaDonDaThanhToan = hoaDonRepository.findHDBYTT(pageablePaid);
-    model.addAttribute("danhSachHoaDonDaThanhToan", danhSachHoaDonDaThanhToan);
-
-    Page<HoaDonEntity> danhSachHoaDonChuaThanhToan = hoaDonRepository.findHDChuaThanhToan(pageableUnpaid);
+    Pageable pageablectt = PageRequest.of(pageHDCtt, 5); // 5 là số bản ghi mỗi trang
+    Page<HoaDonEntity> danhSachHoaDonChuaThanhToan = hoaDonRepository.findHDChuaThanhToan(pageablectt);
     model.addAttribute("danhSachHoaDonChuaThanhToan", danhSachHoaDonChuaThanhToan);
-
-    Page<HoaDonEntity> danhSachHoaDonCho = hoaDonRepository.findHoaDonsByTrangThai(pageableWaiting);
-    model.addAttribute("danhSachHoaDonCho", danhSachHoaDonCho);
-
-    Page<HoaDonEntity> hoaDonHuy = hoaDonRepository.findTTByHoaDon(pageableCancelled);
-    model.addAttribute("hoaDonHuy", hoaDonHuy);
-
+    model.addAttribute("currentPage", pageHDCtt);
+    model.addAttribute("totalPages", danhSachHoaDonChuaThanhToan.getTotalPages());
     return "admin/adminWeb/HoaDon";
 }
+    @GetMapping("/hoadon/huy")
+    public String showHD(Model model, @RequestParam(defaultValue = "0") int pageCancelled) {
+        if (pageCancelled < 0) {
+            pageCancelled = 0;
+        }
+        Pageable pageableCancelled = PageRequest.of(pageCancelled, 5); // 5 items per page
+        Page<HoaDonEntity> hoaDonHuy = hoaDonRepository.findTTByHoaDon(pageableCancelled);
+        model.addAttribute("hoaDonHuy", hoaDonHuy);
+        model.addAttribute("currentPage", pageCancelled);
+        model.addAttribute("totalPages", hoaDonHuy.getTotalPages());
+        return "admin/adminWeb/hoaDonHuy";
+    }
+
+    @GetMapping("/hoadon/hoan-thanh")
+    public String showHDHT(Model model, @RequestParam(defaultValue = "0") int pageHT) {
+        if (pageHT < 0) {
+            pageHT = 0;
+        }
+
+        Pageable pageableHT = PageRequest.of(pageHT, 5); // 5 items per page
+        Page<HoaDonEntity> hoaDonHoanThanh = hoaDonRepository.findHDBYTT(pageableHT);
+        model.addAttribute("hoaDonHoanThanh", hoaDonHoanThanh);
+        model.addAttribute("currentPage", pageHT);
+        model.addAttribute("totalPages", hoaDonHoanThanh.getTotalPages());
+        return "admin/adminWeb/hoaDonHoanThanh";
+    }
+    @GetMapping("/hoadon/dang-giao")
+    public String showHDDG(Model model, @RequestParam(defaultValue = "0") int pageDG) {
+        // Validate the page number
+        if (pageDG < 0) {
+            pageDG = 0;
+        }
+        Pageable pageableDG = PageRequest.of(pageDG, 5); // 5 items per page
+        Page<HoaDonEntity> hoaDonDangGiao = hoaDonRepository.findDangGiao(pageableDG);
+        model.addAttribute("hoaDonDangGiao", hoaDonDangGiao);
+        model.addAttribute("currentPage", pageDG);
+        model.addAttribute("totalPages", hoaDonDangGiao.getTotalPages());
+        return "admin/adminWeb/hoaDonDangGiao";
+    }
+
+    @GetMapping("/hoadon/cho")
+    public String showHDC(Model model, @RequestParam(defaultValue = "0") int pageC) {
+        if (pageC < 0) {
+            pageC = 0;
+        }
+        Pageable pageableC = PageRequest.of(pageC, 5); // 5 items per page
+
+        Page<HoaDonEntity> danhSachHoaDonCho = hoaDonRepository.findHoaDonsByTrangThai(pageableC);
+
+        // Correctly assign the current page
+        model.addAttribute("danhSachHoaDonCho", danhSachHoaDonCho);
+        model.addAttribute("currentPage", pageC); // Use pageC instead of pageableC
+        model.addAttribute("totalPages", danhSachHoaDonCho.getTotalPages());
+
+        return "admin/adminWeb/hoaDonCho";
+    }
+
+
+
     @GetMapping("/create")
     public String showCreateForm(Model model) {
         model.addAttribute("hoaDon", new HoaDonEntity());

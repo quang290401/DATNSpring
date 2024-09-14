@@ -58,6 +58,44 @@
                                 <p>VouCher</p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link active" id="hoaDonMenu">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>
+                                    Hóa đơn
+                                    <i class="fas fa-angle-down right"></i>
+                                </p>
+                            </a>
+
+                            <!-- Danh sách các tùy chọn con -->
+                            <ul class="nav nav-treeview" id="hoaDonSubMenu" style="display: none;">
+                                <li class="nav-item">
+                                    <a href="/hoadon/cho" class="nav-link active">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Hóa đơn Chờ</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/hoadon/dang-giao" class="nav-link active">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Hóa đơn đang giao</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/hoadon/hoan-thanh" class="nav-link active">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Hóa đơn hoàn thành</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/hoadon/huy" class="nav-link active">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Hóa đơn đã hủy</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
                     </ul>
                 </li>
             </ul>
@@ -66,4 +104,14 @@
     </div>
     <!-- /.sidebar -->
 </aside>
+<script>
+    $(document).ready(function() {
+        $('#hoaDonMenu').on('click', function(e) {
+            e.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
+            $('#hoaDonSubMenu').slideToggle(); // Hiển thị/ẩn danh sách tùy chọn con
+            $(this).toggleClass('menu-open'); // Thêm hoặc xóa class 'menu-open'
+        });
+    });
+
+</script>
 </html>

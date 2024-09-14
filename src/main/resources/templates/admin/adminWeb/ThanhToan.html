@@ -241,25 +241,12 @@
                 </script>
 
                 <script>
+
                     let isQrGenerated = false;
                     $(document).ready(function () {
                         let isQrGenerated = false;
                         var tongTien = parseInt($('#tongTienSpan').text());
                         var hoaDonId = $('#hoaDonIdSpan').text().trim();
-
-
-                        // function updateTotalAmount() {
-                        //
-                        //     // Lấy giá trị hiện tại từ các phần tử HTML
-                        //     var totalAmount = parseFloat($('#totalAmount2').text().replace(/,/g, '')); // Loại bỏ dấu phẩy nếu có
-                        //     var voucher = parseFloat($('#voucherID').text().replace(/,/g, '')) || 0; // Nếu không có voucher, mặc định là 0
-                        //
-                        //     // Tính toán tổng tiền mới
-                        //     var updatedTotalAmount = totalAmount - voucher;
-                        //
-                        //     // Cập nhật tổng tiền trong bảng
-                        //     $('#totalAmount3').text(updatedTotalAmount.toLocaleString('en').replace(/,/g, ''));
-                        // }
                         function updateMoneyReturn() {
                             var tienKhachDuaStr = $('#tienKhachDua').val().replace(/\./g, '');
                             var tienKhachDua = parseInt(tienKhachDuaStr);
@@ -368,42 +355,19 @@
                         // Trigger change event to set initial state
                         $('input[name="paymentMethod"]:checked').trigger('change');
                     });
-                //     $.ajax({
-                //         url: '/api/voucher',
-                //         type: 'GET',
-                //         success: function (response) {
-                //             response.forEach(function (voucher) {
-                //                 $('#voucherSelect').append(`
-                //     <option value="${voucher.id}" data-discount="${voucher.phanTramGiam}">${voucher.ten} - ${voucher.phanTramGiam}%</option>
-                // `);
-                //             });
-                //         },
-                //         error: function (xhr) {
-                //             alert('An error occurred while loading the vouchers. Please try again.');
-                //         }
-                //     });
-                //
-                //     $('#voucherSelect').change(function () {
-                //         var selectedOption = $(this).find('option:selected').val();
-                //         var originalTotalAmount = parseFloat($('#cart2 tbody').find('#totalAmount2').last().text().replace(/,/g, '')); // Lưu giá tiền gốc ban đầu
-                //         var formattedOriginalTotalAmount = originalTotalAmount.toLocaleString('en'); // Định dạng giá trị ban đầu
-                //         if (selectedOption === "") {
-                //             $('#shipCode').prop('checked', false);
-                //             loadCart();
-                //             updateTotalAmount();
-                //
-                //         } else {
-                //             var selectedDiscount = $(this).find('option:selected').data('discount');
-                //             var newTotalAmount = originalTotalAmount - (originalTotalAmount * (selectedDiscount / 100));
-                //             var formattedAmount = parseFloat(newTotalAmount).toLocaleString('en');
-                //             $('#voucherID').text(originalTotalAmount * (selectedDiscount / 100));
-                //             formattedAmount = formattedAmount.replace(/,/g, '.').replace(/\./g, '');
-                //
-                //             // $('#totalAmount').text(formattedAmount);
-                //             // $('#totalAmount2').text(formattedAmount);// Cập nhật tổng tiền trong modal
-                //             updateTotalAmount();
-                //         }
-                //     });
+                    $('#checkoutForm').on('submit', function (event) {
+                        event.preventDefault(); // Ngăn chặn hành động submit mặc định
+
+                        // Hiển thị thông báo xác nhận in hóa đơn
+                        if (confirm("Bạn có muốn in hóa đơn không?")) {
+                            // Thực hiện hành động in hóa đơn
+                            window.print();
+                            this.submit();
+                        } else {
+                            // Thực hiện gửi form mà không in hóa đơn
+                            this.submit();
+                        }
+                    });
                 </script>
             </div>
         </div>
