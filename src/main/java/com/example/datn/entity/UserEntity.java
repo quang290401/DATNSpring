@@ -20,13 +20,13 @@ import java.util.List;
 public class UserEntity extends SuperEntity{
 
 
-    @Column(name = "taiKhoan", length = 50, nullable = false)
+    @Column(name = "taiKhoan", length = 50, nullable = true)
     private String taiKhoan;
-    @Column(name = "ten", length =150, nullable = false,columnDefinition = "NVARCHAR(255)")
+    @Column(name = "ten", length =150, nullable = true,columnDefinition = "NVARCHAR(255)")
     private String ten;
-    @Column(name = "tenDem", length = 150, nullable = false,columnDefinition = "NVARCHAR(255)")
+    @Column(name = "tenDem", length = 150, nullable = true,columnDefinition = "NVARCHAR(255)")
     private String tenDem;
-    @Column(name = "ho", length = 150, nullable = false,columnDefinition = "NVARCHAR(255)")
+    @Column(name = "ho", length = 150, nullable = true,columnDefinition = "NVARCHAR(255)")
     private String ho;
     @Column(name = "sdt", length = 50, nullable = true)
     private String sdt;
