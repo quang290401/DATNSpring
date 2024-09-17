@@ -32,6 +32,13 @@ public class SanPhamChiTietDTO extends SuperDTO {
 
     private MauSacDTO mauSac;
 
+    public SanPhamChiTietDTO(SuperDTOBuilder<?, ?> b, BigDecimal giaSanPham, SanPhamDTO sanPham, MauSacDTO mauSac, KichCoDTO kichCo) {
+        super(b);
+        this.giaSanPham = giaSanPham;
+        this.sanPham = sanPham;
+        this.mauSac = mauSac;
+        this.kichCo = kichCo;
+    }
 
     private KichCoDTO kichCo;
 

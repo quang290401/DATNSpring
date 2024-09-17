@@ -1,10 +1,13 @@
 package com.example.datn.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
 import java.math.BigDecimal;
 import java.util.UUID;
-
+@Data
 public  class ProductDetailDTO {
-    private UUID sanPhamChiTietId;
+    private UUID sanPhamId;
     private String tenSanPham;
     private String mauSac;
     private String kichCo;
@@ -13,8 +16,8 @@ public  class ProductDetailDTO {
     private BigDecimal thanhTien;
 
     // Constructor
-    public ProductDetailDTO(UUID sanPhamChiTietId, String tenSanPham, String mauSac, String kichCo, int soLuong, BigDecimal giaBan, BigDecimal thanhTien) {
-        this.sanPhamChiTietId = sanPhamChiTietId;
+    public ProductDetailDTO() {
+        this.sanPhamId = sanPhamId;
         this.tenSanPham = tenSanPham;
         this.mauSac = mauSac;
         this.kichCo = kichCo;
@@ -25,11 +28,11 @@ public  class ProductDetailDTO {
 
     // Getters and Setters
     public UUID getSanPhamChiTietId() {
-        return sanPhamChiTietId;
+        return sanPhamId;
     }
 
     public void setSanPhamChiTietId(UUID sanPhamChiTietId) {
-        this.sanPhamChiTietId = sanPhamChiTietId;
+        this.sanPhamId = sanPhamChiTietId;
     }
 
     public String getTenSanPham() {

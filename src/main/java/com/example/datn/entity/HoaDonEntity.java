@@ -21,16 +21,27 @@
         @ManyToOne
         @JoinColumn(name  = "user_id")
         private UserEntity user;
+        @Transient
+        private boolean conTrongThoiHanDoi;
+        public boolean isConTrongThoiHanDoi() {
+            return conTrongThoiHanDoi;
+        }
+
+        public void setConTrongThoiHanDoi(boolean conTrongThoiHanDoi) {
+            this.conTrongThoiHanDoi = conTrongThoiHanDoi;
+        }
         @ManyToOne
         @JoinColumn(name  = "trangThaiHD_id")
         private TrangThaiHDEntity trangThaiHD;
         @Column(name = "thanhTien", length = 20, nullable = false)
         private BigDecimal tongTien;
         @Column(name = "ngayThanhToan", length = 120, nullable = true)
-        private LocalDate ngayThanhToan;
+            private LocalDate ngayThanhToan;
         @ManyToOne
         @JoinColumn(name  = "vouCher_id")
         private VouCherEntity vouCher;
+        @Column(name = "ghiChu", columnDefinition = "NVARCHAR(500)")
+        private String ghiChu;
         @JsonIgnore
         @OneToMany(mappedBy = "hoaDon")
         private List<HoaDonChiTietEntity> hoaDonChiTiets = new ArrayList<HoaDonChiTietEntity>();
