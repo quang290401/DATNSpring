@@ -93,13 +93,13 @@
         <!-- Ngày tạo hóa đơn -->
         <div class="form-group">
           <label for="ngayTao">Ngày đặt hàng:</label>
-          <input type="text" id="ngayTao" class="form-control" th:value="${#temporals.format(hoaDon.createDate, 'dd/MM/yyyy HH:mm:ss')}" readonly>
+          <input type="text" id="ngayTao" class="form-control" th:value="${#temporals.format(hoaDon.createDate, 'dd/MM/yyyy')}" readonly>
         </div>
 
         <!-- Ngày thanh toán -->
         <div class="form-group">
           <label for="ngayThanhToan">Ngày thanh toán:</label>
-          <input type="text" id="ngayThanhToan" class="form-control" th:value="${hoaDon.ngayThanhToan != null ? #temporals.format(hoaDon.ngayThanhToan, 'dd/MM/yyyy HH:mm:ss') : 'Chưa thanh toán'}" readonly>
+          <input type="text" id="ngayThanhToan" class="form-control" th:value="${hoaDon.ngayThanhToan != null ? #temporals.format(hoaDon.ngayThanhToan, 'dd/MM/yyyy') : 'Chưa thanh toán'}" readonly>
         </div>
 
         <!-- Trạng thái hóa đơn -->
@@ -126,7 +126,7 @@
             </div>
 
             <!-- Đã nhận hàng -->
-            <div class="form-check flex-fill">
+            <div class="form-check flex-fill"th:if="${hoaDon.trangThaiHD.trangThai != '2' && hoaDon.trangThaiHD.trangThai != '3'}">
               <input class="form-check-input" type="radio" name="trangThai" id="daNhanHang" value="1" th:checked="${hoaDon.trangThaiHD.trangThai == '1'}">
               <label class="form-check-label status-daNhanHang" for="daNhanHang">Đã nhận hàng</label>
             </div>
