@@ -46,12 +46,13 @@
                                 <p>Bán Hàng</p>
                             </a>
                         </li>
-                        <li class="nav-item menu-open" >
+                        <li class="nav-item" menu-open>
                             <a href="/thongke/sanPhamBanChay" class="nav-link active">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Thông kê</p>
+                                <p>Thống kê </p>
                             </a>
                         </li>
+
                         <li class="nav-item" menu-open>
                             <a href="/voucher/getAll" class="nav-link active">
                                 <i class="far fa-circle nav-icon"></i>
@@ -112,12 +113,14 @@
 </aside>
 <script>
     $(document).ready(function() {
-        $('#hoaDonMenu').on('click', function(e) {
+        $('#hoaDonMenu').off('click').on('click', function(e) {
             e.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
             $('#hoaDonSubMenu').slideToggle(); // Hiển thị/ẩn danh sách tùy chọn con
             $(this).toggleClass('menu-open'); // Thêm hoặc xóa class 'menu-open'
         });
     });
+
+
 
 </script>
 </html>

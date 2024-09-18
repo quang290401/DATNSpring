@@ -148,10 +148,14 @@
                             // Xác định nút sẽ hiển thị dựa trên trạng thái
                             var actionButtons = item.status === 0 ?
                                 `<button type="button" class="btn btn-success btn-sm me-2"
-        onclick="duyet('${item.sanPhamChiTiet.id}', '${item.hoaDon.id}', '${item.sanPhamChiTiet.giaSanPham * item.soLuong}', '${item.soLuong}', '${item.type}','${item.sanPhamChiTiet.sanPham.id}')">
-        Duyệt
-    </button>
-                                 <button type="button" class="btn btn-danger btn-sm" onclick="khongDuyet('${item.hoaDon.id}')">Không duyệt</button>`
+                         onclick="duyet('${item.sanPhamChiTiet.id}', '${item.hoaDon.id}',
+                          '${(item.sanPhamChiTiet.giaSanPham * item.soLuong) - ((item.sanPhamChiTiet.giaSanPham
+                                    * item.soLuong) * item.hoaDon.vouCher.phanTramGiam/ 100)}',
+                           '${item.soLuong}', '${item.type}', '${item.sanPhamChiTiet.sanPham.id}')">
+                           Duyệt
+                                 </button>
+
+                                <button type="button" class="btn btn-danger btn-sm" onclick="khongDuyet('${item.hoaDon.id}')">Không duyệt</button>`
                                 : '';
 
                             // Thêm dữ liệu vào bảng

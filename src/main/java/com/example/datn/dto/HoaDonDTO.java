@@ -23,6 +23,7 @@ public class HoaDonDTO extends SuperDTO {
     private BigDecimal tongTien;
 
     private LocalDate ngayThanhToan;
+    private VoucherDTO vouCher;
 
     private int trangThai;
 }
