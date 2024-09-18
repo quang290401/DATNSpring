@@ -40,6 +40,7 @@
                                     <th>Ngày tạo hóa đơn</th>
                                     <th>Ngày Thanh Toán</th>
                                     <th>Trạng thái</th>
+
                                     <th>Tổng tiền</th>
                                     <th>Actions</th>
                                 </tr>
@@ -114,38 +115,6 @@
                                 </ul>
                             </div>
                         </div>
-
-            <!--Thay đổi sản phẩm  trong hóa đơn chi tiết -->
-<!--            <div id="updateProductDetailForm" style="display:none;">-->
-<!--                <h3>Sửa sản phẩm chi tiết</h3>-->
-<!--                <form id="updateProductForm" method="post" th:action="@{/updateProductDetail}">-->
-<!--                    <input type="hidden" name="hoaDonId" id="updateHoaDonId"/>-->
-<!--                    <input type="hidden" name="sanPhamChiTietId" id="updateSanPhamChiTietId"/>-->
-
-<!--                    <div class="form-group">-->
-<!--                        <label for="tenSanPham">Tên:</label>-->
-<!--                        <input type="text" class="form-control" id="tenSanPham" name="tenSanPham" readonly/>-->
-<!--                    </div>-->
-
-<!--                    <div class="form-group">-->
-<!--                        <label for="updateKichCo">Kích cỡ:</label>-->
-<!--                        <input type="text" class="form-control" id="updateKichCo" name="kichCo" readonly/>-->
-<!--                    </div>-->
-
-<!--                    <div class="form-group">-->
-<!--                        <label for="updateMauSac">Màu sắc:</label>-->
-<!--                        <input type="text" class="form-control" id="updateMauSac" name="mauSac" readonly/>-->
-<!--                    </div>-->
-
-<!--                    <div class="form-group">-->
-<!--                        <label for="updateSoLuong">Số lượng:</label>-->
-<!--                        <input type="number" class="form-control" id="updateSoLuong" name="soLuong" min="1"-->
-<!--                               readonly/>-->
-<!--                    </div>-->
-
-<!--                    <button type="submit" class="btn btn-success">Cập nhật</button>-->
-<!--                    <button type="button" class="btn btn-secondary" onclick="hideUpdateProductForm()">Hủy</button>-->
-<!--                </form>-->
             </div>
                 <script>
                     $(document).ready(function() {

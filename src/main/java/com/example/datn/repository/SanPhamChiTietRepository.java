@@ -23,6 +23,22 @@ public interface SanPhamChiTietRepository extends JpaRepository<SanPhamChiTietEn
     @Query("SELECT s FROM SanPhamChiTietEntity s ORDER BY function('RAND')")
     List<SanPhamChiTietEntity> findTop4SanPhamChiTiet(Pageable pageable);
 
+//    @Query("SELECT spct FROM SanPhamChiTietEntity spct " +
+//            "JOIN spct.sanPham sp " +
+//            "WHERE sp.tenSanPham = :tenSanPham")
+//    List<SanPhamChiTietEntity> findByTenSanPham(@Param("tenSanPham") String tenSanPham);
+//@Query("SELECT spct FROM SanPhamChiTietEntity spct " +
+//        "JOIN spct.sanPham sp " +
+//        "WHERE sp.tenSanPham = :tenSanPham AND spct.id <> :idSanPham")
+//List<SanPhamChiTietEntity> findByTenSanPhamAndNotId(@Param("tenSanPham") String tenSanPham, @Param("idSanPham") UUID idSanPham);
+@Query("SELECT spct, SUM(hdct.soLuong) AS soLuongDaMua FROM SanPhamChiTietEntity spct " +
+        "JOIN spct.sanPham sp " +
+        "LEFT JOIN HoaDonChiTietEntity hdct ON hdct.sanPhamChiTiet = spct " +
+        "WHERE sp.tenSanPham = :tenSanPham AND spct.id <> :idSanPham " +
+        "GROUP BY spct")
+List<Object[]> findByTenSanPhamAndNotIdWithSoLuong(@Param("tenSanPham") String tenSanPham, @Param("idSanPham") UUID idSanPham);
+
+
     @Modifying
     @Transactional
     @Query("UPDATE SanPhamChiTietEntity sp SET sp.soLuong = sp.soLuong - :soLuong WHERE sp.id = :id")

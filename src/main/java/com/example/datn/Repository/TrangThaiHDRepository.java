@@ -15,5 +15,6 @@ public interface TrangThaiHDRepository extends JpaRepository<TrangThaiHDEntity, 
 
     @Query("SELECT t FROM TrangThaiHDEntity t WHERE t.ten = 'Thanh Toán Online'")
     List<TrangThaiHDEntity> FinByOnline();
+    TrangThaiHDEntity findByTen(String ten);
     TrangThaiHDEntity findByTrangThai(String trangThai);
 }

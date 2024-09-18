@@ -23,13 +23,13 @@ public interface SanPhamRepository extends JpaRepository<SanPhamEntity, UUID>, J
     @Query(value = "WITH Months AS (\n" +
             "    SELECT 1 AS MonthNumber, N'Tháng1' AS MonthName\n" +
             "    UNION ALL SELECT 2, N'Tháng2'\n" +
-            "    UNION ALL SELECT 3,N'Tháng3'\n" +
+            "    UNION ALL SELECT 3, N'Tháng3'\n" +
             "    UNION ALL SELECT 4, N'Tháng4'\n" +
             "    UNION ALL SELECT 5, N'Tháng5'\n" +
             "    UNION ALL SELECT 6, N'Tháng6'\n" +
             "    UNION ALL SELECT 7, N'Tháng7'\n" +
             "    UNION ALL SELECT 8, N'Tháng8'\n" +
-            "    UNION ALL SELECT 9,N'Tháng9'\n" +
+            "    UNION ALL SELECT 9, N'Tháng9'\n" +
             "    UNION ALL SELECT 10, N'Tháng10'\n" +
             "    UNION ALL SELECT 11, N'Tháng11'\n" +
             "    UNION ALL SELECT 12, N'Tháng12'\n" +
@@ -42,16 +42,55 @@ public interface SanPhamRepository extends JpaRepository<SanPhamEntity, UUID>, J
             "LEFT JOIN \n" +
             "    hoa_don hd ON MONTH(hd.ngay_thanh_toan) = m.MonthNumber\n" +
             "LEFT JOIN \n" +
-            "    hoa_don_chi_tiet hdct ON hd.id = hdct.hoa_don_id\n" +
+            "   trang_thaihd tthd ON hd.trang_thaihd_id = tthd.id\n" +
             "WHERE \n" +
-            "    YEAR(hd.ngay_thanh_toan) = YEAR(GETDATE()) -- Thay đổi năm nếu cần\n" +
-            "    AND hd.ngay_thanh_toan >= DATEADD(MONTH, -12, GETDATE()) -- Lọc trong 12 tháng gần nhất\n" +
+            "    YEAR(hd.ngay_thanh_toan) = YEAR(GETDATE()) \n" + // Removed the comment here
+            "    AND hd.ngay_thanh_toan >= DATEADD(MONTH, -12, GETDATE()) \n" + // Removed the comment here
+            "    AND tthd.trang_thai IN ('1','3') -- Chỉ tính hóa đơn đã hoàn thành và hóa đơn đã thanh toán online\n" + // The comment is fine here
             "GROUP BY \n" +
             "    m.MonthName, \n" +
             "    m.MonthNumber\n" +
             "ORDER BY \n" +
             "    m.MonthNumber;\n", nativeQuery = true)
     List<Object[]> thongKeTheoThang();
+
+//    List<Object[]> thongKeTheoThang();
+//@Query(value = "WITH Months AS (\n" +
+//        "    SELECT 1 AS MonthNumber, N'Tháng1' AS MonthName\n" +
+//        "    UNION ALL SELECT 2, N'Tháng2'\n" +
+//        "    UNION ALL SELECT 3,N'Tháng3'\n" +
+//        "    UNION ALL SELECT 4, N'Tháng4'\n" +
+//        "    UNION ALL SELECT 5, N'Tháng5'\n" +
+//        "    UNION ALL SELECT 6, N'Tháng6'\n" +
+//        "    UNION ALL SELECT 7, N'Tháng7'\n" +
+//        "    UNION ALL SELECT 8, N'Tháng8'\n" +
+//        "    UNION ALL SELECT 9,N'Tháng9'\n" +
+//        "    UNION ALL SELECT 10, N'Tháng10'\n" +
+//        "    UNION ALL SELECT 11, N'Tháng11'\n" +
+//        "    UNION ALL SELECT 12, N'Tháng12'\n" +
+//        ")\n" +
+//        "SELECT \n" +
+//        "    m.MonthName,\n" +
+//        "    ISNULL(SUM(hd.thanh_tien), 0) AS totalSales\n" +
+//        "FROM \n" +
+//        "    Months m\n" +
+//        "LEFT JOIN \n" +
+//        "    hoa_don hd ON MONTH(hd.ngay_thanh_toan) = m.MonthNumber\n" +
+//        "LEFT JOIN \n" +
+//        "    hoa_don_chi_tiet hdct ON hd.id = hdct.hoa_don_id\n" +
+//        "LEFT JOIN \n" +
+//        "   trang_thaihd tthd ON hd.trang_thaihd_id = tthd.id\n" +
+//        "WHERE \n" +
+//        "    YEAR(hd.ngay_thanh_toan) = YEAR(GETDATE()) -- Thay đổi năm nếu cần\n" +
+//        "    AND hd.ngay_thanh_toan >= DATEADD(MONTH, -12, GETDATE()) -- Lọc trong 12 tháng gần nhất\n" +
+//        "    AND tthd.trang_thai IN ('1','2','3','5') -- Không tính các hóa đơn có trạng thái hủy\n" +
+//        "GROUP BY \n" +
+//        "    m.MonthName, \n" +
+//        "    m.MonthNumber\n" +
+//        "ORDER BY \n" +
+//        "    m.MonthNumber;\n", nativeQuery = true)
+//List<Object[]> thongKeTheoThang();
+
 
     @Query(value = """
         SELECT TOP 5

@@ -33,7 +33,7 @@ public class SuperEntity {
         }
 
         protected void createdate() {
-                this.createDate = LocalDate.from(LocalDate.now().atStartOfDay());
+                this.createDate = LocalDate.from(LocalDate.now());
         }
 
     }
